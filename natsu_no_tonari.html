@@ -1849,6 +1849,24 @@ function up(e){
   el.addEventListener('mouseup', e=>{ if(!('ontouchstart' in window)) up(e); });
 });
 
+/* キーボード操作（PCブラウザ向け。タップ操作しかなかったのを補う） */
+document.addEventListener('keydown', e=>{
+  if(e.target && (e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA')) return;
+  if(e.key==='Escape'){
+    if($('#gview').classList.contains('on')){ $('#gview').classList.remove('on'); Audio_.se('close'); return; }
+    const openOv = $$('.ov.on')[0];
+    if(openOv){ openOv.classList.remove('on'); Audio_.se('close'); return; }
+    if($('#ui').classList.contains('show') && !inChoice){ $('#menuOv').classList.add('on'); Audio_.se('open'); }
+    return;
+  }
+  if(e.key===' ' || e.key==='Enter'){
+    if($$('.ov.on').length || $('#gview').classList.contains('on')) return;
+    if(!$('#ui').classList.contains('show')) return;
+    e.preventDefault();
+    advance();
+  }
+});
+
 $('#btnLog').onclick = e=>{ e.stopPropagation(); openLog(); };
 $('#btnHide').onclick = e=>{ e.stopPropagation(); hideUI(); };
 $('#btnMenu').onclick = e=>{ e.stopPropagation(); $('#menuOv').classList.add('on'); Audio_.se('open'); };
