@@ -704,7 +704,7 @@ const Audio_ = (() => {
    ========================================================= */
 const G = {
   name:'きみ', kizuna:0, scene:null, flags:{}, acts:[], actN:0,
-  seen:{}, cleared:0, routeSeen:{}, ending:null, pool:null
+  seen:{}, cleared:0, routeSeen:{}, ending:null, pool:null, endingsSeen:{}
 };
 const CFG = { speed:55, uiHidden:false, boot:false };
 let curLayer = 0, typing=false, skipTyping=false, waitTap=null, curLog=[], inChoice=false;
@@ -992,7 +992,7 @@ async function saveSettings(){
 }
 async function loadSettings(){ return await Store.get('nnt_settings'); }
 async function saveMeta(){
-  await Store.set('nnt_meta', {cleared:G.cleared, seen:G.seen, routeSeen:G.routeSeen, name:G.name});
+  await Store.set('nnt_meta', {cleared:G.cleared, seen:G.seen, routeSeen:G.routeSeen, endingsSeen:G.endingsSeen, name:G.name});
 }
 
 /* ---------- ギャラリー ---------- */
@@ -1805,6 +1805,7 @@ async function showEnding(e){
   Audio_.se('bell');
   G.cleared = 1;
   G.routeSeen[e.route] = 1;
+  G.endingsSeen[e.t] = 1;
   G.ending = e.t;
   await saveMeta();
   await Store.del('nnt_save');
@@ -1904,13 +1905,14 @@ async function showTitle(){
   $('#ui').classList.remove('show');
   $('#curtain').classList.remove('on');
   const meta = await Store.get('nnt_meta');
-  if(meta){ G.cleared=meta.cleared||0; G.seen=Object.assign({},meta.seen||{}); G.routeSeen=meta.routeSeen||{}; if(meta.name) G.name=meta.name; }
+  if(meta){ G.cleared=meta.cleared||0; G.seen=Object.assign({},meta.seen||{}); G.routeSeen=meta.routeSeen||{}; G.endingsSeen=Object.assign({},meta.endingsSeen||{}); if(meta.name) G.name=meta.name; }
   const sv = await loadSave();
   $('#btnCont').disabled = !sv;
   $('#btnGal').disabled = !G.cleared;
   const seenN = Object.keys(G.seen).length;
+  const edN = Object.keys(G.endingsSeen).length;
   $('#titleNote').textContent = G.cleared
-    ? `思い出 ${seenN}/${SLOTS.length}　${G.routeSeen.oka&&G.routeSeen.hanao?'ふたつの夜を見届けました':'まだ見ていない夜があります'}`
+    ? `思い出 ${seenN}/${SLOTS.length}　エンディング ${edN}/6`
     : '';
   refreshTitleBg();
   $('#title').classList.add('on');
@@ -1950,7 +1952,7 @@ $('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGaller
   loadEmbeddedArt();
   refreshTitleBg();
   const meta = await Store.get('nnt_meta');
-  if(meta){ G.cleared=meta.cleared||0; G.seen=meta.seen||{}; G.routeSeen=meta.routeSeen||{}; G.name=meta.name||'きみ'; }
+  if(meta){ G.cleared=meta.cleared||0; G.seen=meta.seen||{}; G.routeSeen=meta.routeSeen||{}; G.endingsSeen=meta.endingsSeen||{}; G.name=meta.name||'きみ'; }
   const settings = await loadSettings();
   if(settings){
     if(settings.vb!=null) CFG.vb=settings.vb;
