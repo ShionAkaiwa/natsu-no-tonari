@@ -68,3 +68,8 @@ PCで `natsu status` を打ったときに読めます。
 > 焼き込まれます。ファイル名がどれに対応するか分からない場合は、
 > とりあえず `inbox` フォルダに好きな名前で入れて教えてもらえれば、
 > 次回こちらで振り分けます。
+
+20260722
+[Netlify] Action needed: shion has used all available credits — upgrade to restore full service
+shion has used its full credit allowance for this billing cycle. We’ve added 30 operational credits to keep your published sites online. These credits can’t be used for production deploys or Agent Runners, so those stay paused until you upgrade.
+ってのがメールできてたよ。じょうげんが来た的なやつかな?どうする?
