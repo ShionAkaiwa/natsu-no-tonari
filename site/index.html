@@ -1356,7 +1356,7 @@ maigo:{ id:'maigo', bg:'maigo', bgm:'matsuri', amb:'matsuri', ambHold:5, hold:14
     ['m','なんで、あんな言い方をしたんだろう。'],
     ['m','嘘をつくのが、こんなに下手だとは思わなかった。'],
   ]},
-  {t:'「手、つなごうか。迷子になるから」', k:2, res:[
+  {t:'「手、つなごうか。迷子になるから」', k:2, flag:'tsunagu', res:[
     ['a','だれが迷子！？　わたしもう二十歳だし！'],
     ['n','言いながら、指はもう伸びてきていた。'],
     ['a','……はい。にぎった。'],
@@ -1413,6 +1413,7 @@ r_oka3:{ id:'r_oka3', bg:'yokogao', bgm:'kokoro', hold:1800, keepFw:true, trans:
   ];
   if(G.flags.hometa) base.push(['m','さっき「似合ってる」と言えたときの、赤くなった耳を思い出す。']);
   if(G.flags.oboeteru) base.push(['m','さっき「覚えてるよ」と言ったときの、泣きそうな横顔を思い出す。']);
+  if(G.flags.tsunagu) base.push(['m','さっき「迷子になるから」と繋いだ手の、あのときの体温を思い出す。']);
   return base.concat([
    ['n','光が上がるたび、茜の頬の色が変わる。'],
    ['n','ひらいた瞳に、小さな花火がまるごと映っていた。'],
@@ -1603,6 +1604,7 @@ r_hanao4:{ id:'r_hanao4', bg:'senko', bgm:'kokoro', amb:'kawa', ambHold:9, flick
   if(G.flags.hometa) base.push(['m','さっき「似合ってる」と言えたときの、赤くなった耳を思い出す。']);
   if(G.flags.oboeteru) base.push(['m','さっき「覚えてるよ」と言ったときの、泣きそうな横顔を思い出す。']);
   if(G.flags.onbu) base.push(['m','さっき背負った背中の重みが、まだ肩に残っている。']);
+  if(G.flags.tsunagu) base.push(['m','さっき「迷子になるから」と繋いだ手の、あのときの体温を思い出す。']);
   return base.concat([
    ['a','でもね、わたし、こっちのほうが好きかも。'],
    ['a','ちゃんと、消えるまで見ていられるから。'],
