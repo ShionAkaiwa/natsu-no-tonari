@@ -1042,6 +1042,10 @@ async function save(){
   });
 }
 async function loadSave(){ return await Store.get('nnt_save'); }
+async function saveSettings(){
+  await Store.set('nnt_settings', {vb:CFG.vb, vs:CFG.vs, speed:CFG.speed});
+}
+async function loadSettings(){ return await Store.get('nnt_settings'); }
 async function saveMeta(){
   await Store.set('nnt_meta', {cleared:G.cleared, seen:G.seen, routeSeen:G.routeSeen, name:G.name});
 }
@@ -1885,6 +1889,9 @@ CFG.vb=.42; CFG.vs=.70;
 $('#volBgm').oninput = e=>{ CFG.vb=e.target.value/100; if(!muted) Audio_.setVol('bgm',CFG.vb); };
 $('#volSe').oninput  = e=>{ CFG.vs=e.target.value/100; if(!muted) Audio_.setVol('se',CFG.vs); };
 $('#spd').oninput    = e=>{ CFG.speed=+e.target.value; };
+$('#volBgm').addEventListener('change', saveSettings);
+$('#volSe').addEventListener('change', saveSettings);
+$('#spd').addEventListener('change', saveSettings);
 
 /* =========================================================
    イラスト読み込み UI
@@ -1956,6 +1963,17 @@ $('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGaller
   await refreshTitleBg();
   const meta = await Store.get('nnt_meta');
   if(meta){ G.cleared=meta.cleared||0; G.seen=meta.seen||{}; G.routeSeen=meta.routeSeen||{}; G.name=meta.name||'きみ'; }
+  const settings = await loadSettings();
+  if(settings){
+    if(settings.vb!=null) CFG.vb=settings.vb;
+    if(settings.vs!=null) CFG.vs=settings.vs;
+    if(settings.speed!=null) CFG.speed=settings.speed;
+    $('#volBgm').value=Math.round(CFG.vb*100);
+    $('#volSe').value=Math.round(CFG.vs*100);
+    $('#spd').value=CFG.speed;
+    Audio_.setVol('bgm', CFG.vb);
+    Audio_.setVol('se', CFG.vs);
+  }
   await showTitle();
   if(n===0){
     setTimeout(()=>{ toast('「イラストを読み込む」から一枚絵を追加できます', 3400); }, 900);
