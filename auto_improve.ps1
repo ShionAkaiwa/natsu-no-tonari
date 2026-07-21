@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 #  夏のとなり 自動改善スクリプト
 #  タスクスケジューラから定期実行される。手動なら natsu now。
 #  ※このファイルは基本的に触らなくて大丈夫です
@@ -11,7 +11,8 @@ $PauseFlag = Join-Path $Root ".paused"
 $LogFile   = Join-Path $Root "auto_run.log"
 $SnapDir   = Join-Path $Root "snapshots"
 
-function Log($m) { Add-Content $LogFile "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - $m" }
+$Utf8 = New-Object System.Text.UTF8Encoding($false)
+function Log($m) { [System.IO.File]::AppendAllText($LogFile, "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - $m`r`n", $Utf8) }
 
 # --- 一時停止中なら何もしない -------------------------------
 if (Test-Path $PauseFlag) { Log "一時停止中のためスキップ"; exit }
@@ -71,7 +72,7 @@ try {
     # --dangerously-skip-permissions は無人実行のため確認を省略するオプション。
     # 変更は全てgitに記録されるので、おかしければ natsu undo で戻せる。
     $output = & $claudeExe -p $prompt --dangerously-skip-permissions 2>&1 | Out-String
-    Add-Content $LogFile $output
+    [System.IO.File]::AppendAllText($LogFile, $output + "`r`n", $Utf8)
 
     # --- 制限に当たったかを判定 ------------------------------
     if ($output -match "(?i)usage limit|rate limit|quota|too many requests") {
@@ -84,7 +85,7 @@ try {
     $broken = $false
     if (-not (Test-Path $GameFile)) { $broken = $true }
     elseif ((Get-Item $GameFile).Length -lt 10000) { $broken = $true }
-    elseif ((Get-Content $GameFile -Tail 5 -Raw) -notmatch "</html>") { $broken = $true }
+    elseif ((((Get-Content $GameFile -Tail 5 -Encoding UTF8) -join "`n")) -notmatch "</html>") { $broken = $true }
 
     if ($broken) {
         Log "!!! ゲームファイルが壊れています。直前の状態に戻します"
@@ -106,8 +107,8 @@ catch {
 finally {
     Remove-Item $LockFile -ErrorAction SilentlyContinue
     # ログが肥大化しないよう直近1000行だけ残す
-    if ((Test-Path $LogFile) -and (Get-Content $LogFile).Count -gt 1000) {
-        $keep = Get-Content $LogFile -Tail 1000
-        Set-Content $LogFile $keep
+    if ((Test-Path $LogFile) -and (Get-Content $LogFile -Encoding UTF8).Count -gt 1000) {
+        $keep = (Get-Content $LogFile -Tail 1000 -Encoding UTF8) -join "`r`n"
+        [System.IO.File]::WriteAllText($LogFile, $keep, $Utf8)
     }
 }

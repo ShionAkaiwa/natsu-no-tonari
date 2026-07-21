@@ -1,0 +1,1 @@
+function natsu { & "D:\natsu-project\natsu.bat" $args }

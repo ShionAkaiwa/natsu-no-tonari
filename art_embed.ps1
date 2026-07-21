@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 #  画像をゲームに組み込む
 #  inbox フォルダに置かれた画像を images に移して、
 #  ゲームから使えるように登録します。
@@ -12,7 +12,8 @@ $ImgDir   = Join-Path $Root "images"
 $LogFile  = Join-Path $Root "auto_run.log"
 $ArtLog   = Join-Path $Root "ART_NEW.md"
 
-function Log($m) { Add-Content $LogFile "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - [art] $m" }
+$Utf8 = New-Object System.Text.UTF8Encoding($false)
+function Log($m) { [System.IO.File]::AppendAllText($LogFile, "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - [art] $m`r`n", $Utf8) }
 
 if (-not (Test-Path $InboxDir)) { New-Item $InboxDir -ItemType Directory | Out-Null }
 if (-not (Test-Path $ImgDir))   { New-Item $ImgDir   -ItemType Directory | Out-Null }
@@ -47,12 +48,23 @@ $block = "<script id=""ART_DATA"">`n" +
 
 $html = Get-Content $GameFile -Raw -Encoding UTF8
 
-if ($html -match '(?s)<script id="ART_DATA">.*?</script>') {
-    $html = [regex]::Replace($html, '(?s)<script id="ART_DATA">.*?</script>', [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $block })
+$startTag = '<script id="ART_DATA">'
+$endTag   = '</script>'
+$i = $html.IndexOf($startTag)
+if ($i -ge 0) {
+    $j = $html.IndexOf($endTag, $i)
+    if ($j -ge 0) {
+        $html = $html.Substring(0, $i) + $block + $html.Substring($j + $endTag.Length)
+    }
 } else {
-    $html = $html -replace '</body>', "$block`n</body>"
+    $k = $html.LastIndexOf('</body>')
+    if ($k -ge 0) {
+        $html = $html.Substring(0, $k) + $block + "`n" + $html.Substring($k)
+    } else {
+        $html = $html + "`n" + $block
+    }
 }
-Set-Content $GameFile $html -Encoding UTF8 -NoNewline
+[System.IO.File]::WriteAllText($GameFile, $html, $Utf8)
 
 # --- 新規画像があればClaudeへの申し送りを書く ---------------
 if ($new.Count -gt 0) {
@@ -63,7 +75,7 @@ if ($new.Count -gt 0) {
         $k = [System.IO.Path]::GetFileNameWithoutExtension($n)
         $lines += "- ``$k`` (images/$n)"
     }
-    Set-Content $ArtLog ($lines -join "`n") -Encoding UTF8
+    [System.IO.File]::WriteAllText($ArtLog, ($lines -join "`r`n"), $Utf8)
     Write-Host ""
     Write-Host "  $($new.Count) 枚を取り込みました" -ForegroundColor Green
     foreach ($n in $new) { Write-Host "    ・$n" }

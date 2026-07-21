@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 #  Gemini で画像を自動生成する(任意の機能)
 #  ART_QUEUE.md に書かれた未生成のプロンプトを読んで、
 #  Gemini API に投げて画像を作り、inbox に保存します。
@@ -18,7 +18,8 @@ $LogFile  = Join-Path $Root "auto_run.log"
 # モデル名。将来変わったらここだけ書き換えれば動きます。
 $Model = "gemini-2.5-flash-image"
 
-function Log($m) { Add-Content $LogFile "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - [gemini] $m" }
+$Utf8 = New-Object System.Text.UTF8Encoding($false)
+function Log($m) { [System.IO.File]::AppendAllText($LogFile, "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - [gemini] $m`r`n", $Utf8) }
 
 $apiKey = $env:GEMINI_API_KEY
 if (-not $apiKey) {
@@ -101,7 +102,7 @@ for ($i = 0; $i -lt $limit; $i++) {
     Start-Sleep -Seconds 3
 }
 
-Set-Content $Queue $content -Encoding UTF8
+[System.IO.File]::WriteAllText($Queue, $content, $Utf8)
 
 Write-Host ""
 Write-Host "  inbox に保存しました。組み込むには  natsu art" -ForegroundColor Cyan

@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Position=0)][string]$Command = "help",
     [Parameter(Position=1, ValueFromRemainingArguments=$true)][string[]]$Rest
 )
@@ -12,7 +12,8 @@ $LogFile   = Join-Path $Root "auto_run.log"
 $Requests  = Join-Path $Root "REQUESTS.md"
 $SnapDir   = Join-Path $Root "snapshots"
 
-function Log($m)  { Add-Content $LogFile "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - $m" }
+$Utf8 = New-Object System.Text.UTF8Encoding($false)
+function Log($m)  { [System.IO.File]::AppendAllText($LogFile, "$(Get-Date -Format 'yyyy-MM-dd HH:mm') - $m`r`n", $Utf8) }
 function OK($t)   { Write-Host "  [OK] $t" -ForegroundColor Green }
 function NG($t)   { Write-Host "  [NG] $t" -ForegroundColor Red }
 function Warn($t) { Write-Host "  [!]  $t" -ForegroundColor Yellow }
@@ -31,7 +32,7 @@ function Test-GameFile {
     if (-not (Test-Path $GameFile)) { return $false }
     $size = (Get-Item $GameFile).Length
     if ($size -lt 10000) { return $false }
-    $tail = Get-Content $GameFile -Tail 5 -Raw
+    $tail = (Get-Content $GameFile -Tail 5 -Encoding UTF8) -join "`n"
     return ($tail -match "</html>")
 }
 
@@ -103,7 +104,7 @@ switch ($Command.ToLower()) {
             Write-Host ""
             break
         }
-        Add-Content $Requests "`n## $(Get-Date -Format 'MM/dd HH:mm') 志温`n$text`n`n> (未読)"
+        [System.IO.File]::AppendAllText($Requests, "`r`n## $(Get-Date -Format 'MM/dd HH:mm') 志温`r`n$text`r`n`r`n> (未読)`r`n", $Utf8)
         git -C $Root add REQUESTS.md 2>&1 | Out-Null
         git -C $Root commit -m "req: 要望を追加" 2>&1 | Out-Null
         git -C $Root push 2>&1 | Out-Null
@@ -126,7 +127,7 @@ switch ($Command.ToLower()) {
 
         $unread = 0
         if (Test-Path $Requests) {
-            $unread = (Select-String -Path $Requests -Pattern "\(未読\)" -ErrorAction SilentlyContinue).Count
+            $unread = (Select-String -Path $Requests -Pattern "\(未読\)" -Encoding UTF8 -ErrorAction SilentlyContinue).Count
         }
         Write-Host "  未読の要望: $unread 件"
 
@@ -141,7 +142,7 @@ switch ($Command.ToLower()) {
 
         Write-Host ""
         Write-Host "  --- 直近のログ ---" -ForegroundColor DarkGray
-        if (Test-Path $LogFile) { Get-Content $LogFile -Tail 6 }
+        if (Test-Path $LogFile) { Get-Content $LogFile -Tail 6 -Encoding UTF8 }
         Write-Host ""
     }
 
@@ -186,10 +187,10 @@ switch ($Command.ToLower()) {
     "log" {
         Write-Host ""
         Write-Host "  --- 実装された改善 ---" -ForegroundColor Green
-        Get-Content (Join-Path $Root "PROGRESS.md") -Tail 25
+        Get-Content (Join-Path $Root "PROGRESS.md") -Tail 25 -Encoding UTF8
         Write-Host ""
         Write-Host "  --- 判断が保留された項目 ---" -ForegroundColor Yellow
-        Get-Content (Join-Path $Root "IMPROVEMENTS_LOG.md") -Tail 25
+        Get-Content (Join-Path $Root "IMPROVEMENTS_LOG.md") -Tail 25 -Encoding UTF8
         Write-Host ""
         Write-Host "  --- 直近の変更履歴 ---" -ForegroundColor DarkGray
         git -C $Root log --oneline -10
@@ -230,7 +231,7 @@ switch ($Command.ToLower()) {
     # --- 必要なイラスト一覧を見る -------------------------------
     "arts" {
         Write-Host ""
-        Get-Content (Join-Path $Root "ART_QUEUE.md")
+        Get-Content (Join-Path $Root "ART_QUEUE.md") -Encoding UTF8
         Write-Host ""
     }
 
