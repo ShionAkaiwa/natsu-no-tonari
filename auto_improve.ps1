@@ -85,10 +85,18 @@ try {
     }
 
     # --- ファイルが壊れていないか確認 ------------------------
+    # 過去に art_embed.ps1 のバグで本体スクリプトが丸ごと消えたことがあり、
+    # そのときもサイズは10000バイトを超え末尾も </html> のままだったため
+    # このチェックをすり抜けた。ゲーム本体に必ず存在するはずの目印
+    # (function boot と Audio_ モジュール)の有無も見る。
     $broken = $false
     if (-not (Test-Path $GameFile)) { $broken = $true }
-    elseif ((Get-Item $GameFile).Length -lt 10000) { $broken = $true }
+    elseif ((Get-Item $GameFile).Length -lt 50000) { $broken = $true }
     elseif ((((Get-Content $GameFile -Tail 5 -Encoding UTF8) -join "`n")) -notmatch "</html>") { $broken = $true }
+    else {
+        $gameText = Get-Content $GameFile -Raw -Encoding UTF8
+        if ($gameText -notmatch "function boot" -or $gameText -notmatch "const Audio_") { $broken = $true }
+    }
 
     if ($broken) {
         Log "!!! ゲームファイルが壊れています。直前の状態に戻します"

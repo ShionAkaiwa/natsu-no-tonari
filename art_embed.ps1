@@ -56,7 +56,13 @@ $html = Get-Content $GameFile -Raw -Encoding UTF8
 
 $startTag = '<script id="ART_DATA">'
 $endTag   = '</script>'
-$i = $html.IndexOf($startTag)
+# LastIndexOf を使う: 本文中のコメントなどに "<script id=""ART_DATA"">" という
+# 文字列そのものが説明用に書かれている場合があり、IndexOf(先頭から検索)だと
+# そちらに誤って一致してしまい、次に見つかった </script> (本来のゲーム本体の
+# 閉じタグ)までを丸ごと削除してしまう事故が過去にあった。実際のタグは常に
+# ファイル末尾付近(</body> の直前)にしか出現しないため、LastIndexOf で
+# 後ろから検索することで誤マッチを避ける。
+$i = $html.LastIndexOf($startTag)
 if ($i -ge 0) {
     $j = $html.IndexOf($endTag, $i)
     if ($j -ge 0) {
