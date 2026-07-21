@@ -1396,6 +1396,7 @@ r_oka3:{ id:'r_oka3', bg:'yokogao', bgm:'kokoro', hold:1800, keepFw:true, trans:
    ['m','花火より、隣の横顔ばかり見ていた。'],
   ];
   if(G.flags.hometa) base.push(['m','さっき「似合ってる」と言えたときの、赤くなった耳を思い出す。']);
+  if(G.flags.oboeteru) base.push(['m','さっき「覚えてるよ」と言ったときの、泣きそうな横顔を思い出す。']);
   return base.concat([
    ['n','光が上がるたび、茜の頬の色が変わる。'],
    ['n','ひらいた瞳に、小さな花火がまるごと映っていた。'],
@@ -1584,6 +1585,8 @@ r_hanao4:{ id:'r_hanao4', bg:'senko', bgm:'kokoro', amb:'kawa', ambHold:9, flick
    ['n','まばたきのたび、まつげの影が揺れた。'],
   ];
   if(G.flags.hometa) base.push(['m','さっき「似合ってる」と言えたときの、赤くなった耳を思い出す。']);
+  if(G.flags.oboeteru) base.push(['m','さっき「覚えてるよ」と言ったときの、泣きそうな横顔を思い出す。']);
+  if(G.flags.onbu) base.push(['m','さっき背負った背中の重みが、まだ肩に残っている。']);
   return base.concat([
    ['a','でもね、わたし、こっちのほうが好きかも。'],
    ['a','ちゃんと、消えるまで見ていられるから。'],
