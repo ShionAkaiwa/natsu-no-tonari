@@ -54,6 +54,8 @@ Write-Host "  $($matches.Count) 件の画像を生成します" -ForegroundColor
 
 # 1回の実行で作りすぎないよう3枚まで
 $limit = [Math]::Min(3, $matches.Count)
+$successCount = 0
+$quotaBlocked = $false
 
 for ($i = 0; $i -lt $limit; $i++) {
     $key    = $matches[$i].Groups[1].Value.Trim()
@@ -84,6 +86,7 @@ for ($i = 0; $i -lt $limit; $i++) {
             [IO.File]::WriteAllBytes($out, [Convert]::FromBase64String($imgData))
             Write-Host "     完了: inbox\$key.png" -ForegroundColor Green
             Log "生成成功: $key"
+            $successCount++
 
             # キューのステータスを更新
             $content = $content -replace "(### $([regex]::Escape($key))\r?\nstatus: )未生成", "`${1}生成済み"
@@ -94,8 +97,14 @@ for ($i = 0; $i -lt $limit; $i++) {
         }
     }
     catch {
-        Write-Host "     エラー: $_" -ForegroundColor Red
-        Log "生成エラー: $key / $_"
+        $errMsg = "$_"
+        if ($errMsg -match "429") {
+            Write-Host "     利用枠の上限(429)。課金を有効にしていない場合、画像生成の無料枠は現在0件です" -ForegroundColor Yellow
+            $quotaBlocked = $true
+        } else {
+            Write-Host "     エラー: $errMsg" -ForegroundColor Red
+        }
+        Log "生成エラー: $key / $errMsg"
         $content = $content -replace "(### $([regex]::Escape($key))\r?\nstatus: )未生成", "`${1}要手動"
     }
 
@@ -105,5 +114,13 @@ for ($i = 0; $i -lt $limit; $i++) {
 [System.IO.File]::WriteAllText($Queue, $content, $Utf8)
 
 Write-Host ""
-Write-Host "  inbox に保存しました。組み込むには  natsu art" -ForegroundColor Cyan
+if ($successCount -gt 0) {
+    Write-Host "  $successCount 件を inbox に保存しました。組み込むには  natsu art" -ForegroundColor Green
+} elseif ($quotaBlocked) {
+    Write-Host "  生成できませんでした(利用枠の上限)。" -ForegroundColor Yellow
+    Write-Host "  課金を有効にしていない場合、画像生成の無料枠は現在0件です。"
+    Write-Host "  手動ルートに切り替える場合は  natsu arts  でプロンプトを確認してください。"
+} else {
+    Write-Host "  生成できませんでした。auto_run.log を確認してください。" -ForegroundColor Yellow
+}
 Write-Host ""

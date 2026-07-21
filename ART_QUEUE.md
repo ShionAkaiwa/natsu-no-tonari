@@ -29,7 +29,7 @@ Claude Code が「この場面に絵が欲しい」と判断したものを、
 ## 書式の例(Claude Codeがこの形で書き足します)
 
 ### hanabi_kiss
-status: 未生成
+status: 要手動
 prompt: Anime style illustration, warm summer festival night. A young Japanese woman around 20 years old with chestnut brown hair in a high bun, wearing a dark navy blue yukata with a floral pattern. She is looking up at large fireworks bursting in the night sky, her face lit softly by the golden light, expression of quiet joy. Viewed from slightly behind and to the side. Soft painterly anime style, warm color palette, bokeh lights from festival stalls in the background. No text, no watermark, no letters anywhere in the image. Vertical composition.
 
 ---
