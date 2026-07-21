@@ -1,0 +1,6 @@
+play_now.html
+.auto_running.lock
+.paused
+.claude_path
+snapshots/
+inbox/

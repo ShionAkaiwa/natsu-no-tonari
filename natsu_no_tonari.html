@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#070B14">
+<title>夏のとなり</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#070B14;
+  --glass:rgba(9,14,28,.62);
+  --glass-strong:rgba(7,11,22,.86);
+  --hair:rgba(255,255,255,.15);
+  --sakura:#FBDCE4;
+  --sakura-dim:#E3B9C6;
+  --enji:#B0384C;
+  --gold:#EBC978;
+  --gold-dim:#A98B45;
+  --text:#F3F0F4;
+  --mute:#AEB6C7;
+  --lh:1.85em;
+  --pad:16px;
+  --sat:env(safe-area-inset-top,0px);
+  --sab:env(safe-area-inset-bottom,0px);
+  --box-w:min(720px,100%);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;padding:0;overflow:hidden;background:var(--ink);}
+body{
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  user-select:none;
+  overscroll-behavior:none;
+}
+#app{position:fixed;inset:0;overflow:hidden;}
+
+/* ============ 背景ステージ ============ */
+#stage{position:absolute;inset:0;background:#04060c;}
+.layer{position:absolute;inset:0;opacity:0;transition:opacity .85s ease;}
+.layer.on{opacity:1;}
+.layer .inner{
+  position:absolute;inset:-3%;
+  background-size:cover;background-position:center 22%;
+  will-change:transform;
+}
+.layer .inner.kb{animation:kenburns 34s ease-out forwards;}
+.layer .inner.kb2{animation:kenburns2 38s ease-out forwards;}
+@keyframes kenburns{
+  from{transform:scale(1.02) translate3d(0,0,0);}
+  to{transform:scale(1.10) translate3d(-1.2%,-1.4%,0);}
+}
+@keyframes kenburns2{
+  from{transform:scale(1.10) translate3d(-1%,-1%,0);}
+  to{transform:scale(1.02) translate3d(.8%,.6%,0);}
+}
+/* 画像が無いときの代替背景 */
+.layer .inner.ph{background-size:cover;background-position:center;}
+#vignette{position:absolute;inset:0;pointer-events:none;
+  background:
+   radial-gradient(120% 80% at 50% 30%,rgba(0,0,0,0) 40%,rgba(0,0,0,.45) 100%),
+   linear-gradient(to bottom,rgba(0,0,0,.28) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 45%,rgba(4,6,14,.72) 100%);
+}
+#fw{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .6s ease;}
+#fw.on{opacity:1;}
+#flicker{position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen;
+  background:radial-gradient(60% 45% at 50% 78%,rgba(255,168,72,.55) 0%,rgba(255,132,40,.20) 45%,rgba(255,110,20,0) 78%);
+  transition:opacity .5s ease;}
+#flash{position:absolute;inset:0;pointer-events:none;background:#fff;opacity:0;}
+#curtain{position:absolute;inset:0;background:#04060c;opacity:0;pointer-events:none;transition:opacity .5s ease;}
+#curtain.on{opacity:1;}
+
+/* ============ UI ============ */
+#ui{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;pointer-events:none;}
+#ui.show{opacity:1;pointer-events:auto;}
+#ui.hidden{opacity:0;pointer-events:none;}
+#tap{position:absolute;inset:0;}
+
+#topbar{
+  position:absolute;top:calc(var(--sat) + 10px);right:10px;
+  display:flex;gap:8px;z-index:6;
+}
+.ibtn{
+  width:38px;height:38px;border-radius:13px;border:1px solid var(--hair);
+  background:rgba(10,15,28,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  color:var(--text);font-size:10px;font-weight:700;letter-spacing:.02em;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  cursor:pointer;transition:transform .16s ease,background .2s ease,border-color .2s;
+  padding:0;line-height:1;font-family:inherit;
+}
+.ibtn:active{transform:scale(.9);background:rgba(176,56,76,.42);}
+.ibtn svg{width:15px;height:15px;stroke:var(--sakura);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.ibtn span{font-size:8.5px;color:var(--mute);}
+
+/* 会話ボックス */
+#dialogue{
+  position:absolute;left:50%;transform:translateX(-50%);
+  bottom:calc(var(--sab) + 14px);
+  width:calc(var(--box-w) - 24px);
+  z-index:4;
+}
+#plate{
+  display:inline-flex;align-items:center;gap:7px;
+  margin:0 0 -9px 12px;padding:5px 15px 6px;
+  border-radius:12px 12px 4px 4px;
+  background:linear-gradient(180deg,rgba(176,56,76,.92),rgba(120,32,50,.92));
+  border:1px solid rgba(235,201,120,.45);
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  font-size:13.5px;font-weight:700;letter-spacing:.06em;
+  color:#FFF3F6;position:relative;z-index:2;
+  opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s;
+}
+#plate.on{opacity:1;transform:translateY(0);}
+#plate .bellmark{width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#FFF0C0,var(--gold) 60%,#8a6a20);
+  box-shadow:0 0 6px rgba(235,201,120,.6);flex:none;}
+#box{
+  position:relative;
+  background:var(--glass);
+  backdrop-filter:blur(14px) saturate(1.1);-webkit-backdrop-filter:blur(14px) saturate(1.1);
+  border:1px solid var(--hair);
+  border-radius:20px;
+  padding:15px 17px 16px;
+  box-shadow:0 10px 34px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.06);
+}
+#box:before{content:"";position:absolute;left:17px;right:17px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(235,201,120,.5),transparent);}
+#flow{
+  height:calc(var(--lh) * 3);
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  font-size:15.5px;line-height:var(--lh);letter-spacing:.02em;
+  touch-action:pan-y;
+}
+#flow::-webkit-scrollbar{display:none;}
+#flow.masked{
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) .5em,#000 1.3em,#000 100%);
+  mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) .5em,#000 1.3em,#000 100%);
+}
+.ln{margin:0;padding:0;opacity:0;transform:translateY(6px);
+  animation:lnIn .32s ease forwards;word-break:normal;overflow-wrap:anywhere;}
+@keyframes lnIn{to{opacity:1;transform:translateY(0)}}
+.ln.old{opacity:.42;}
+.ln.a{color:var(--sakura);}
+.ln.p{color:#F6E3B6;}
+.ln.m{color:#CBD2E2;font-size:14.5px;}
+.ln.n{color:#B9C2D6;font-size:14.5px;}
+#bell{
+  position:absolute;right:14px;bottom:9px;width:16px;height:20px;opacity:0;
+  transition:opacity .3s;pointer-events:none;
+}
+#bell.on{opacity:1;animation:bellSwing 1.9s ease-in-out infinite;}
+#bell .b{width:12px;height:12px;margin:5px auto 0;border-radius:50% 50% 48% 48%;
+  background:radial-gradient(circle at 34% 28%,#FFF6D8,var(--gold) 55%,#7d5f1c);
+  box-shadow:0 0 8px rgba(235,201,120,.55);}
+#bell .c{width:1px;height:5px;margin:0 auto;background:var(--gold-dim);}
+@keyframes bellSwing{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(1px)}}
+
+/* 選択肢 */
+#choices{
+  position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
+  width:calc(var(--box-w) - 34px);
+  display:none;flex-direction:column;gap:10px;z-index:5;
+}
+#choices.on{display:flex;}
+#dialogue{transition:opacity .3s ease;}
+.ch{
+  position:relative;
+  padding:14px 16px 14px 40px;border-radius:16px;
+  background:linear-gradient(180deg,rgba(14,21,40,.80),rgba(9,14,28,.86));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(235,201,120,.28);
+  color:var(--text);font-size:14.5px;font-weight:500;text-align:left;
+  font-family:inherit;cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,.36);
+  opacity:0;transform:translateY(10px);
+  animation:chIn .38s cubic-bezier(.2,.9,.3,1) forwards;
+  transition:background .18s,border-color .18s,transform .12s;
+}
+.ch:nth-child(1){animation-delay:.02s}.ch:nth-child(2){animation-delay:.09s}
+.ch:nth-child(3){animation-delay:.16s}.ch:nth-child(4){animation-delay:.23s}
+@keyframes chIn{to{opacity:1;transform:translateY(0)}}
+.ch:before{content:"";position:absolute;left:16px;top:50%;width:9px;height:9px;margin-top:-4.5px;
+  border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFF3CE,var(--gold) 58%,#7d5f1c);
+  box-shadow:0 0 7px rgba(235,201,120,.5);}
+.ch:active{transform:scale(.985);background:linear-gradient(180deg,rgba(176,56,76,.55),rgba(120,32,50,.6));border-color:rgba(251,220,228,.6);}
+
+/* ============ オーバーレイ共通 ============ */
+.ov{position:absolute;inset:0;z-index:20;display:none;
+  background:rgba(4,7,15,.90);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+.ov.on{display:flex;flex-direction:column;animation:fadeIn .28s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.ovhead{display:flex;align-items:center;justify-content:space-between;
+  padding:calc(var(--sat) + 14px) 16px 12px;border-bottom:1px solid rgba(255,255,255,.08);}
+.ovtitle{font-family:"Shippori Mincho B1",serif;font-size:16px;letter-spacing:.22em;color:var(--sakura);}
+.ovbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px calc(var(--sab) + 24px);}
+.xbtn{width:34px;height:34px;border-radius:11px;border:1px solid var(--hair);
+  background:rgba(255,255,255,.05);color:var(--text);font-size:16px;cursor:pointer;font-family:inherit;}
+.xbtn:active{transform:scale(.92)}
+
+/* ログ */
+.logline{margin:0 0 11px;font-size:14px;line-height:1.75;}
+.logname{display:block;font-size:10.5px;letter-spacing:.14em;color:var(--gold);margin-bottom:2px;}
+.logline.m .logtext{color:#AEB6C7;}
+.logempty{color:var(--mute);font-size:13px;text-align:center;padding:40px 0;}
+
+/* ギャラリー */
+#galGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;}
+.gcell{position:relative;aspect-ratio:9/16;border-radius:13px;overflow:hidden;
+  background:rgba(255,255,255,.05);border:1px solid var(--hair);cursor:pointer;}
+.gcell img{width:100%;height:100%;object-fit:cover;display:block;}
+.gcell.lock{display:flex;align-items:center;justify-content:center;color:#4B5468;font-size:20px;}
+.gcell .cap{position:absolute;left:0;right:0;bottom:0;padding:14px 8px 6px;font-size:10.5px;
+  background:linear-gradient(transparent,rgba(0,0,0,.8));color:#E6E1E8;}
+#gview{position:absolute;inset:0;z-index:30;display:none;background:#04060c;}
+#gview.on{display:block;}
+#gview img{width:100%;height:100%;object-fit:contain;}
+
+/* ============ タイトル ============ */
+#title{position:absolute;inset:0;z-index:15;display:none;overflow:hidden;}
+#title.on{display:block;}
+#titleBg{position:absolute;inset:-4%;background-size:cover;background-position:center;
+  animation:kenburns 46s ease-out infinite alternate;}
+#titleVeil{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(4,7,16,.55),rgba(4,7,16,.18) 40%,rgba(4,7,16,.82));}
+.tWrap{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;
+  padding:calc(var(--sat) + 34px) 24px calc(var(--sab) + 28px);}
+.tMain{writing-mode:vertical-rl;text-orientation:upright;
+  font-family:"Shippori Mincho B1",serif;font-weight:800;
+  font-size:clamp(38px,12vw,58px);letter-spacing:.16em;line-height:1.12;
+  color:#FFF7F2;text-shadow:0 3px 22px rgba(0,0,0,.7),0 0 40px rgba(255,190,140,.18);
+  margin:0 6px 0 auto;padding-right:2px;height:auto;}
+.tSub{writing-mode:vertical-rl;font-family:"Shippori Mincho B1",serif;font-size:12px;
+  letter-spacing:.5em;color:rgba(251,220,228,.72);margin:6px 14px 0 auto;}
+.tMenu{display:flex;flex-direction:column;gap:10px;width:min(340px,100%);margin:0 auto;}
+.tbtn{padding:15px 18px;border-radius:16px;font-family:inherit;font-size:15px;font-weight:700;
+  letter-spacing:.14em;color:#FFF3F6;cursor:pointer;
+  background:linear-gradient(180deg,rgba(176,56,76,.72),rgba(105,28,44,.78));
+  border:1px solid rgba(235,201,120,.42);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 8px 26px rgba(0,0,0,.4);transition:transform .14s,filter .2s;}
+.tbtn.sub{background:rgba(12,18,34,.62);border-color:var(--hair);color:var(--text);font-weight:500;letter-spacing:.1em;font-size:13.5px;padding:12px 16px;}
+.tbtn:active{transform:scale(.97);filter:brightness(1.12);}
+.tbtn[disabled]{opacity:.34;pointer-events:none;}
+.tnote{text-align:center;font-size:11px;color:var(--mute);margin-top:2px;letter-spacing:.06em;}
+
+/* 名前入力 */
+#nameOv .card{margin:auto;width:min(400px,100%);}
+.card{background:rgba(10,16,30,.72);border:1px solid var(--hair);border-radius:22px;padding:24px 20px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 14px 44px rgba(0,0,0,.5);}
+.card h3{margin:0 0 6px;font-family:"Shippori Mincho B1",serif;font-size:17px;letter-spacing:.16em;color:var(--sakura);font-weight:600;}
+.card p{margin:0 0 16px;font-size:12.5px;line-height:1.7;color:var(--mute);}
+#nameInput{width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(235,201,120,.35);
+  background:rgba(255,255,255,.06);color:var(--text);font-size:16px;font-family:inherit;text-align:center;
+  letter-spacing:.14em;outline:none;}
+#nameInput:focus{border-color:var(--sakura);box-shadow:0 0 0 3px rgba(251,220,228,.12);}
+.ovcenter{flex:1;display:flex;padding:20px 18px;}
+
+/* イラスト読み込み */
+.slotList{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+.slot{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;
+  background:rgba(255,255,255,.045);border:1px solid transparent;cursor:pointer;transition:.15s;}
+.slot.sel{border-color:var(--gold);background:rgba(235,201,120,.12);}
+.slot.done{opacity:.55;}
+.slot .th{width:30px;height:44px;border-radius:7px;background:rgba(255,255,255,.07);
+  object-fit:cover;flex:none;display:block;}
+.slot .nm{font-size:12px;line-height:1.4;flex:1;}
+.slot .st{font-size:10px;color:var(--gold);letter-spacing:.08em;flex:none;}
+#thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px;}
+#thumbs img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:8px;border:1px solid var(--hair);cursor:pointer;}
+#thumbs img.used{opacity:.28;}
+.hint{font-size:11.5px;color:var(--mute);line-height:1.7;margin:10px 0 0;}
+.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.row .tbtn{flex:1;min-width:130px;text-align:center;}
+
+/* トースト */
+#toast{position:absolute;left:50%;top:calc(var(--sat) + 62px);transform:translate(-50%,-8px);
+  background:rgba(7,11,22,.9);border:1px solid rgba(235,201,120,.35);color:var(--text);
+  padding:9px 16px;border-radius:999px;font-size:12px;letter-spacing:.08em;z-index:40;
+  opacity:0;transition:.28s;pointer-events:none;white-space:nowrap;}
+#toast.on{opacity:1;transform:translate(-50%,0);}
+
+/* エンディング */
+#ed{position:absolute;inset:0;z-index:18;display:none;background:#04060c;}
+#ed.on{display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadeIn 1.4s ease;}
+#edTitle{font-family:"Shippori Mincho B1",serif;font-size:clamp(22px,7vw,32px);letter-spacing:.3em;
+  color:#FFF6EE;text-align:center;text-shadow:0 0 30px rgba(255,190,140,.25);}
+#edSub{font-size:11.5px;letter-spacing:.34em;color:var(--gold);margin-top:16px;}
+#edBtn{margin-top:38px;}
+
+@media(max-height:640px){
+  :root{--lh:1.72em;}
+  #flow{font-size:14.5px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .layer .inner.kb,.layer .inner.kb2,#titleBg{animation:none!important;}
+  #bell.on{animation:none;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- ===== 背景ステージ ===== -->
+  <div id="stage">
+    <div class="layer" id="lay0"><div class="inner"></div></div>
+    <div class="layer" id="lay1"><div class="inner"></div></div>
+    <canvas id="fw"></canvas>
+    <div id="flicker"></div>
+    <div id="vignette"></div>
+    <div id="flash"></div>
+    <div id="curtain"></div>
+  </div>
+
+  <!-- ===== 会話UI ===== -->
+  <div id="ui">
+    <div id="tap"></div>
+    <div id="topbar">
+      <button class="ibtn" id="btnLog" aria-label="ログ">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>ログ</span>
+      </button>
+      <button class="ibtn" id="btnHide" aria-label="UI非表示">
+        <svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>隠す</span>
+      </button>
+      <button class="ibtn" id="btnSound" aria-label="音">
+        <svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9c1.2 1.2 1.2 4.8 0 6"/></svg><span>音</span>
+      </button>
+      <button class="ibtn" id="btnMenu" aria-label="メニュー">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg><span>他</span>
+      </button>
+    </div>
+
+    <div id="dialogue">
+      <div id="plate"><i class="bellmark"></i><span id="plateName"></span></div>
+      <div id="box">
+        <div id="flow"></div>
+        <div id="bell"><div class="c"></div><div class="b"></div></div>
+      </div>
+    </div>
+    <div id="choices"></div>
+  </div>
+
+  <!-- ===== ログ ===== -->
+  <div class="ov" id="logOv">
+    <div class="ovhead"><div class="ovtitle">ロ グ</div><button class="xbtn" data-close="logOv">✕</button></div>
+    <div class="ovbody" id="logBody"></div>
+  </div>
+
+  <!-- ===== メニュー ===== -->
+  <div class="ov" id="menuOv">
+    <div class="ovhead"><div class="ovtitle">メ ニ ュ ー</div><button class="xbtn" data-close="menuOv">✕</button></div>
+    <div class="ovbody">
+      <div class="card">
+        <h3>設定</h3>
+        <p>音量はいつでも変えられます。文字の速さは告白などの大切な場面では自動でゆっくりになります。</p>
+        <div style="font-size:12px;color:#AEB6C7;letter-spacing:.1em;margin-bottom:4px;">BGM</div>
+        <input type="range" id="volBgm" min="0" max="100" value="42" style="width:100%">
+        <div style="font-size:12px;color:#AEB6C7;letter-spacing:.1em;margin:12px 0 4px;">効果音・環境音</div>
+        <input type="range" id="volSe" min="0" max="100" value="70" style="width:100%">
+        <div style="font-size:12px;color:#AEB6C7;letter-spacing:.1em;margin:12px 0 4px;">文字の速さ</div>
+        <input type="range" id="spd" min="0" max="100" value="55" style="width:100%">
+      </div>
+      <div class="row">
+        <button class="tbtn sub" id="btnSaveNow">ここまでを保存</button>
+        <button class="tbtn sub" id="btnToTitle">タイトルへ戻る</button>
+      </div>
+      <p class="hint">シーンが変わるたびに自動で保存されます。アプリを閉じても「つづきから」で戻れます。</p>
+    </div>
+  </div>
+
+  <!-- ===== ギャラリー ===== -->
+  <div class="ov" id="galOv">
+    <div class="ovhead"><div class="ovtitle">思 い 出</div><button class="xbtn" data-close="galOv">✕</button></div>
+    <div class="ovbody"><div id="galGrid"></div>
+      <p class="hint" id="galNote"></p>
+    </div>
+    <div id="gview"><img id="gviewImg" alt=""></div>
+  </div>
+
+  <!-- ===== 名前入力 ===== -->
+  <div class="ov" id="nameOv">
+    <div class="ovcenter">
+      <div class="card">
+        <h3>きみの名前</h3>
+        <p>茜がこの名前で呼びかけます。空欄のままなら「きみ」と呼ばれます。</p>
+        <input id="nameInput" maxlength="8" placeholder="ハル" autocomplete="off">
+        <div class="row"><button class="tbtn" id="nameGo">この名前ではじめる</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== イラスト読み込み ===== -->
+  <div class="ov" id="imgOv">
+    <div class="ovhead"><div class="ovtitle">イ ラ ス ト</div><button class="xbtn" data-close="imgOv">✕</button></div>
+    <div class="ovbody">
+      <div class="card" style="padding:18px 16px">
+        <h3>イラストを読み込む</h3>
+        <p>この物語で使う一枚絵20枚を、端末から選んでください。ファイル名が一致すれば自動で振り分けます。一致しない場合は、下のサムネイルを場面に割り当ててください。一度読み込めば次回から自動で復元します。</p>
+        <input type="file" id="filePick" accept="image/*" multiple style="display:none">
+        <div class="row">
+          <button class="tbtn" id="btnPick">画像を選ぶ</button>
+          <button class="tbtn sub" id="btnAutoOrder">選んだ順に割り当て</button>
+        </div>
+        <div class="row"><button class="tbtn sub" id="btnClearImg">読み込みをやり直す</button></div>
+      </div>
+      <div id="thumbs"></div>
+      <p class="hint" id="imgStat">まだ読み込まれていません。</p>
+      <div class="slotList" id="slotList"></div>
+    </div>
+  </div>
+
+  <!-- ===== エンディング ===== -->
+  <div id="ed">
+    <div id="edTitle"></div>
+    <div id="edSub"></div>
+    <div id="edEpi"></div>
+    <button class="tbtn" id="edBtn">タイトルへ</button>
+  </div>
+
+  <!-- ===== タイトル ===== -->
+  <div id="title">
+    <div id="titleBg"></div>
+    <div id="titleVeil"></div>
+    <div class="tWrap">
+      <div style="display:flex;justify-content:flex-end;align-items:flex-start;">
+        <div class="tSub">ひと夏の、となり</div>
+        <h1 class="tMain">夏のとなり</h1>
+      </div>
+      <div class="tMenu">
+        <button class="tbtn" id="btnNew">はじめから</button>
+        <button class="tbtn sub" id="btnCont" disabled>つづきから</button>
+        <button class="tbtn sub" id="btnGal" disabled>思い出（ギャラリー）</button>
+        <button class="tbtn sub" id="btnImg">イラストを読み込む</button>
+        <p class="tnote" id="titleNote"></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+<script>
+/* =========================================================
+   夏のとなり  /  core : storage, assets, audio
+   ========================================================= */
+'use strict';
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const clamp = (v,a,b) => v<a?a:v>b?b:v;
+const rnd = (a,b) => a + Math.random()*(b-a);
+const pick = a => a[Math.floor(Math.random()*a.length)];
+
+/* ---------- 保存（window.storage → localStorage → メモリ） ---------- */
+const Store = (() => {
+  const mem = {};
+  const hasWS = typeof window !== 'undefined' && window.storage && typeof window.storage.get === 'function';
+  let ls = null;
+  try { const k='__t'; localStorage.setItem(k,'1'); localStorage.removeItem(k); ls = localStorage; } catch(e){}
+  return {
+    async get(k){
+      if (hasWS) { try { const r = await window.storage.get(k); if (r && r.value != null) return JSON.parse(r.value); } catch(e){} }
+      if (ls) { try { const v = ls.getItem(k); if (v != null) return JSON.parse(v); } catch(e){} }
+      return mem[k] !== undefined ? mem[k] : null;
+    },
+    async set(k,v){
+      mem[k] = v;
+      const s = JSON.stringify(v);
+      if (hasWS) { try { await window.storage.set(k, s); return true; } catch(e){} }
+      if (ls) { try { ls.setItem(k, s); return true; } catch(e){} }
+      return false;
+    },
+    async del(k){
+      delete mem[k];
+      if (hasWS) { try { await window.storage.delete(k); } catch(e){} }
+      if (ls) { try { ls.removeItem(k); } catch(e){} }
+    }
+  };
+})();
+
+/* ---------- 画像スロット定義（物語順） ---------- */
+const SLOTS = [
+  {k:'bg_torii',  f:'de189548-8b27-4385-9d82-537fc7676773.jpg', n:'鳥居のある参道（夕暮れ・人物なし）', ph:['#F2A65A','#C9603E','#4A2740']},
+  {k:'akane',     f:'6F936887-DC15-4A14-B4B4-A118129E0272.JPG', n:'鳥居の前で微笑む茜（夕暮れ）',       ph:['#FFC98A','#D6714A','#3B2438']},
+  {k:'bg_yatai',  f:'859dda41-3500-491f-a575-96ac8f7e0dd7.jpg', n:'屋台通り（提灯・人物なし）',          ph:['#FF9A4D','#8E3B2E','#16203C']},
+  {k:'ringo',     f:'A4B86076-18E7-468B-88E8-A710747C8C1E.JPG', n:'りんご飴を持つ茜',                    ph:['#FF8A5B','#A33A34','#1A2440']},
+  {k:'kingyo',    f:'012A0E6F-65DE-4087-8ED3-93590E087BF8.JPG', n:'金魚すくいに真剣な茜',                ph:['#7FD8E8','#2E7FA8','#14243F']},
+  {k:'shateki',   f:'87C0A0B5-34A9-41FC-849F-77432650C00E.JPG', n:'射的で狙いを定める茜（背中）',        ph:['#F4C177','#9A6234','#161F38']},
+  {k:'kakigori',  f:'03AECB7D-6868-463C-83C3-C783F6C0C6F7.JPG', n:'かき氷を食べる茜',                    ph:['#FF9BB0','#8E4C67','#141E3A']},
+  {k:'kitsune',   f:'1c015a59-c35c-481a-946b-70794c80b680.jpg', n:'狐面を着けて笑う茜',                  ph:['#FFD9A6','#A86C3C','#1B1A2E']},
+  {k:'bonodori',  f:'d7bd6a93-1139-44d8-a2b4-5bd1faad4437.jpg', n:'盆踊りの輪で踊る茜',                  ph:['#FF7A6B','#9A2F3E','#131C36']},
+  {k:'omikuji',   f:'f7fb4346-e982-424c-b332-cc473b84ce6b.jpg', n:'おみくじを持つ茜（境内）',            ph:['#FFC98A','#8C5A34','#101A33']},
+  {k:'maigo',     f:'62FE4521-C46E-4342-87B9-3F0B7834F8BE.JPG', n:'しゃがんで迷子の子と話す茜',          ph:['#FFB783','#8A4A3E','#121B34']},
+  {k:'sashidashi',f:'5CBC63F6-A1E5-4EE8-A6C8-0E872D899113.JPG', n:'振り返って手を差し出す茜（花火）',    ph:['#FFD08A','#B4453C','#0F1A38']},
+  {k:'bg_oka',    f:'60e6e7eb-9543-4524-ab0f-a7e29de70718.jpg', n:'夜の丘と街明かり（人物なし）',        ph:['#2A4A6E','#16294A','#0A1226']},
+  {k:'yokogao',   f:'46E83DF5-879B-45C8-A72B-05D474FCDC19.JPG', n:'花火を見上げる茜の横顔',              ph:['#5B86B8','#27436E','#0C1428']},
+  {k:'nakiwarai', f:'B24F92D6-E5D7-4EF3-8EE4-3C03560260EE.JPG', n:'涙をこぼして笑う茜（アップ）',        ph:['#E8B473','#6E4A46','#080C18']},
+  {k:'geta',      f:'90627aa6-0d54-43f1-ae0c-a02230bfb057.jpg', n:'下駄を手に持つ茜（夜道）',            ph:['#4E6E8E','#20344F','#0A1122']},
+  {k:'onbu',      f:'1895A5A2-A988-48CA-963C-AF0F1969CE96.JPG', n:'おんぶされる茜（夜道）',              ph:['#3E5C82','#1C3050','#090F20']},
+  {k:'fukuro',    f:'17de49d6-f50d-4942-9975-5faf12c526a8.jpg', n:'線香花火の袋を掲げて笑う茜（玄関）',  ph:['#FFC58A','#9A6238','#141626']},
+  {k:'senko',     f:'738FD173-9E76-4225-945F-15E68CA24DE2.JPG', n:'川辺で線香花火をする茜（月）',        ph:['#4F79A8','#1E3557','#080E1E']},
+  {k:'senko2',    f:'37331d84-445d-42bc-89f4-c7ff2b35c4cc.jpg', n:'二人の手元の線香花火（川辺）',        ph:['#3F6FA0','#1A3050','#070C1C']}
+];
+const SLOTMAP = Object.fromEntries(SLOTS.map(s => [s.k, s]));
+const IMG = {};                       // key -> objectURL / dataURL
+const phCss = s => `linear-gradient(168deg, ${s.ph[0]} 0%, ${s.ph[1]} 46%, ${s.ph[2]} 100%)`;
+function bgOf(key){
+  if (IMG[key]) return `url("${IMG[key]}")`;
+  const s = SLOTMAP[key];
+  return s ? phCss(s) : '#0a1120';
+}
+const imgCount = () => Object.keys(IMG).length;
+
+/* ---------- IndexedDB キャッシュ（使えなければ黙って諦める） ---------- */
+const IDB = (() => {
+  const NAME='natsu_no_tonari', ST='cg';
+  function open(){
+    return new Promise((res,rej)=>{
+      try{
+        const rq = indexedDB.open(NAME,1);
+        rq.onupgradeneeded = ()=>{ try{rq.result.createObjectStore(ST);}catch(e){} };
+        rq.onsuccess = ()=>res(rq.result);
+        rq.onerror = ()=>rej(rq.error);
+      }catch(e){ rej(e); }
+    });
+  }
+  return {
+    async put(k,blob){ try{ const db=await open(); return new Promise(r=>{const t=db.transaction(ST,'readwrite');t.objectStore(ST).put(blob,k);t.oncomplete=()=>r(1);t.onerror=()=>r(0);}); }catch(e){ return 0; } },
+    async all(){ try{
+        const db=await open();
+        return await new Promise(r=>{
+          const out={}; const t=db.transaction(ST,'readonly'); const st=t.objectStore(ST);
+          const rq=st.openCursor();
+          rq.onsuccess=e=>{const c=e.target.result; if(c){out[c.key]=c.value;c.continue();} else r(out);};
+          rq.onerror=()=>r({});
+        });
+      }catch(e){ return {}; } },
+    async clear(){ try{ const db=await open(); return new Promise(r=>{const t=db.transaction(ST,'readwrite');t.objectStore(ST).clear();t.oncomplete=()=>r(1);t.onerror=()=>r(0);}); }catch(e){ return 0; } }
+  };
+})();
+
+/* =========================================================
+   Audio : すべて手続き生成（外部ファイルなし）
+   ========================================================= */
+const Audio_ = (() => {
+  let ctx=null, master=null, bgmG=null, seG=null, ambG=null, verb=null;
+  let ready=false;
+  let vol = {bgm:.42, se:.70};
+  let bgmTimer=null, bgmMood=null, bgmNodes=[];
+  let ambNodes=[];
+
+  function makeVerb(){
+    const c = ctx.createConvolver();
+    const len = ctx.sampleRate*2.0, b = ctx.createBuffer(2,len,ctx.sampleRate);
+    for(let ch=0;ch<2;ch++){
+      const d=b.getChannelData(ch);
+      for(let i=0;i<len;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)*0.5; }
+    }
+    c.buffer=b; return c;
+  }
+  function init(){
+    if(ready) return;
+    try{
+      const AC = window.AudioContext||window.webkitAudioContext;
+      if(!AC) return;
+      ctx = new AC();
+      master = ctx.createGain(); master.gain.value=1; master.connect(ctx.destination);
+      verb = makeVerb();
+      const vg = ctx.createGain(); vg.gain.value=.30; verb.connect(vg); vg.connect(master);
+      bgmG = ctx.createGain(); bgmG.gain.value=vol.bgm; bgmG.connect(master); bgmG.connect(verb);
+      seG  = ctx.createGain(); seG.gain.value=vol.se;  seG.connect(master);
+      const sv = ctx.createGain(); sv.gain.value=.22; seG.connect(sv); sv.connect(verb);
+      ambG = ctx.createGain(); ambG.gain.value=0;     ambG.connect(master);
+      ready=true;
+    }catch(e){}
+  }
+  const resume = () => { if(!ready) init(); if(ctx && ctx.state==='suspended') ctx.resume(); };
+  const now = () => ctx.currentTime;
+
+  function noiseBuf(sec, type){
+    const len=Math.floor(ctx.sampleRate*sec), b=ctx.createBuffer(1,len,ctx.sampleRate), d=b.getChannelData(0);
+    let last=0;
+    for(let i=0;i<len;i++){
+      const w=Math.random()*2-1;
+      if(type==='brown'){ last=(last+0.02*w)/1.02; d[i]=last*3.2; } else d[i]=w;
+    }
+    return b;
+  }
+  function tone(o){
+    if(!ready) return;
+    const {f=880,t=0,d=.2,g=.15,type='sine',to=null,fil=null,q=1} = o;
+    const osc=ctx.createOscillator(), gn=ctx.createGain();
+    osc.type=type; osc.frequency.setValueAtTime(f, now()+t);
+    if(to) osc.frequency.exponentialRampToValueAtTime(Math.max(1,to), now()+t+d*.85);
+    gn.gain.setValueAtTime(0, now()+t);
+    gn.gain.linearRampToValueAtTime(g, now()+t+Math.min(.012,d*.2));
+    gn.gain.exponentialRampToValueAtTime(.0001, now()+t+d);
+    let node=osc;
+    if(fil){ const bf=ctx.createBiquadFilter(); bf.type='lowpass'; bf.frequency.value=fil; bf.Q.value=q; node.connect(bf); node=bf; }
+    node.connect(gn); gn.connect(seG);
+    osc.start(now()+t); osc.stop(now()+t+d+.05);
+  }
+  function noise(o){
+    if(!ready) return;
+    const {t=0,d=.3,g=.12,type='white',f=1200,q=1,ft='bandpass',sweep=null}=o;
+    const src=ctx.createBufferSource(); src.buffer=noiseBuf(Math.max(.05,d+.05),type);
+    const bf=ctx.createBiquadFilter(); bf.type=ft; bf.frequency.setValueAtTime(f, now()+t); bf.Q.value=q;
+    if(sweep) bf.frequency.exponentialRampToValueAtTime(Math.max(40,sweep), now()+t+d);
+    const gn=ctx.createGain();
+    gn.gain.setValueAtTime(0, now()+t);
+    gn.gain.linearRampToValueAtTime(g, now()+t+d*.14);
+    gn.gain.exponentialRampToValueAtTime(.0001, now()+t+d);
+    src.connect(bf); bf.connect(gn); gn.connect(seG);
+    src.start(now()+t); src.stop(now()+t+d+.05);
+  }
+  /* FM系の鈴 */
+  function bell(f=1760, g=.10, d=1.5, t=0){
+    if(!ready) return;
+    const car=ctx.createOscillator(), mod=ctx.createOscillator(), mg=ctx.createGain(), gn=ctx.createGain();
+    car.type='sine'; mod.type='sine';
+    car.frequency.value=f; mod.frequency.value=f*3.17;
+    mg.gain.setValueAtTime(f*2.4, now()+t); mg.gain.exponentialRampToValueAtTime(1, now()+t+d*.5);
+    mod.connect(mg); mg.connect(car.frequency);
+    gn.gain.setValueAtTime(0, now()+t);
+    gn.gain.linearRampToValueAtTime(g, now()+t+.006);
+    gn.gain.exponentialRampToValueAtTime(.0001, now()+t+d);
+    car.connect(gn); gn.connect(seG);
+    car.start(now()+t); mod.start(now()+t); car.stop(now()+t+d+.05); mod.stop(now()+t+d+.05);
+  }
+
+  const SE = {
+    blip(){ const f=rnd(1180,1360); tone({f,to:f*.86,d:.055,g:.045,type:'triangle',fil:2600}); },
+    blip2(){ const f=rnd(900,1000); tone({f,to:f*.9,d:.06,g:.035,type:'sine',fil:2200}); },
+    decide(){ bell(1980,.075,.85); tone({f:1046,to:1568,d:.11,g:.09,type:'sine'}); noise({d:.05,g:.03,f:5200,q:1.2}); },
+    hover(){ tone({f:1568,d:.05,g:.03,type:'sine'}); },
+    bell(){ bell(1568,.11,1.9); },
+    trans(){ noise({d:1.1,g:.05,f:1600,sweep:280,q:.7,type:'brown'}); bell(1318,.07,2.2,.15); },
+    open(){ tone({f:784,to:1175,d:.16,g:.06,type:'sine'}); },
+    close(){ tone({f:1175,to:660,d:.16,g:.055,type:'sine'}); },
+    splash(){ noise({d:.30,g:.10,f:2400,sweep:700,q:.9}); tone({f:520,to:240,d:.2,g:.04,type:'sine'}); },
+    pop(){ tone({f:220,to:70,d:.13,g:.14,type:'square',fil:900}); noise({d:.09,g:.11,f:2800,q:.8}); },
+    paper(){ noise({d:.22,g:.055,f:4200,sweep:2600,q:.6}); },
+    step(){ tone({f:rnd(300,360),to:150,d:.09,g:.05,type:'triangle',fil:1200}); },
+    boom(){
+      tone({f:78,to:34,d:1.5,g:.30,type:'sine'});
+      noise({d:1.3,g:.13,f:420,sweep:110,q:.5,type:'brown'});
+      for(let i=0;i<16;i++) noise({t:.14+Math.random()*.9,d:.05,g:.028,f:rnd(2200,5200),q:2.4});
+    },
+    fizz(){ for(let i=0;i<14;i++) noise({t:i*.05+Math.random()*.05,d:.05,g:.022,f:rnd(3600,7200),q:3}); },
+    heart(){ tone({f:64,to:44,d:.28,g:.16,type:'sine'}); tone({f:64,to:44,d:.26,g:.12,type:'sine',t:.34}); }
+  };
+  function se(k){ if(!ready) init(); if(!ready) return; resume(); (SE[k]||function(){})(); }
+
+  /* ---------- 環境音（数秒鳴らしてフェードアウト） ---------- */
+  function stopAmb(fade=1.6){
+    ambNodes.forEach(n=>{ try{ n.g.gain.cancelScheduledValues(now()); n.g.gain.setValueAtTime(n.g.gain.value, now()); n.g.gain.linearRampToValueAtTime(0, now()+fade); setTimeout(()=>{try{n.s.stop();}catch(e){}}, fade*1000+200);}catch(e){} });
+    ambNodes=[];
+  }
+  function amb(kind, hold=6){
+    if(!ready) init(); if(!ready) return; resume();
+    stopAmb(.6);
+    const defs = {
+      matsuri:[{f:620,q:.55,g:.055,type:'brown'},{f:1500,q:.8,g:.018,type:'white'}],
+      keidai :[{f:420,q:.6,g:.032,type:'brown'}],
+      mushi  :[{f:4600,q:2.2,g:.030,type:'white'},{f:300,q:.7,g:.016,type:'brown'}],
+      kawa   :[{f:900,q:.5,g:.050,type:'white'},{f:180,q:.6,g:.030,type:'brown'}],
+      yoru   :[{f:260,q:.6,g:.026,type:'brown'}]
+    };
+    (defs[kind]||defs.yoru).forEach(d=>{
+      const s=ctx.createBufferSource(); s.buffer=noiseBuf(4,d.type); s.loop=true;
+      const bf=ctx.createBiquadFilter(); bf.type='bandpass'; bf.frequency.value=d.f; bf.Q.value=d.q;
+      const g=ctx.createGain(); g.gain.value=0;
+      s.connect(bf); bf.connect(g); g.connect(ambG);
+      s.start();
+      g.gain.linearRampToValueAtTime(d.g*vol.se, now()+1.4);
+      g.gain.setValueAtTime(d.g*vol.se, now()+hold);
+      g.gain.linearRampToValueAtTime(d.g*vol.se*0.16, now()+hold+3.2);
+      ambNodes.push({s,g});
+    });
+    ambG.gain.setValueAtTime(1, now());
+    if(kind==='mushi'){
+      let n=0; const chirp=()=>{ if(n++>26||!ambNodes.length) return;
+        noise({d:.07,g:.020,f:rnd(5200,7200),q:6}); setTimeout(chirp, rnd(180,520)); };
+      setTimeout(chirp,600);
+    }
+    if(kind==='matsuri'){
+      let n=0; const taiko=()=>{ if(n++>16||!ambNodes.length) return;
+        tone({f:96,to:52,d:.5,g:.045,type:'sine'}); setTimeout(taiko, rnd(700,1500)); };
+      setTimeout(taiko,900);
+    }
+  }
+
+  /* ---------- BGM（手続き生成の和風アルペジオ＋パッド） ---------- */
+  const MOODS = {
+    yuu   :{bpm:66, chords:[[57,64,69,73],[55,62,67,71],[53,60,64,69],[52,59,64,67]], scale:[69,71,73,76,78,81,83,85], lead:.55},
+    matsuri:{bpm:92, chords:[[57,64,69,71],[59,66,71,74],[57,64,69,73],[62,69,73,76]], scale:[69,71,74,76,78,81,83,86], lead:.75},
+    yoru  :{bpm:58, chords:[[45,57,64,69],[48,55,60,67],[43,55,62,67],[41,53,60,65]], scale:[69,72,74,76,79,81,84], lead:.42},
+    kokoro:{bpm:54, chords:[[53,60,65,72],[55,62,67,74],[50,57,62,69],[48,55,60,67]], scale:[69,72,74,77,79,81,84], lead:.38},
+    ed    :{bpm:62, chords:[[53,60,64,71],[55,62,67,74],[57,64,69,76],[52,59,64,71]], scale:[71,73,76,78,80,83,85], lead:.5}
+  };
+  const mtof = m => 440*Math.pow(2,(m-69)/12);
+  function pad(midi, t, dur, g){
+    const o=ctx.createOscillator(), o2=ctx.createOscillator(), gn=ctx.createGain(), bf=ctx.createBiquadFilter();
+    o.type='triangle'; o2.type='sine';
+    o.frequency.value=mtof(midi); o2.frequency.value=mtof(midi)*1.005;
+    bf.type='lowpass'; bf.frequency.value=1500; bf.Q.value=.6;
+    gn.gain.setValueAtTime(0,t);
+    gn.gain.linearRampToValueAtTime(g, t+dur*.35);
+    gn.gain.linearRampToValueAtTime(0.0001, t+dur);
+    o.connect(bf); o2.connect(bf); bf.connect(gn); gn.connect(bgmG);
+    o.start(t); o2.start(t); o.stop(t+dur+.1); o2.stop(t+dur+.1);
+    bgmNodes.push(o,o2);
+  }
+  function pluck(midi, t, g){
+    const o=ctx.createOscillator(), gn=ctx.createGain(), bf=ctx.createBiquadFilter();
+    o.type='triangle'; o.frequency.value=mtof(midi);
+    bf.type='lowpass'; bf.frequency.setValueAtTime(4200,t); bf.frequency.exponentialRampToValueAtTime(700,t+.7);
+    gn.gain.setValueAtTime(0,t); gn.gain.linearRampToValueAtTime(g,t+.008);
+    gn.gain.exponentialRampToValueAtTime(.0001,t+1.15);
+    o.connect(bf); bf.connect(gn); gn.connect(bgmG);
+    o.start(t); o.stop(t+1.25); bgmNodes.push(o);
+  }
+  function bgm(mood){
+    if(!ready) init(); if(!ready) return; resume();
+    if(bgmMood===mood) return;
+    bgmMood=mood;
+    if(bgmTimer) clearInterval(bgmTimer);
+    const M=MOODS[mood]||MOODS.yoru;
+    const beat=60/M.bpm; let step=0; let t0=now()+.15;
+    const tick=()=>{
+      if(bgmMood!==mood) return;
+      const ahead=now()+.9;
+      while(t0<ahead){
+        const bar=Math.floor(step/8)%M.chords.length, s=step%8;
+        const ch=M.chords[bar];
+        if(s===0) ch.forEach((m,i)=> pad(m+ (i>1?0:12), t0, beat*8*.98, .030));
+        if(s%2===0 && Math.random()<M.lead+.2){
+          const n=M.scale[Math.floor(Math.random()*M.scale.length)] + (Math.random()<.25?12:0);
+          pluck(n, t0, .034*(s===0?1.25:.85));
+        }
+        if(s===4 && Math.random()<.5) pluck(ch[0]+24, t0+beat*.5, .018);
+        t0+=beat; step++;
+      }
+    };
+    tick(); bgmTimer=setInterval(tick,300);
+  }
+  function bgmStop(){ bgmMood=null; if(bgmTimer) clearInterval(bgmTimer); bgmTimer=null; }
+  function setVol(k,v){ vol[k]=v; if(!ready) return;
+    if(k==='bgm'&&bgmG) bgmG.gain.setTargetAtTime(v, now(), .1);
+    if(k==='se'&&seG) seG.gain.setTargetAtTime(v, now(), .1);
+  }
+  return {init,resume,se,amb,stopAmb,bgm,bgmStop,setVol,get ready(){return ready;}};
+})();
+
+/* =========================================================
+   engine
+   ========================================================= */
+const G = {
+  name:'きみ', kizuna:0, scene:null, flags:{}, acts:[], actN:0,
+  seen:{}, cleared:0, routeSeen:{}, ending:null, pool:null
+};
+const CFG = { speed:55, uiHidden:false, boot:false };
+let curLayer = 0, typing=false, skipTyping=false, waitTap=null, curLog=[], inChoice=false;
+
+/* ---------- トースト ---------- */
+let toastT=null;
+function toast(msg, ms=1800){
+  const t=$('#toast'); t.textContent=msg; t.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'), ms);
+}
+
+/* ---------- 花火キャンバス ---------- */
+const FW = (() => {
+  const cv=$('#fw'); const cx=cv.getContext('2d');
+  let W=0,H=0,parts=[],on=false,raf=null,timer=null,dpr=1;
+  function fit(){ dpr=Math.min(2,window.devicePixelRatio||1); W=cv.clientWidth;H=cv.clientHeight;
+    cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0); }
+  window.addEventListener('resize',fit);
+  const COL=[[255,214,140],[255,150,120],[150,210,255],[255,255,235],[255,180,220],[190,255,200]];
+  function burst(x,y,big){
+    const c=pick(COL), n=big?150:95, sp=big?rnd(2.6,4.2):rnd(1.8,3.0);
+    for(let i=0;i<n;i++){
+      const a=Math.PI*2*i/n + rnd(-.05,.05), s=sp*rnd(.45,1);
+      parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,dec:rnd(.006,.013),c,r:rnd(1.2,2.6),tr:[]});
+    }
+    Audio_.se('boom');
+  }
+  function loop(){
+    cx.clearRect(0,0,W,H);
+    cx.globalCompositeOperation='lighter';
+    for(let i=parts.length-1;i>=0;i--){
+      const p=parts[i];
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.022; p.vx*=0.988; p.vy*=0.988; p.life-=p.dec;
+      if(p.life<=0){ parts.splice(i,1); continue; }
+      const a=Math.max(0,p.life);
+      const g=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4.5);
+      g.addColorStop(0,`rgba(${p.c[0]},${p.c[1]},${p.c[2]},${a})`);
+      g.addColorStop(1,`rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);
+      cx.fillStyle=g; cx.beginPath(); cx.arc(p.x,p.y,p.r*4.5,0,6.3); cx.fill();
+    }
+    cx.globalCompositeOperation='source-over';
+    raf=requestAnimationFrame(loop);
+  }
+  function schedule(){
+    if(!on) return;
+    const big=Math.random()<.42;
+    burst(rnd(W*.14,W*.86), rnd(H*.07,H*.30), big);
+    timer=setTimeout(schedule, rnd(1500,3400));
+  }
+  return {
+    start(){ if(on) return; on=true; fit(); cv.classList.add('on');
+      if(!raf) loop(); setTimeout(schedule, 400); },
+    stop(){ on=false; cv.classList.remove('on'); clearTimeout(timer);
+      setTimeout(()=>{ if(!on){ cancelAnimationFrame(raf); raf=null; parts=[]; cx.clearRect(0,0,W,H);} },900); },
+    one(big=true){ fit(); if(!raf) loop(); cv.classList.add('on'); on=true;
+      burst(rnd(W*.2,W*.8), rnd(H*.08,H*.26), big); },
+    get on(){return on;}
+  };
+})();
+
+/* ---------- 光のゆらぎ ---------- */
+let flickT=null;
+function flicker(mode){
+  const el=$('#flicker');
+  clearInterval(flickT);
+  if(!mode){ el.style.opacity=0; return; }
+  const base = mode==='strong' ? .55 : .30;
+  const step=()=>{ el.style.transition='opacity .18s ease';
+    el.style.opacity = (base*rnd(.55,1.25)).toFixed(3); };
+  step(); flickT=setInterval(step, 190);
+}
+
+/* ---------- 背景 ---------- */
+function setBg(key, instant){
+  const next = curLayer?0:1;
+  const nl = $('#lay'+next), cl = $('#lay'+curLayer);
+  const inner = nl.querySelector('.inner');
+  inner.className='inner';
+  inner.style.background = bgOf(key);
+  inner.style.backgroundSize='cover';
+  inner.style.backgroundPosition='center 22%';
+  void inner.offsetWidth;
+  inner.classList.add(next?'kb2':'kb');
+  if(instant){ nl.style.transition='none'; } else { nl.style.transition=''; }
+  nl.classList.add('on'); cl.classList.remove('on');
+  curLayer = next;
+  if(instant) requestAnimationFrame(()=>{ nl.style.transition=''; });
+}
+async function flash(ms=520){
+  const f=$('#flash');
+  f.style.transition='none'; f.style.opacity=.85;
+  await sleep(30);
+  f.style.transition=`opacity ${ms}ms ease`; f.style.opacity=0;
+}
+
+/* ---------- テキスト ---------- */
+function nameOf(sp){ return sp==='a' ? '茜' : sp==='p' ? G.name : ''; }
+function fill(t){ return t.replace(/\{n\}/g, G.name); }
+
+function setPlate(sp){
+  const p=$('#plate');
+  const nm=nameOf(sp);
+  if(nm){ $('#plateName').textContent=nm; p.classList.add('on'); }
+  else p.classList.remove('on');
+}
+function pushLine(sp){
+  const flow=$('#flow');
+  [...flow.children].forEach(c=>c.classList.add('old'));
+  const d=document.createElement('div');
+  d.className='ln '+sp;
+  flow.appendChild(d);
+  while(flow.children.length>14) flow.removeChild(flow.firstChild);
+  return d;
+}
+function scrollFlow(){
+  const f=$('#flow'); f.scrollTop=f.scrollHeight;
+  f.classList.toggle('masked', f.scrollTop>2);
+}
+
+async function typeInto(el, text, speed){
+  typing=true; skipTyping=false;
+  $('#bell').classList.remove('on');
+  let blip=0;
+  for(let i=0;i<text.length;i++){
+    if(skipTyping){ el.textContent=text; scrollFlow(); break; }
+    const ch=text[i];
+    el.textContent += ch;
+    scrollFlow();
+    if(ch!=='\u3000' && ch!==' ' && (blip++ % 2 === 0)) Audio_.se(Math.random()<.25?'blip2':'blip');
+    let d=speed;
+    if('、，'.includes(ch)) d+=180;
+    else if('。！？'.includes(ch)) d+=260;
+    else if(ch==='…') d+=120;
+    else if(ch==='\u3000') d+=90;
+    await sleep(d);
+  }
+  typing=false;
+  $('#bell').classList.add('on');
+}
+function tapPromise(){ return new Promise(res=>{ waitTap=()=>{ waitTap=null; res(); }; }); }
+
+async function say(sp, text, opt){
+  opt=opt||{};
+  text=fill(text);
+  setPlate(sp);
+  const el=pushLine(sp);
+  const base = 92 - CFG.speed*0.72;             // 55 → 約52ms
+  const sp_ = opt.slow ? base*1.9 : opt.fast ? base*0.6 : base;
+  await typeInto(el, text, sp_);
+  curLog.push({sp, t:text});
+  await tapPromise();
+}
+
+/* ---------- コマンド ---------- */
+async function cmd(c){
+  if(c.bg!==undefined){ setBg(c.bg); if(c.bg) markSeen(c.bg); }
+  if(c.se) Audio_.se(c.se);
+  if(c.bgm) Audio_.bgm(c.bgm);
+  if(c.amb) Audio_.amb(c.amb, c.hold||6);
+  if(c.ambStop) Audio_.stopAmb();
+  if(c.fw!==undefined){ c.fw?FW.start():FW.stop(); }
+  if(c.fwOne) FW.one(true);
+  if(c.flick!==undefined) flicker(c.flick);
+  if(c.flash) await flash(c.flash===true?520:c.flash);
+  if(c.wait) await sleep(c.wait);
+  if(c.clear) { $('#flow').innerHTML=''; }
+  if(c.uiOff){ $('#ui').classList.remove('show'); }
+  if(c.uiOn){ $('#ui').classList.add('show'); }
+}
+function markSeen(k){ if(SLOTMAP[k]){ G.seen[k]=1; } }
+
+/* ---------- 選択肢 ---------- */
+function showChoices(list){
+  return new Promise(res=>{
+    inChoice=true;
+    const box=$('#choices'), dlg=$('#dialogue');
+    box.innerHTML='';
+    dlg.style.opacity='.42'; dlg.style.pointerEvents='none';
+    list.forEach((c,i)=>{
+      const b=document.createElement('button');
+      b.className='ch'; b.textContent=fill(c.t);
+      b.onclick=e=>{
+        e.stopPropagation();
+        Audio_.se('decide');
+        box.classList.remove('on'); box.innerHTML='';
+        dlg.style.opacity=''; dlg.style.pointerEvents='';
+        inChoice=false;
+        res(c);
+      };
+      box.appendChild(b);
+    });
+    box.classList.add('on');
+    $('#bell').classList.remove('on');
+  });
+}
+
+/* ---------- ログ ---------- */
+function openLog(){
+  const b=$('#logBody');
+  if(!curLog.length){ b.innerHTML='<div class="logempty">この場面の会話はまだありません。</div>'; }
+  else{
+    b.innerHTML = curLog.map(l=>{
+      const nm = l.sp==='a'?'茜': l.sp==='p'?esc(G.name):'';
+      return `<div class="logline ${l.sp}">${nm?`<span class="logname">${nm}</span>`:''}<span class="logtext">${esc(l.t)}</span></div>`;
+    }).join('');
+  }
+  $('#logOv').classList.add('on'); Audio_.se('open');
+  b.scrollTop=b.scrollHeight;
+}
+function esc(s){ return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+
+/* ---------- UI 非表示 ---------- */
+function hideUI(){
+  if(CFG.uiHidden) return;
+  CFG.uiHidden=true;
+  $('#ui').classList.add('hidden');
+  Audio_.se('close');
+  setTimeout(()=>{
+    const back=e=>{ e.preventDefault(); e.stopPropagation();
+      CFG.uiHidden=false; $('#ui').classList.remove('hidden'); Audio_.se('open');
+      document.removeEventListener('pointerdown',back,true); };
+    document.addEventListener('pointerdown',back,true);
+  },260);
+}
+
+/* ---------- シーン遷移 ---------- */
+async function enterScene(sc){
+  G.scene = sc.id;
+  curLog = [];
+  $('#flow').innerHTML='';
+  $('#plate').classList.remove('on');
+  $('#bell').classList.remove('on');
+  $('#ui').classList.remove('show');
+  if(sc.fw===false || sc.fw===undefined) { if(!sc.keepFw) FW.stop(); }
+  if(sc.flick===undefined) flicker(null);
+  if(sc.bg){ setBg(sc.bg); markSeen(sc.bg); }
+  if(sc.bgm) Audio_.bgm(sc.bgm);
+  if(sc.trans!==false) Audio_.se('trans');
+  if(sc.amb) setTimeout(()=>Audio_.amb(sc.amb, sc.ambHold||6), 500);
+  await save();
+  await sleep(sc.hold || 1150);          // 1秒はイラストだけを見せる
+  $('#ui').classList.add('show');
+  await sleep(320);
+}
+
+async function runScene(id){
+  let sc = SCENES[id];
+  while(sc){
+    if(typeof sc === 'function'){ sc = SCENES[sc()]; continue; }
+    await enterScene(sc);
+    const lines = typeof sc.lines==='function' ? sc.lines() : sc.lines;
+    if(lines) for(const L of lines){
+      if(Array.isArray(L)) await say(L[0], L[1], L[2]);
+      else await cmd(L);
+    }
+    if(sc.ending){ await showEnding(sc.ending); return; }
+    let nextId = sc.next;
+    if(sc.choices){
+      const list = typeof sc.choices==='function' ? sc.choices() : sc.choices;
+      const c = await showChoices(list);
+      if(c.k) G.kizuna += c.k;
+      if(c.flag) G.flags[c.flag]=1;
+      if(c.act) G.acts.push(c.act);
+      if(c.res) for(const L of c.res){
+        if(Array.isArray(L)) await say(L[0],L[1],L[2]); else await cmd(L);
+      }
+      if(c.go !== undefined) nextId = typeof c.go==='function' ? c.go() : c.go;
+    }
+    if(typeof nextId==='function') nextId = nextId();
+    if(!nextId) break;
+    sc = SCENES[nextId];
+  }
+}
+
+/* ---------- セーブ ---------- */
+async function save(){
+  await Store.set('nnt_save', {
+    name:G.name, kizuna:G.kizuna, scene:G.scene, flags:G.flags,
+    acts:G.acts, actN:G.actN, pool:G.pool, seen:G.seen, cleared:G.cleared, routeSeen:G.routeSeen, v:2
+  });
+}
+async function loadSave(){ return await Store.get('nnt_save'); }
+async function saveMeta(){
+  await Store.set('nnt_meta', {cleared:G.cleared, seen:G.seen, routeSeen:G.routeSeen, name:G.name});
+}
+
+/* ---------- ギャラリー ---------- */
+function openGallery(){
+  const g=$('#galGrid'); g.innerHTML='';
+  let n=0;
+  SLOTS.forEach(s=>{
+    const d=document.createElement('div');
+    d.className='gcell';
+    if(G.seen[s.k]){
+      n++;
+      if(IMG[s.k]){ const im=document.createElement('img'); im.src=IMG[s.k]; d.appendChild(im); }
+      else { d.style.background=phCss(s); }
+      const c=document.createElement('div'); c.className='cap'; c.textContent=s.n; d.appendChild(c);
+      d.onclick=()=>{ if(!IMG[s.k]) return; $('#gviewImg').src=IMG[s.k]; $('#gview').classList.add('on'); Audio_.se('open'); };
+    } else {
+      d.classList.add('lock'); d.textContent='✦';
+    }
+    g.appendChild(d);
+  });
+  $('#galNote').textContent = `${n} / ${SLOTS.length} 枚。まだ見ていない場面は、別の道を選ぶと見つかります。`;
+  $('#galOv').classList.add('on'); Audio_.se('open');
+}
+$('#gview').onclick=()=>{ $('#gview').classList.remove('on'); Audio_.se('close'); };
+
+/* =========================================================
+   イラスト読み込み
+   ========================================================= */
+let pickedFiles=[], selSlot=null;
+function normName(s){ return String(s).toLowerCase().replace(/\s+/g,''); }
+async function fileToURL(f){ return URL.createObjectURL(f); }
+
+async function applyFiles(files){
+  pickedFiles = files.slice();
+  let hit=0;
+  const byName={};
+  SLOTS.forEach(s=>byName[normName(s.f)]=s.k);
+  for(const f of files){
+    const k = byName[normName(f.name)];
+    if(k && !IMG[k]){ IMG[k]=await fileToURL(f); IDB.put(k,f); hit++; }
+  }
+  renderImgUI();
+  if(hit) toast(`${hit}枚を自動で割り当てました`);
+  else toast('ファイル名が違うので、下から割り当ててください', 2600);
+  refreshTitleBg();
+}
+function autoOrder(){
+  if(pickedFiles.length!==SLOTS.length){ toast(`${SLOTS.length}枚ちょうど選んでください（今 ${pickedFiles.length}枚）`,2600); return; }
+  const sorted=pickedFiles.slice();
+  sorted.forEach(async (f,i)=>{ const k=SLOTS[i].k; IMG[k]=await fileToURL(f); IDB.put(k,f); });
+  setTimeout(()=>{ renderImgUI(); refreshTitleBg(); toast('選んだ順に割り当てました'); },200);
+}
+function renderImgUI(){
+  const sl=$('#slotList'); sl.innerHTML='';
+  SLOTS.forEach(s=>{
+    const d=document.createElement('div');
+    d.className='slot'+(IMG[s.k]?' done':'')+(selSlot===s.k?' sel':'');
+    const th=document.createElement(IMG[s.k]?'img':'div'); th.className='th';
+    if(IMG[s.k]) th.src=IMG[s.k]; else th.style.background=phCss(s);
+    const nm=document.createElement('div'); nm.className='nm'; nm.textContent=s.n;
+    const st=document.createElement('div'); st.className='st'; st.textContent=IMG[s.k]?'済':'未';
+    d.append(th,nm,st);
+    d.onclick=()=>{ selSlot = selSlot===s.k?null:s.k; renderImgUI(); Audio_.se('hover'); };
+    sl.appendChild(d);
+  });
+  const tb=$('#thumbs'); tb.innerHTML='';
+  pickedFiles.forEach(async f=>{
+    const im=document.createElement('img'); im.src=await fileToURL(f);
+    im.onclick=async ()=>{
+      if(!selSlot){ toast('先に下の場面をえらんでください'); return; }
+      IMG[selSlot]=im.src; IDB.put(selSlot,f);
+      const i=SLOTS.findIndex(s=>s.k===selSlot);
+      const nxt=SLOTS.slice(i+1).find(s=>!IMG[s.k]);
+      selSlot = nxt?nxt.k:null;
+      Audio_.se('decide'); renderImgUI(); refreshTitleBg();
+    };
+    tb.appendChild(im);
+  });
+  $('#imgStat').textContent = `${imgCount()} / ${SLOTS.length} 枚 読み込み済み。` +
+    (imgCount()<SLOTS.length ? ' 足りない分は、場面をえらんでからサムネイルをタップ。' : ' すべて揃いました。');
+}
+async function restoreImages(){
+  const all = await IDB.all();
+  let n=0;
+  for(const k in all){ if(SLOTMAP[k] && all[k]){ try{ IMG[k]=URL.createObjectURL(all[k]); n++; }catch(e){} } }
+  return n;
+}
+function refreshTitleBg(){
+  $('#titleBg').style.background = bgOf(IMG['bg_torii']?'bg_torii':'bg_yatai');
+  $('#titleBg').style.backgroundSize='cover';
+  $('#titleBg').style.backgroundPosition='center';
+}
+
+/* =========================================================
+   SCENARIO
+   ========================================================= */
+const ACT_POOL = ['ringo','kingyo','shateki','kakigori','kitsune','bonodori','omikuji'];
+
+function shufflePool(){
+  const a = ACT_POOL.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  G.pool = a;
+  return a;
+}
+function hubChoices(){
+  const pool = (G.pool && G.pool.length) ? G.pool : shufflePool();
+  const rest = pool.filter(a=>!G.acts.includes(a));
+  const shown = rest.slice(0,3);
+  const label = {
+    ringo:'りんご飴の屋台へ',
+    kingyo:'金魚すくいをのぞく',
+    shateki:'射的の景品を見に行く',
+    kakigori:'かき氷で涼んでいく',
+    kitsune:'お面屋の前で足を止める',
+    bonodori:'櫓の盆踊りに近づく',
+    omikuji:'境内のおみくじを引く'
+  };
+  const react = {
+    ringo:[['a','あっ、いいねそれ！　わたし赤いのが好き。だって、きれいだから。']],
+    kingyo:[['a','金魚すくい？　わたし、じつは……けっこう自信あるよ。']],
+    shateki:[['a','射的！？　ねえ、あのおっきいクマ、狙っていい？']],
+    kakigori:[['a','かき氷さんせい！　わたし、もう首のうしろが暑くて暑くて。']],
+    kitsune:[['a','お面かわいい〜！　ちょっとだけ、見ていこ？']],
+    bonodori:[['a','あっ、太鼓の音。……ねえ、盆踊りって、混ざっていいのかな。']],
+    omikuji:[['a','おみくじ！　こういうの、ちゃんと引いておきたいタイプなの、わたし。']]
+  };
+  return shown.map(a=>({
+    t:label[a], act:a, res:react[a], go:a
+  }));
+}
+function afterAct(){
+  G.actN = G.acts.length;
+  return G.actN>=4 ? 'maigo' : 'hub';
+}
+function routeBranch(){
+  const a = G.routeSeen.oka, b = G.routeSeen.hanao;
+  if(a && !b) return 'r_hanao';
+  if(b && !a) return 'r_oka';
+  return Math.random()<0.5 ? 'r_oka' : 'r_hanao';
+}
+
+const SCENES = {
+
+/* ---------------- 序章 ---------------- */
+prologue:{ id:'prologue', bg:'bg_torii', bgm:'yuu', amb:'keidai', ambHold:7, hold:1600,
+ lines:[
+  ['n','夕方の六時。空はまだ、みかんの皮みたいな色をしている。'],
+  ['m','石段の下で待ち合わせ。約束の時間まで、あと十分ある。'],
+  ['m','……十分も早く来てしまった。'],
+  ['m','浴衣で行くね、とだけ返事が来ていた。'],
+  ['m','どんな顔で「似合ってる」って言えばいいのか、'],
+  ['m','家の鏡の前で三回練習して、たぶん全部忘れた。'],
+  {se:'bell'},
+  ['n','参道の奥から、細く長い笛の音が流れてくる。'],
+  ['m','浴衣、か。'],
+  ['m','──ぜんぜん、心の準備ができていない。'],
+  {se:'step'},
+  ['n','背中のほうで、からん、と下駄の音がした。'],
+ ], next:'meet' },
+
+meet:{ id:'meet', bg:'akane', bgm:'yuu', hold:1500,
+ lines:[
+  ['a','おまたせっ！'],
+  ['m','振り向いた瞬間、うまく息が吸えなかった。'],
+  ['n','濃紺の浴衣に、白と桜色の花。'],
+  ['n','高い位置でまとめた髪から、ほつれ毛が一本、耳の横で揺れている。'],
+  ['n','赤い小さな花のかんざしと、帯の金の鈴。'],
+  ['a','ん？　どしたの、そんな固まって。'],
+  ['a','……もしかして、変？'],
+  ['m','変なわけがない。'],
+  ['m','変なのは、心臓の速さのほうだ。'],
+ ],
+ choices:[
+  {t:'「似合ってる。すごく」', k:2, flag:'hometa', res:[
+    ['a','──っ、'],
+    ['n','言い切る前に、茜の耳が赤くなった。'],
+    ['a','……そういうの、まっすぐ言えちゃうんだ、{n}って。'],
+    ['a','えへへ。じゃあ今日は、いっぱい見てていいよ。'],
+    ['m','その笑い方はずるいと思う。'],
+  ]},
+  {t:'「待ってないよ、ぜんぜん」', k:1, res:[
+    ['a','うそだあ。だって手、汗すごいもん。'],
+    ['m','いつのまに握られていた。'],
+    ['a','……三十分前から待ってたでしょ。知ってるんだから。'],
+    ['a','わたしも、ほんとは早く来ちゃったから、おあいこね。'],
+  ]},
+  {t:'なにも言えずに、見とれる', k:1, res:[
+    ['n','言葉が出てこなかった。ただ、見ていた。'],
+    ['a','……なんか言ってよぉ。恥ずかしいでしょ！'],
+    ['n','袖でぱたぱたと顔をあおぐ。首すじまで桜色になっていた。'],
+    ['a','……でも。そういう顔してくれるなら、着てきてよかったな。'],
+  ]}
+ ],
+ next:'toYatai' },
+
+toYatai:{ id:'toYatai', bg:'bg_torii', trans:false, hold:900,
+ lines:[
+  ['a','よーし、行こっ！　今日ね、屋台がいつもの倍あるんだって。'],
+  ['m','袖を軽く引かれる。金の鈴が、ちりん、と鳴った。'],
+  {se:'bell'},
+  ['a','花火は八時半から。それまで、ぜんぶ回っちゃお。'],
+  ['m','──ぜんぶ、は無理だと思う。'],
+  ['m','でも、そう言う茜の横顔が楽しそうだったから、黙っておいた。'],
+ ], next:'hub' },
+
+/* ---------------- 屋台ハブ ---------------- */
+hub:{ id:'hub', bg:'bg_yatai', bgm:'matsuri', amb:'matsuri', ambHold:7, hold:1200,
+ lines:function(){
+   const v=[
+     [['n','提灯の列が、参道の奥までずっと続いている。'],
+      ['n','ソースと、線香と、夏草のにおいが混ざっている。'],
+      ['a','ねえ{n}、次どこ行こっか。']],
+     [['n','人の流れに押されて、肩が触れる。'],
+      ['a','はぐれないでよ？　……あ、いま「そっちこそ」って思ったでしょ。'],
+      ['a','つぎ、どこ行く？']],
+     [['n','どこかで太鼓が鳴って、屋台の明かりが少し揺れた。'],
+      ['a','時間、まだある？　……あるよね。'],
+      ['a','じゃあ、もうちょっとだけ。']],
+     [['n','歩くたび、帯の金の鈴がちりんと鳴る。'],
+      ['a','なんかね、今日、時間の進み方おかしくない？'],
+      ['a','……はやすぎるんだけど。']],
+     [['n','浴衣の袖を軽くつままれた。'],
+      ['a','あと一個だけ。ね、あと一個だけ回ろ？']]
+   ];
+   return v[Math.min(G.acts.length, v.length-1)];
+ },
+ choices:hubChoices, next:null },
+
+/* ---------------- りんご飴 ---------------- */
+ringo:{ id:'ringo', bg:'ringo', amb:'matsuri', ambHold:5,
+ lines:[
+  ['n','電球の下で、りんご飴の飴がぬらりと光っている。'],
+  ['a','はい、{n}のぶん。……あ、ちがう、これわたしの。'],
+  ['a','いま、いちばん赤いの選んだから。'],
+  ['m','屋台のおじさんが笑っていた。'],
+  ['n','ひとくちかじった茜が、口をとがらせる。'],
+  ['a','……かたい。かたすぎる。歯が負けてる。'],
+  ['a','ねえ、これ食べ方あるの？　みんなどうやって食べてるの？'],
+  ['m','唇に飴の欠片がついている。'],
+  ['m','指摘するか、しないか、三秒くらい迷った。'],
+  ['a','ふふ、いま「ついてる」って言おうとしたでしょ。'],
+  ['a','……言ってくれてもよかったのに。'],
+  {se:'heart'},
+  ['a','小学生のときもさ、{n}、わたしのほっぺにご飯粒ついてても言わなかったよね。'],
+  ['a','ずっと見てるくせに、なんにも言わないの。むかしから。'],
+  ['m','見ていたことは、ばれていたらしい。'],
+ ], next:afterAct },
+
+/* ---------------- 金魚すくい ---------------- */
+kingyo:{ id:'kingyo', bg:'kingyo', amb:'matsuri', ambHold:5,
+ lines:[
+  ['n','水槽の底で、青い光がゆらゆら揺れている。'],
+  ['a','……しずかに。息、止めて。'],
+  ['m','さっきまでの元気はどこへ行ったのか、'],
+  ['m','ポイを構えた茜の目つきが、急に真剣になった。'],
+  ['n','水面すれすれに手首を沈める。'],
+  ['n','浴衣の袖を反対の手でそっと押さえている。'],
+  {se:'splash'},
+  ['a','……あっ。'],
+  ['n','薄い紙が、あっけなく破れた。'],
+  ['a','いま！　いまのは金魚が悪い！　急に曲がったもん！'],
+  ['m','金魚に文句を言う人を、はじめて見た。'],
+  ['a','……ねえ、笑ってるでしょ。'],
+  ['a','いいもん。じゃあ{n}がやってよ。'],
+  ['n','押しつけられたポイを受け取ると、指先が少しだけ触れた。'],
+  ['a','……あ。ごめん。'],
+  ['m','謝られると、こっちのほうが困る。'],
+ ], next:afterAct },
+
+/* ---------------- 射的 ---------------- */
+shateki:{ id:'shateki', bg:'shateki', amb:'matsuri', ambHold:5,
+ lines:[
+  ['n','棚のいちばん上に、大きな白いクマが座っている。'],
+  ['a','あれ。あれがいい。あれしか勝たん。'],
+  ['m','コルクの銃を構えた茜が、片目をつぶった。'],
+  ['n','背すじがまっすぐ伸びて、帯の赤いリボンがぴんと張る。'],
+  ['a','……行くよ。'],
+  {se:'pop'},
+  ['n','コルクはクマの耳をかすめて、後ろの壁に当たった。'],
+  ['a','かすった！　いま、かすったよね！？'],
+  ['m','かすっただけだった。'],
+  ['n','三発目も、四発目も、クマは微動だにしない。'],
+  ['a','……あのクマ、根性ある。'],
+  ['a','ねえ{n}、最後の一発、かわりにやってみて。'],
+  ['a','わたしが取れなかったやつを{n}が取ってくれたら、'],
+  ['a','……なんか、ちょっといいなって、思っただけ。'],
+  ['m','その「だけ」に、どれだけの重さがあるのか。'],
+  ['m','引き金を引く手が、少し震えた。'],
+ ], next:afterAct },
+
+/* ---------------- かき氷 ---------------- */
+kakigori:{ id:'kakigori', bg:'kakigori', amb:'matsuri', ambHold:5,
+ lines:[
+  ['n','ベンチに並んで座る。浴衣ごしに、肩が近い。'],
+  ['a','いちご。ぜったいいちご。ブルーハワイは味がわかんないもん。'],
+  ['m','ひとくち食べて、茜が目を閉じて笑った。'],
+  ['n','まつげが下りて、頬の赤みが淡くなる。'],
+  ['a','……しあわせ。'],
+  ['a','夏って、こういうのがあるからずるいよね。'],
+  ['n','スプーンを持ったまま、こめかみを押さえる。'],
+  ['a','いった……。きた、きたやつ。頭のここ、きゅーってなるやつ。'],
+  ['m','こめかみを押さえたまま、それでもスプーンは止まらない。'],
+  ['a','……ん、あーん。'],
+  ['m','差し出された。'],
+  ['m','こういうとき、迷っている時間がいちばん恥ずかしい。'],
+  ['a','はやく〜。溶けちゃう。'],
+  ['a','……あ、いま、ちょっと嬉しそうな顔した。'],
+  ['a','ふふ。今日ね、{n}のそういう顔、何回見られるか数えてるの。'],
+ ], next:afterAct },
+
+/* ---------------- お面 ---------------- */
+kitsune:{ id:'kitsune', bg:'kitsune', amb:'matsuri', ambHold:5,
+ lines:[
+  ['n','白い狐の面が、壁いっぱいに並んでいる。'],
+  ['a','じゃーん。どう？'],
+  ['n','面を横にずらして、笑った顔がのぞく。'],
+  ['a','こういうの、ちっちゃいころ絶対つけたくてさ。'],
+  ['a','でもお母さんが「すぐ飽きるでしょ」って買ってくれなかったんだ。'],
+  ['m','いま買っている。'],
+  ['a','……ん。今日は、いいの。'],
+  ['a','今日は、そういう日だから。'],
+  ['n','面の奥から、目だけがこちらを見ていた。'],
+  ['a','ねえ{n}。狐って、人を化かすんでしょ。'],
+  ['a','じゃあわたしがこれ着けてたら、'],
+  ['a','……{n}のこと、化かしちゃってもいいってこと？'],
+  ['m','とっくに化かされている、とは言えなかった。'],
+  {se:'bell'},
+  ['a','なーんてね。ほら、行こ！'],
+ ], next:afterAct },
+
+/* ---------------- 盆踊り ---------------- */
+bonodori:{ id:'bonodori', bg:'bonodori', amb:'matsuri', ambHold:6,
+ lines:[
+  ['n','櫓のまわりを、浴衣の輪がゆっくり回っている。'],
+  ['a','わたし、この曲だけ踊れるんだ。'],
+  ['a','おばあちゃんに、毎年おなじの教わったから。'],
+  ['n','手のひらを返して、半歩。'],
+  ['n','袖がふわりと持ち上がって、金の鈴が鳴る。'],
+  {se:'bell'},
+  ['a','ほら、{n}も。'],
+  ['a','──むずかしくないよ。手はこう。……そう、逆。'],
+  ['m','逆だった。'],
+  ['n','笑いながら、茜が手首をつかんで直してくれる。'],
+  ['n','触れた場所だけ、やたらと熱い。'],
+  ['a','……あのね。'],
+  ['a','わたし、来年もここに来たいなって、いま思ってる。'],
+  ['a','だれと来たいかは、……言わない。'],
+  ['m','輪の中で、太鼓の音が一度、大きく響いた。'],
+ ], next:afterAct },
+
+/* ---------------- おみくじ ---------------- */
+omikuji:{ id:'omikuji', bg:'omikuji', amb:'keidai', ambHold:6,
+ lines:[
+  ['n','社殿の脇、灯籠の明かりの下。'],
+  ['n','紙を開いた茜が、しばらく黙った。'],
+  ['a','……末吉。'],
+  ['a','ねえ、末吉ってさ、微妙じゃない？　がんばれって言われてる感じ。'],
+  ['m','のぞきこもうとしたら、さっと胸に隠された。'],
+  ['a','だっ、だめ！　こっちは見ないで！'],
+  ['a','恋愛のとこは、ぜったい、だめ！'],
+  ['m','それはもう、答えを言っているのと同じだと思う。'],
+  ['n','結局、いちばん下の一行だけ見せてくれた。'],
+  ['a','ここだけね。「待人 来る」。'],
+  ['a','……来たよ。ちゃんと、来てくれたよね、今日。'],
+  {se:'heart'},
+  ['n','紙を丁寧にたたんで、袂にしまう。'],
+  ['a','結ばないの、って顔してる。'],
+  ['a','いいの。悪いこと書いてなかったから、持って帰る。'],
+ ], next:afterAct },
+
+/* ---------------- 迷子 ---------------- */
+maigo:{ id:'maigo', bg:'maigo', bgm:'matsuri', amb:'matsuri', ambHold:5, hold:1400,
+ lines:[
+  ['n','人混みの端で、小さな泣き声がした。'],
+  ['m','気づいたときには、茜はもうしゃがみこんでいた。'],
+  ['n','浴衣の裾を気にもせず、目線を子どもの高さまで下げている。'],
+  ['a','だいじょうぶだよ。おねえちゃん、ここにいるからね。'],
+  ['a','なまえ、教えてくれる？　……うん。えらいね、言えたね。'],
+  ['m','声の高さが、さっきまでとまるで違う。'],
+  ['m','やわらかくて、ゆっくりで、'],
+  ['m','こんな声も出せるのか、と思った。'],
+  ['n','水風船の紐を、ほどけないように結び直してやっている。'],
+  ['a','ね、お母さんの浴衣、なに色だった？　……青。よし、さがそ。'],
+  ['n','五分後、人混みの向こうから母親が駆けてきた。'],
+  ['n','子どもが振り返って、小さく手を振る。'],
+  {se:'bell'},
+  ['a','……よかったぁ。'],
+  ['n','立ち上がった茜が、大きく息を吐いた。'],
+  ['a','わたし、あの子と同じくらいのとき、ここで迷子になったことあるんだ。'],
+  ['a','そのとき手つないでてくれたの、{n}だったんだけど。'],
+  ['a','……覚えてない、って顔してる。'],
+  ['m','覚えている。'],
+  ['m','ただ、覚えていると言ってしまったら、'],
+  ['m','ずっと覚えていた理由まで、話さないといけない気がした。'],
+ ],
+ choices:[
+  {t:'「覚えてるよ。ずっと」', k:3, flag:'oboeteru', res:[
+    ['a','……っ、'],
+    ['n','茜が、口もとを手で押さえた。'],
+    ['a','ずるい。そういうの、急に言うのずるい。'],
+    ['a','わたしいま、顔ぜったい変だから、見ないで。'],
+    ['m','見ないでと言われて、見ないでいられるわけがなかった。'],
+  ]},
+  {t:'「……どうだったかな」', k:0, res:[
+    ['a','だよねー。ちっちゃいころのことだもんね。'],
+    ['n','笑ったのに、その笑い方が少しだけ薄かった。'],
+    ['m','なんで、あんな言い方をしたんだろう。'],
+    ['m','嘘をつくのが、こんなに下手だとは思わなかった。'],
+  ]},
+  {t:'「手、つなごうか。迷子になるから」', k:2, res:[
+    ['a','だれが迷子！？　わたしもう二十歳だし！'],
+    ['n','言いながら、指はもう伸びてきていた。'],
+    ['a','……はい。にぎった。'],
+    ['a','これ、はぐれないためだからね。それだけだからね。'],
+  ]}
+ ],
+ next:'toClimax' },
+
+toClimax:{ id:'toClimax', bg:'bg_yatai', trans:false, hold:900,
+ lines:[
+  ['n','境内の時計が、八時十五分を指していた。'],
+  ['a','あっ、そろそろだ。'],
+  ['a','ねえ{n}、花火はここじゃもったいないの。'],
+  ['a','いい場所、知ってる。ついてきて。'],
+  ['m','人の流れに逆らって、茜が細い坂道のほうへ歩き出す。'],
+  {se:'step'},
+ ], next:routeBranch },
+
+/* ================= ルートA：丘の花火 ================= */
+r_oka:{ id:'r_oka', bg:'sashidashi', bgm:'yoru', amb:'matsuri', ambHold:4, hold:1300,
+ lines:[
+  ['n','坂の途中で、腹の底に響く音がした。'],
+  {fwOne:true, flash:380},
+  ['n','屋台の屋根の向こうで、金色が大きく開く。'],
+  ['a','わっ、始まっちゃった！　まだ八時半じゃないのに！'],
+  ['n','人波の中で、茜がくるりと振り返る。'],
+  ['n','提灯の赤い光を頬に受けて、手をこちらへ差し出した。'],
+  ['a','走るよ、{n}！　あそこからのほうが、ぜったいきれいだから！'],
+  ['m','差し出された手のひらが、ひどく小さく見えた。'],
+  ['m','考えるより先に、握っていた。'],
+  {se:'bell'},
+  ['a','……っ、うん。行こ。'],
+ ], next:'r_oka2', keepFw:false },
+
+r_oka2:{ id:'r_oka2', bg:'bg_oka', bgm:'yoru', amb:'mushi', ambHold:8, hold:1700,
+ lines:[
+  {fw:true},
+  ['n','坂を登りきると、風が変わった。'],
+  ['n','足もとの草がざわざわ鳴って、'],
+  ['n','眼下に、町の明かりがぜんぶ広がっている。'],
+  ['a','はぁ……っ、はぁ……。ほら、ね？　言ったとおりでしょ。'],
+  ['m','息を切らせながら、茜が得意そうに笑った。'],
+  ['n','後れ毛が汗で首すじに貼りついている。'],
+  ['a','ここ、おばあちゃんに教えてもらった場所なんだ。'],
+  ['a','ほんとは、だれにも教えたくなかったんだけど。'],
+  ['m','だけど、の続きは、花火の音にかき消された。'],
+ ], next:'r_oka3' },
+
+r_oka3:{ id:'r_oka3', bg:'yokogao', bgm:'kokoro', hold:1800, keepFw:true, trans:false,
+ lines:[
+  ['n','空が、青と金にひらいては消えていく。'],
+  ['m','花火より、隣の横顔ばかり見ていた。'],
+  ['n','光が上がるたび、茜の頬の色が変わる。'],
+  ['n','ひらいた瞳に、小さな花火がまるごと映っていた。'],
+  ['a','……きれいだねぇ。'],
+  ['a','わたしね、花火って、ちょっとだけ苦手だったんだ。'],
+  ['a','おっきい音がして、すぐ消えちゃうから。'],
+  ['a','せっかくきれいなのに、待ってくれないでしょ。'],
+  ['n','言葉を切って、茜がこちらを向いた。'],
+  ['a','でも今年は、平気。'],
+  ['a','消えても、となりに{n}がいるってわかってるから。'],
+  ['m','──いま、なにか言わないといけない。'],
+  ['m','喉の奥が、かたく閉じている。'],
+ ], next:'r_oka4' },
+
+r_oka4:{ id:'r_oka4', bg:'nakiwarai', bgm:'kokoro', hold:1900, keepFw:true, trans:false,
+ lines:[
+  ['n','最後の一発が、空いっぱいにひらいた。'],
+  {fwOne:true, flash:300},
+  ['n','光に照らされた茜の目から、'],
+  ['n','つう、と一筋、涙がこぼれていた。'],
+  ['a','……あれ。やだ、なんで。'],
+  ['a','ちがうの、悲しいんじゃなくて。'],
+  ['a','うれしいのが、こぼれてるだけ。'],
+  ['n','泣きながら、それでも笑っている。'],
+  ['a','ずっと来たかったの。{n}と、ここに。'],
+  ['a','小学生のときからずっと、それだけ考えてた。'],
+  ['a','……ばかみたいでしょ。'],
+  ['m','ばかみたいなのは、こっちだ。'],
+  ['m','同じことを、ずっと考えていた。'],
+  ['m','ずっと。何年も。'],
+ ],
+ choices:[
+  {t:'「好きだ。ずっと、茜が好きだった」', k:5, flag:'kokuhaku', go:'ed_oka_true', res:[
+    {se:'heart'},
+    ['p','好きだ。','slow'],
+    ['p','ずっと──ずっと、茜が好きだった。','slow'],
+    ['n','空が静まりかえって、'],
+    ['n','煙のにおいだけが、風に流れていく。'],
+    ['a','……知ってた。','slow'],
+    ['a','ううん、うそ。知らなかった。'],
+    ['a','知ってたら、こんなに泣いてない。'],
+    ['n','茜が、両手で顔を覆って、それからゆっくり下ろした。'],
+    ['a','わたしも。','slow'],
+    ['a','わたしも、好き。ずっとずっと、{n}が好き。'],
+  ]},
+  {t:'そっと、涙をぬぐう', k:3, go:'ed_oka_soft', res:[
+    ['n','親指で、こぼれたところをぬぐった。'],
+    ['n','茜は目を閉じて、されるままになっていた。'],
+    ['a','……ずるいなあ。'],
+    ['a','そういうことするのに、言葉はくれないんだ。'],
+    ['m','言えなかった。'],
+    ['m','言ってしまえば、この夏が終わる気がして。'],
+    ['a','いいよ。待つのは、得意だから。'],
+    ['a','待人 来る、って、書いてあったし。'],
+  ]},
+  {t:'「来年も、ここに来よう」', k:4, go:'ed_oka_next', res:[
+    ['p','来年も。'],
+    ['p','来年も、ここに来よう。二人で。','slow'],
+    ['n','茜が、濡れた目を大きく見ひらいた。'],
+    ['a','……それって。'],
+    ['a','来年も、その次も、ずっとってことでいい？'],
+    ['a','わたし、そういうふうに受け取るからね。'],
+    ['a','あとから違うって言っても、もう遅いんだから。'],
+  ]}
+ ] },
+
+/* ================= ルートB：鼻緒と線香花火 ================= */
+r_hanao:{ id:'r_hanao', bg:'geta', bgm:'yoru', amb:'mushi', ambHold:7, hold:1500,
+ lines:[
+  ['n','坂道の途中で、茜が小さく声をあげた。'],
+  {se:'step'},
+  ['a','……あ。'],
+  ['n','片方の下駄が、足から離れて転がっている。'],
+  ['a','鼻緒。切れちゃった。'],
+  ['m','しゃがんで見てみたが、根もとから完全にほどけていた。'],
+  ['m','ハンカチで結び直そうとしても、すぐに抜けてしまう。'],
+  ['a','……いいよ、もう。'],
+  ['a','だいじょうぶ、歩ける。ちょっと痛いだけだもん。'],
+  ['n','言いながら、足の裏を気にして、そっと体重を移している。'],
+  ['a','ごめんね。せっかく丘まで行こうって言ったのに。'],
+  ['a','わたしのせいで、花火、見られなくなっちゃう。'],
+  ['m','花火は、来年もある。'],
+  ['m','この足で坂を登らせるほうが、よっぽど問題だった。'],
+ ],
+ choices:[
+  {t:'背中を向けて、しゃがむ', k:3, flag:'onbu', res:[
+    ['a','え。……えっ、うそ、乗るの？　人いるよ！？'],
+    ['a','む、無理だよ、重いもん！'],
+    ['m','とっくに知っている。'],
+    ['m','小学生のとき、同じことをして、同じことを言われた。'],
+    ['a','……ほんとに？　ほんとにいいの？'],
+    ['n','しばらくして、背中にそっと重みがかかった。'],
+  ]},
+  {t:'「おぶってく。文句は聞かない」', k:4, flag:'onbu', res:[
+    ['a','ちょ、っと、強引すぎない！？'],
+    ['n','言葉とは裏腹に、腕はもう首に回っていた。'],
+    ['a','……{n}のそういうとこ、'],
+    ['a','ずるい。ほんとに、ずるい。'],
+  ]},
+  {t:'自分の靴を脱いで差し出す', k:2, res:[
+    ['a','だめだめだめ！　{n}が裸足になっちゃうでしょ！'],
+    ['a','わたしのために{n}が痛いのは、いちばんやだ。'],
+    ['m','押し問答の末、結局こうなった。'],
+    ['n','背中を向けてしゃがむと、小さく笑う声がした。'],
+    ['a','……じゃあ、お言葉に甘えます。'],
+  ]}
+ ],
+ next:'r_hanao2' },
+
+r_hanao2:{ id:'r_hanao2', bg:'onbu', bgm:'kokoro', amb:'mushi', ambHold:8, hold:1800,
+ lines:[
+  ['n','夜道を、ゆっくり下りていく。'],
+  ['n','片手に、鼻緒の切れた下駄を二つぶら下げて。'],
+  ['a','……あったかいね、背中。'],
+  ['m','近い。耳のすぐそばで声がする。'],
+  ['m','息がかかるたびに、歩幅がおかしくなりそうだった。'],
+  ['a','ねえ。重くない？　ほんとに？'],
+  ['m','軽い、と答えたら、たぶん怒られる。'],
+  ['m','だから、ちょうどいい、と答えた。'],
+  ['a','なにそれ。ふふ。'],
+  {fwOne:true, flash:340},
+  ['n','背中の向こう、山の上で花火がひらいた。'],
+  ['n','音が遅れて、二拍おくれて追いかけてくる。'],
+  ['a','……あ。'],
+  ['n','しがみつく腕の力が、少しだけ強くなった。'],
+  ['a','ごめんね。'],
+  ['a','わたしのせいで、いちばんいいところ、見られなかったね。'],
+  ['a','ずっと楽しみにしてたのに。ほんとに、ごめん。'],
+  ['m','振り返れないから、顔は見えない。'],
+  ['m','でも、声の震え方でわかった。'],
+ ],
+ choices:[
+  {t:'「花火より、こっちのほうがいい」', k:4, res:[
+    ['p','花火なんて、来年も上がるだろ。'],
+    ['p','……いまは、こっちのほうがいい。','slow'],
+    ['n','しばらく、返事がなかった。'],
+    ['n','かわりに、首すじに額が押しつけられた。'],
+    ['a','……ばか。'],
+    ['a','そういうこと言われたら、降りられなくなるじゃん。'],
+  ]},
+  {t:'「謝るのは、そっちじゃない」', k:3, res:[
+    ['p','謝るなら、鼻緒に言ってくれ。'],
+    ['a','ふふっ、なにそれ。鼻緒に謝るの、わたし？'],
+    ['n','背中で、笑い声が跳ねた。'],
+    ['a','……ありがと。'],
+    ['a','{n}は昔から、わたしが泣きそうなとき、ふざけるよね。'],
+  ]}
+ ],
+ next:'r_hanao3' },
+
+r_hanao3:{ id:'r_hanao3', bg:'fukuro', bgm:'yuu', amb:'yoru', ambHold:5, hold:1500,
+ lines:[
+  ['n','茜の家の玄関先。'],
+  ['n','浴衣にスニーカーという、ちぐはぐな足もとになった茜が、'],
+  ['n','なにかを掲げて戻ってきた。'],
+  ['a','じゃーん！　見て、これ！'],
+  ['n','袋いっぱいの、線香花火。'],
+  ['a','おばあちゃんが、持ってけって。'],
+  ['a','「花火見損ねたんならこれで我慢しな」って。'],
+  ['a','あと、{n}によろしくって。名前ちゃんと覚えてたよ。'],
+  ['m','家族に名前を覚えられている、という事実の重さ。'],
+  ['a','川、行こ。すぐそこだから。'],
+  ['a','……まだ、帰りたくない。'],
+  ['n','最後の一言だけ、声が小さかった。'],
+ ], next:'r_hanao4' },
+
+r_hanao4:{ id:'r_hanao4', bg:'senko', bgm:'kokoro', amb:'kawa', ambHold:9, flick:'soft', hold:1800,
+ lines:[
+  {flick:'soft'},
+  ['n','川べりに座る。水面に、月がまるごと映っていた。'],
+  {se:'fizz'},
+  ['n','火をつけると、小さな玉がふくらんで、'],
+  ['n','ぱち、ぱち、と細い光をこぼしはじめる。'],
+  ['a','……ちいさいね。'],
+  ['a','さっきの花火の、何百分の一もない。'],
+  ['n','橙色の光が、茜の頬をやわらかく照らしている。'],
+  ['n','まばたきのたび、まつげの影が揺れた。'],
+  ['a','でもね、わたし、こっちのほうが好きかも。'],
+  ['a','ちゃんと、消えるまで見ていられるから。'],
+  ['m','手のなかの火の玉が、ふるえて、'],
+  ['m','それでも落ちずに、まだ光っている。'],
+ ], next:'r_hanao5' },
+
+r_hanao5:{ id:'r_hanao5', bg:'senko2', bgm:'kokoro', flick:'strong', hold:2000, trans:false,
+ lines:[
+  {flick:'strong'},
+  ['n','二本目に火をつけると、'],
+  ['n','ふたつの光が、ほとんど同じ高さで並んだ。'],
+  ['a','……ねえ。'],
+  ['a','どっちが長く落ちないか、勝負しよ。'],
+  ['m','息を止めた。'],
+  ['m','指先が震えたら負けだ、と思った。'],
+  ['n','ぱち、ぱち。'],
+  ['n','火花の数が、だんだん減っていく。'],
+  ['a','わたしね、負けたほうが、'],
+  ['a','ひとつだけ本当のこと言うっていうの、どう。'],
+  ['m','その瞬間、こちらの玉が、ぽとりと落ちた。'],
+  ['n','水面で、じゅっ、と音がして消えた。'],
+  ['a','……あ。'],
+  ['a','負けちゃったね、{n}。'],
+  ['n','こちらを見る目が、光を映して、揺れていた。'],
+ ],
+ choices:[
+  {t:'「好きだ。ずっと前から」', k:5, flag:'kokuhaku', go:'ed_senko_true', res:[
+    {se:'heart'},
+    ['p','好きだ。','slow'],
+    ['p','ずっと前から、茜のことが好きだった。','slow'],
+    ['n','茜の手のなかで、二本目の玉も落ちた。'],
+    ['n','急に暗くなって、川の音だけが大きくなる。'],
+    ['a','……ずるい。','slow'],
+    ['a','わたしが言うつもりだったのに。'],
+    ['a','ずっと、今日言うって決めてたのに。'],
+    ['n','そう言って、額をこちらの肩に押しつけた。'],
+    ['a','わたしも好き。'],
+    ['a','──ぜんぶ、ぜんぶ好き。'],
+  ]},
+  {t:'「……また来年も、一緒にやろう」', k:3, go:'ed_senko_next', res:[
+    ['p','……また来年も、一緒にやろう。'],
+    ['n','言ってから、それが精一杯の告白だと気づいた。'],
+    ['a','……それ、本当のこと？'],
+    ['m','うなずくのが、やっとだった。'],
+    ['a','ふうん。'],
+    ['a','じゃあ、来年また負けてね。'],
+    ['a','ちゃんと聞きたいこと、まだあるから。'],
+  ]},
+  {t:'黙って、手を重ねる', k:4, go:'ed_senko_hand', res:[
+    ['n','言葉のかわりに、河原についた手に、自分の手を重ねた。'],
+    ['n','逃げられなかった。逃げる気配もなかった。'],
+    ['a','……っ。'],
+    ['a','こういうの、ずるいってさっきも言ったよね。'],
+    ['n','それでも、指はゆっくりと絡んできた。'],
+    ['a','いいよ。今日は、言わなくても。'],
+    ['a','わかってるから。ちゃんと、わかってるから。'],
+  ]}
+ ] },
+
+/* ================= エンディング ================= */
+ed_oka_true:{ id:'ed_oka_true', bg:'nakiwarai', trans:false, hold:900, keepFw:true,
+ lines:[
+  ['n','風が、煙を運んでいく。'],
+  ['n','町の明かりが、まばたきみたいに揺れている。'],
+  ['m','この夏のことを、たぶん一生忘れない。'],
+  ['m','隣にいる、という、それだけのことを。'],
+ ], ending:{t:'夏のとなり', s:'TRUE END　――　となりに、ずっと', route:'oka'} },
+
+ed_oka_soft:{ id:'ed_oka_soft', bg:'bg_oka', trans:false, hold:900,
+ lines:[
+  ['n','花火が終わっても、しばらく二人とも動かなかった。'],
+  ['a','……ねえ。来年も、誘ってね。'],
+  ['m','言えなかった言葉が、胸の底で光っている。'],
+  ['m','線香花火みたいに、まだ落ちずに。'],
+ ], ending:{t:'まだ落ちない火', s:'END　――　言えなかった、けれど', route:'oka'} },
+
+ed_oka_next:{ id:'ed_oka_next', bg:'bg_oka', trans:false, hold:900,
+ lines:[
+  ['n','約束はひとつ増えて、夏は静かに終わっていく。'],
+  ['a','ぜったい、だからね。指切りする？'],
+  ['m','小指が、思ったよりずっと細かった。'],
+ ], ending:{t:'来年の花火', s:'END　――　約束の場所で', route:'oka'} },
+
+ed_senko_true:{ id:'ed_senko_true', bg:'senko2', trans:false, hold:900, flick:'soft',
+ lines:[
+  ['n','袋の中には、まだ何本も残っている。'],
+  ['a','……ぜんぶ、やってから帰ろ。'],
+  ['m','帰り道が長くなればいいと、はじめて思った。'],
+ ], ending:{t:'線香花火の速さで', s:'TRUE END　――　落ちるまで、となりで', route:'hanao'} },
+
+ed_senko_next:{ id:'ed_senko_next', bg:'senko', trans:false, hold:900, flick:'soft',
+ lines:[
+  ['n','水面の月が、ゆっくりと形を戻していく。'],
+  ['a','来年は、鼻緒の丈夫なやつ履いてくるね。'],
+  ['m','来年の話ができることが、いまはただ、うれしかった。'],
+ ], ending:{t:'また来年', s:'END　――　まだ、言葉にならない', route:'hanao'} },
+
+ed_senko_hand:{ id:'ed_senko_hand', bg:'senko2', trans:false, hold:900, flick:'soft',
+ lines:[
+  ['n','重ねた手を、どちらからともなく離さなかった。'],
+  ['n','川の音が、二人分の沈黙をやさしく埋めていく。'],
+  ['m','言葉より確かなものが、手のひらにあった。'],
+ ], ending:{t:'てのひらの熱', s:'END　――　言わなくても、わかる', route:'hanao'} }
+
+};
+
+/* =========================================================
+   エンディング
+   ========================================================= */
+async function showEnding(e){
+  FW.stop(); flicker(null); Audio_.stopAmb(1.2);
+  $('#ui').classList.remove('show');
+  $('#curtain').classList.add('on');
+  Audio_.bgm('ed');
+  await sleep(1400);
+  $('#edTitle').textContent = e.t;
+  $('#edSub').textContent = e.s;
+  const k=G.kizuna;
+  $('#edEpi').textContent =
+    k>=16 ? '――　この夜のことを、二人はきっと何度も話す。' :
+    k>=11 ? '――　夏はまだ、少しだけ残っている。' :
+    k>=6  ? '――　言えたことも、言えなかったことも、全部その夜のものだ。' :
+            '――　それでも、となりにいた。';
+  $('#ed').classList.add('on');
+  Audio_.se('bell');
+  G.cleared = 1;
+  G.routeSeen[e.route] = 1;
+  G.ending = e.t;
+  await saveMeta();
+  await Store.del('nnt_save');
+}
+$('#edBtn').onclick = async ()=>{
+  Audio_.se('decide');
+  $('#ed').classList.remove('on');
+  $('#curtain').classList.remove('on');
+  await showTitle();
+};
+
+/* =========================================================
+   入力
+   ========================================================= */
+function advance(){
+  if(inChoice) return;
+  Audio_.resume();
+  if(typing){ skipTyping=true; return; }
+  if(waitTap) waitTap();
+}
+let sw={y:0,x:0,moved:false};
+function down(e){
+  const p = e.touches ? e.touches[0] : e;
+  sw.y=p.clientY; sw.x=p.clientX; sw.moved=false;
+}
+function move(e){
+  const p = e.touches ? e.touches[0] : e;
+  if(Math.abs(p.clientY-sw.y)>8 || Math.abs(p.clientX-sw.x)>8) sw.moved=true;
+}
+function up(e){
+  if(sw.moved) return;
+  if(e.target.closest && e.target.closest('#topbar')) return;
+  advance();
+}
+['#tap','#dialogue'].forEach(sel=>{
+  const el=$(sel);
+  el.addEventListener('touchstart', down, {passive:true});
+  el.addEventListener('touchmove', move, {passive:true});
+  el.addEventListener('touchend', up);
+  el.addEventListener('mousedown', down);
+  el.addEventListener('mousemove', move);
+  el.addEventListener('mouseup', e=>{ if(!('ontouchstart' in window)) up(e); });
+});
+
+$('#btnLog').onclick = e=>{ e.stopPropagation(); openLog(); };
+$('#btnHide').onclick = e=>{ e.stopPropagation(); hideUI(); };
+$('#btnMenu').onclick = e=>{ e.stopPropagation(); $('#menuOv').classList.add('on'); Audio_.se('open'); };
+let muted=false;
+$('#btnSound').onclick = e=>{
+  e.stopPropagation(); muted=!muted;
+  Audio_.setVol('bgm', muted?0:CFG.vb); Audio_.setVol('se', muted?0:CFG.vs);
+  $('#btnSound').style.opacity = muted?.42:1;
+  toast(muted?'音を止めました':'音を戻しました', 1200);
+};
+$$('[data-close]').forEach(b=> b.onclick = e=>{
+  e.stopPropagation(); $('#'+b.dataset.close).classList.remove('on'); Audio_.se('close');
+});
+$('#btnSaveNow').onclick = async e=>{ e.stopPropagation(); await save(); toast('ここまでを保存しました'); };
+$('#btnToTitle').onclick = async e=>{
+  e.stopPropagation(); await save();
+  $('#menuOv').classList.remove('on');
+  await showTitle();
+};
+
+/* 設定スライダー */
+CFG.vb=.42; CFG.vs=.70;
+$('#volBgm').oninput = e=>{ CFG.vb=e.target.value/100; if(!muted) Audio_.setVol('bgm',CFG.vb); };
+$('#volSe').oninput  = e=>{ CFG.vs=e.target.value/100; if(!muted) Audio_.setVol('se',CFG.vs); };
+$('#spd').oninput    = e=>{ CFG.speed=+e.target.value; };
+
+/* =========================================================
+   イラスト読み込み UI
+   ========================================================= */
+$('#btnImg').onclick = e=>{ e.stopPropagation(); renderImgUI(); $('#imgOv').classList.add('on'); Audio_.se('open'); };
+$('#btnPick').onclick = e=>{ e.stopPropagation(); $('#filePick').click(); };
+$('#filePick').onchange = e=>{ const f=[...e.target.files]; if(f.length) applyFiles(f); };
+$('#btnAutoOrder').onclick = e=>{ e.stopPropagation(); autoOrder(); };
+$('#btnClearImg').onclick = async e=>{
+  e.stopPropagation();
+  await IDB.clear();
+  Object.keys(IMG).forEach(k=>delete IMG[k]);
+  pickedFiles=[]; selSlot=null; renderImgUI(); refreshTitleBg();
+  toast('読み込みをリセットしました');
+};
+
+/* =========================================================
+   タイトル
+   ========================================================= */
+async function showTitle(){
+  FW.stop(); flicker(null); Audio_.stopAmb(1.0);
+  $('#ui').classList.remove('show');
+  $('#curtain').classList.remove('on');
+  const meta = await Store.get('nnt_meta');
+  if(meta){ G.cleared=meta.cleared||0; G.seen=Object.assign({},meta.seen||{}); G.routeSeen=meta.routeSeen||{}; if(meta.name) G.name=meta.name; }
+  const sv = await loadSave();
+  $('#btnCont').disabled = !sv;
+  $('#btnGal').disabled = !G.cleared;
+  const seenN = Object.keys(G.seen).length;
+  $('#titleNote').textContent = G.cleared
+    ? `思い出 ${seenN}/${SLOTS.length}　${G.routeSeen.oka&&G.routeSeen.hanao?'ふたつの夜を見届けました':'まだ見ていない夜があります'}`
+    : (imgCount()<SLOTS.length ? `イラスト ${imgCount()}/${SLOTS.length} 枚読み込み済み` : 'イラストの準備ができました');
+  refreshTitleBg();
+  $('#title').classList.add('on');
+  Audio_.bgm('yuu');
+}
+$('#btnNew').onclick = async e=>{
+  e.stopPropagation(); Audio_.init(); Audio_.resume(); Audio_.se('decide');
+  $('#nameInput').value = (G.name && G.name!=='きみ') ? G.name : '';
+  $('#nameOv').classList.add('on');
+};
+$('#nameGo').onclick = async e=>{
+  e.stopPropagation(); Audio_.se('decide');
+  const v = $('#nameInput').value.trim();
+  G.name = v || 'きみ';
+  G.kizuna=0; G.flags={}; G.acts=[]; G.actN=0; G.ending=null; shufflePool();
+  $('#nameOv').classList.remove('on');
+  $('#title').classList.remove('on');
+  await saveMeta();
+  await runScene('prologue');
+};
+$('#btnCont').onclick = async e=>{
+  e.stopPropagation(); Audio_.init(); Audio_.resume(); Audio_.se('decide');
+  const sv = await loadSave();
+  if(!sv) return;
+  G.name=sv.name||'きみ'; G.kizuna=sv.kizuna||0; G.flags=sv.flags||{};
+  G.acts=sv.acts||[]; G.actN=sv.actN||0; G.seen=sv.seen||{}; G.pool=sv.pool||null;
+  G.cleared=sv.cleared||0; G.routeSeen=sv.routeSeen||{};
+  $('#title').classList.remove('on');
+  await runScene(sv.scene || 'prologue');
+};
+$('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGallery(); };
+
+/* =========================================================
+   起動
+   ========================================================= */
+(async function boot(){
+  const n = await restoreImages();
+  await refreshTitleBg();
+  const meta = await Store.get('nnt_meta');
+  if(meta){ G.cleared=meta.cleared||0; G.seen=meta.seen||{}; G.routeSeen=meta.routeSeen||{}; G.name=meta.name||'きみ'; }
+  await showTitle();
+  if(n===0){
+    setTimeout(()=>{ toast('「イラストを読み込む」から一枚絵を追加できます', 3400); }, 900);
+  } else if(n<SLOTS.length){
+    setTimeout(()=>{ toast(`イラスト ${n}/${SLOTS.length} 枚を復元しました`, 2600); }, 700);
+  }
+  window.addEventListener('pointerdown', ()=>Audio_.resume(), {once:true});
+  const fit=()=>{ document.documentElement.style.setProperty('--vh', window.innerHeight+'px'); };
+  fit(); window.addEventListener('resize', fit);
+})();
+
+</script>
+</body>
+</html>
