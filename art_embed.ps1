@@ -34,11 +34,17 @@ foreach ($f in $files) {
 }
 
 # --- ゲームから参照できるよう一覧を書き込む -----------------
+# images フォルダを正本(履歴管理用)とし、実際にゲームへ埋め込むのは
+# base64化したデータなので、natsu_no_tonari.html 単体で完結する
+# (images フォルダが無い場所にコピーしても絵が表示される)。
+$mime = @{ ".png"="image/png"; ".jpg"="image/jpeg"; ".jpeg"="image/jpeg"; ".webp"="image/webp" }
 $all = Get-ChildItem $ImgDir -Include *.png,*.jpg,*.jpeg,*.webp -Recurse -ErrorAction SilentlyContinue
 $entries = @()
 foreach ($img in $all) {
     $k = [System.IO.Path]::GetFileNameWithoutExtension($img.Name)
-    $entries += "  `"$k`": `"images/$($img.Name)`""
+    $ext = $img.Extension.ToLower()
+    $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($img.FullName))
+    $entries += "  `"$k`": `"data:$($mime[$ext]);base64,$b64`""
 }
 
 $block = "<script id=""ART_DATA"">`n" +

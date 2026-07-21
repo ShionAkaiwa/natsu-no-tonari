@@ -260,19 +260,6 @@ body{
 #nameInput:focus{border-color:var(--sakura);box-shadow:0 0 0 3px rgba(251,220,228,.12);}
 .ovcenter{flex:1;display:flex;padding:20px 18px;}
 
-/* イラスト読み込み */
-.slotList{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
-.slot{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;
-  background:rgba(255,255,255,.045);border:1px solid transparent;cursor:pointer;transition:.15s;}
-.slot.sel{border-color:var(--gold);background:rgba(235,201,120,.12);}
-.slot.done{opacity:.55;}
-.slot .th{width:30px;height:44px;border-radius:7px;background:rgba(255,255,255,.07);
-  object-fit:cover;flex:none;display:block;}
-.slot .nm{font-size:12px;line-height:1.4;flex:1;}
-.slot .st{font-size:10px;color:var(--gold);letter-spacing:.08em;flex:none;}
-#thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px;}
-#thumbs img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:8px;border:1px solid var(--hair);cursor:pointer;}
-#thumbs img.used{opacity:.28;}
 .hint{font-size:11.5px;color:var(--mute);line-height:1.7;margin:10px 0 0;}
 .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
 .row .tbtn{flex:1;min-width:130px;text-align:center;}
@@ -392,26 +379,6 @@ body{
     </div>
   </div>
 
-  <!-- ===== イラスト読み込み ===== -->
-  <div class="ov" id="imgOv">
-    <div class="ovhead"><div class="ovtitle">イ ラ ス ト</div><button class="xbtn" data-close="imgOv">✕</button></div>
-    <div class="ovbody">
-      <div class="card" style="padding:18px 16px">
-        <h3>イラストを読み込む</h3>
-        <p>この物語で使う一枚絵20枚を、端末から選んでください。ファイル名が一致すれば自動で振り分けます。一致しない場合は、下のサムネイルを場面に割り当ててください。一度読み込めば次回から自動で復元します。</p>
-        <input type="file" id="filePick" accept="image/*" multiple style="display:none">
-        <div class="row">
-          <button class="tbtn" id="btnPick">画像を選ぶ</button>
-          <button class="tbtn sub" id="btnAutoOrder">選んだ順に割り当て</button>
-        </div>
-        <div class="row"><button class="tbtn sub" id="btnClearImg">読み込みをやり直す</button></div>
-      </div>
-      <div id="thumbs"></div>
-      <p class="hint" id="imgStat">まだ読み込まれていません。</p>
-      <div class="slotList" id="slotList"></div>
-    </div>
-  </div>
-
   <!-- ===== エンディング ===== -->
   <div id="ed">
     <div id="edTitle"></div>
@@ -433,7 +400,6 @@ body{
         <button class="tbtn" id="btnNew">はじめから</button>
         <button class="tbtn sub" id="btnCont" disabled>つづきから</button>
         <button class="tbtn sub" id="btnGal" disabled>思い出（ギャラリー）</button>
-        <button class="tbtn sub" id="btnImg">イラストを読み込む</button>
         <p class="tnote" id="titleNote"></p>
       </div>
     </div>
@@ -482,64 +448,43 @@ const Store = (() => {
 
 /* ---------- 画像スロット定義（物語順） ---------- */
 const SLOTS = [
-  {k:'bg_torii',  f:'de189548-8b27-4385-9d82-537fc7676773.jpg', n:'鳥居のある参道（夕暮れ・人物なし）', ph:['#F2A65A','#C9603E','#4A2740']},
-  {k:'akane',     f:'6F936887-DC15-4A14-B4B4-A118129E0272.JPG', n:'鳥居の前で微笑む茜（夕暮れ）',       ph:['#FFC98A','#D6714A','#3B2438']},
-  {k:'bg_yatai',  f:'859dda41-3500-491f-a575-96ac8f7e0dd7.jpg', n:'屋台通り（提灯・人物なし）',          ph:['#FF9A4D','#8E3B2E','#16203C']},
-  {k:'ringo',     f:'A4B86076-18E7-468B-88E8-A710747C8C1E.JPG', n:'りんご飴を持つ茜',                    ph:['#FF8A5B','#A33A34','#1A2440']},
-  {k:'kingyo',    f:'012A0E6F-65DE-4087-8ED3-93590E087BF8.JPG', n:'金魚すくいに真剣な茜',                ph:['#7FD8E8','#2E7FA8','#14243F']},
-  {k:'shateki',   f:'87C0A0B5-34A9-41FC-849F-77432650C00E.JPG', n:'射的で狙いを定める茜（背中）',        ph:['#F4C177','#9A6234','#161F38']},
-  {k:'kakigori',  f:'03AECB7D-6868-463C-83C3-C783F6C0C6F7.JPG', n:'かき氷を食べる茜',                    ph:['#FF9BB0','#8E4C67','#141E3A']},
-  {k:'kitsune',   f:'1c015a59-c35c-481a-946b-70794c80b680.jpg', n:'狐面を着けて笑う茜',                  ph:['#FFD9A6','#A86C3C','#1B1A2E']},
-  {k:'bonodori',  f:'d7bd6a93-1139-44d8-a2b4-5bd1faad4437.jpg', n:'盆踊りの輪で踊る茜',                  ph:['#FF7A6B','#9A2F3E','#131C36']},
-  {k:'omikuji',   f:'f7fb4346-e982-424c-b332-cc473b84ce6b.jpg', n:'おみくじを持つ茜（境内）',            ph:['#FFC98A','#8C5A34','#101A33']},
-  {k:'maigo',     f:'62FE4521-C46E-4342-87B9-3F0B7834F8BE.JPG', n:'しゃがんで迷子の子と話す茜',          ph:['#FFB783','#8A4A3E','#121B34']},
-  {k:'sashidashi',f:'5CBC63F6-A1E5-4EE8-A6C8-0E872D899113.JPG', n:'振り返って手を差し出す茜（花火）',    ph:['#FFD08A','#B4453C','#0F1A38']},
-  {k:'bg_oka',    f:'60e6e7eb-9543-4524-ab0f-a7e29de70718.jpg', n:'夜の丘と街明かり（人物なし）',        ph:['#2A4A6E','#16294A','#0A1226']},
-  {k:'yokogao',   f:'46E83DF5-879B-45C8-A72B-05D474FCDC19.JPG', n:'花火を見上げる茜の横顔',              ph:['#5B86B8','#27436E','#0C1428']},
-  {k:'nakiwarai', f:'B24F92D6-E5D7-4EF3-8EE4-3C03560260EE.JPG', n:'涙をこぼして笑う茜（アップ）',        ph:['#E8B473','#6E4A46','#080C18']},
-  {k:'geta',      f:'90627aa6-0d54-43f1-ae0c-a02230bfb057.jpg', n:'下駄を手に持つ茜（夜道）',            ph:['#4E6E8E','#20344F','#0A1122']},
-  {k:'onbu',      f:'1895A5A2-A988-48CA-963C-AF0F1969CE96.JPG', n:'おんぶされる茜（夜道）',              ph:['#3E5C82','#1C3050','#090F20']},
-  {k:'fukuro',    f:'17de49d6-f50d-4942-9975-5faf12c526a8.jpg', n:'線香花火の袋を掲げて笑う茜（玄関）',  ph:['#FFC58A','#9A6238','#141626']},
-  {k:'senko',     f:'738FD173-9E76-4225-945F-15E68CA24DE2.JPG', n:'川辺で線香花火をする茜（月）',        ph:['#4F79A8','#1E3557','#080E1E']},
-  {k:'senko2',    f:'37331d84-445d-42bc-89f4-c7ff2b35c4cc.jpg', n:'二人の手元の線香花火（川辺）',        ph:['#3F6FA0','#1A3050','#070C1C']}
+  {k:'bg_torii',  n:'鳥居のある参道（夕暮れ・人物なし）', ph:['#F2A65A','#C9603E','#4A2740']},
+  {k:'akane',     n:'鳥居の前で微笑む茜（夕暮れ）',       ph:['#FFC98A','#D6714A','#3B2438']},
+  {k:'bg_yatai',  n:'屋台通り（提灯・人物なし）',          ph:['#FF9A4D','#8E3B2E','#16203C']},
+  {k:'ringo',     n:'りんご飴を持つ茜',                    ph:['#FF8A5B','#A33A34','#1A2440']},
+  {k:'kingyo',    n:'金魚すくいに真剣な茜',                ph:['#7FD8E8','#2E7FA8','#14243F']},
+  {k:'shateki',   n:'射的で狙いを定める茜（背中）',        ph:['#F4C177','#9A6234','#161F38']},
+  {k:'kakigori',  n:'かき氷を食べる茜',                    ph:['#FF9BB0','#8E4C67','#141E3A']},
+  {k:'kitsune',   n:'狐面を着けて笑う茜',                  ph:['#FFD9A6','#A86C3C','#1B1A2E']},
+  {k:'bonodori',  n:'盆踊りの輪で踊る茜',                  ph:['#FF7A6B','#9A2F3E','#131C36']},
+  {k:'omikuji',   n:'おみくじを持つ茜（境内）',            ph:['#FFC98A','#8C5A34','#101A33']},
+  {k:'maigo',     n:'しゃがんで迷子の子と話す茜',          ph:['#FFB783','#8A4A3E','#121B34']},
+  {k:'sashidashi',n:'振り返って手を差し出す茜（花火）',    ph:['#FFD08A','#B4453C','#0F1A38']},
+  {k:'bg_oka',    n:'夜の丘と街明かり（人物なし）',        ph:['#2A4A6E','#16294A','#0A1226']},
+  {k:'yokogao',   n:'花火を見上げる茜の横顔',              ph:['#5B86B8','#27436E','#0C1428']},
+  {k:'nakiwarai', n:'涙をこぼして笑う茜（アップ）',        ph:['#E8B473','#6E4A46','#080C18']},
+  {k:'geta',      n:'下駄を手に持つ茜（夜道）',            ph:['#4E6E8E','#20344F','#0A1122']},
+  {k:'onbu',      n:'おんぶされる茜（夜道）',              ph:['#3E5C82','#1C3050','#090F20']},
+  {k:'fukuro',    n:'線香花火の袋を掲げて笑う茜（玄関）',  ph:['#FFC58A','#9A6238','#141626']},
+  {k:'senko',     n:'川辺で線香花火をする茜（月）',        ph:['#4F79A8','#1E3557','#080E1E']},
+  {k:'senko2',    n:'二人の手元の線香花火（川辺）',        ph:['#3F6FA0','#1A3050','#070C1C']}
 ];
 const SLOTMAP = Object.fromEntries(SLOTS.map(s => [s.k, s]));
-const IMG = {};                       // key -> objectURL / dataURL
+const IMG = {};                       // key -> data URL（window.ART から複製）
 const phCss = s => `linear-gradient(168deg, ${s.ph[0]} 0%, ${s.ph[1]} 46%, ${s.ph[2]} 100%)`;
 function bgOf(key){
   if (IMG[key]) return `url("${IMG[key]}")`;
   const s = SLOTMAP[key];
   return s ? phCss(s) : '#0a1120';
 }
-const imgCount = () => Object.keys(IMG).length;
-
-/* ---------- IndexedDB キャッシュ（使えなければ黙って諦める） ---------- */
-const IDB = (() => {
-  const NAME='natsu_no_tonari', ST='cg';
-  function open(){
-    return new Promise((res,rej)=>{
-      try{
-        const rq = indexedDB.open(NAME,1);
-        rq.onupgradeneeded = ()=>{ try{rq.result.createObjectStore(ST);}catch(e){} };
-        rq.onsuccess = ()=>res(rq.result);
-        rq.onerror = ()=>rej(rq.error);
-      }catch(e){ rej(e); }
-    });
-  }
-  return {
-    async put(k,blob){ try{ const db=await open(); return new Promise(r=>{const t=db.transaction(ST,'readwrite');t.objectStore(ST).put(blob,k);t.oncomplete=()=>r(1);t.onerror=()=>r(0);}); }catch(e){ return 0; } },
-    async all(){ try{
-        const db=await open();
-        return await new Promise(r=>{
-          const out={}; const t=db.transaction(ST,'readonly'); const st=t.objectStore(ST);
-          const rq=st.openCursor();
-          rq.onsuccess=e=>{const c=e.target.result; if(c){out[c.key]=c.value;c.continue();} else r(out);};
-          rq.onerror=()=>r({});
-        });
-      }catch(e){ return {}; } },
-    async clear(){ try{ const db=await open(); return new Promise(r=>{const t=db.transaction(ST,'readwrite');t.objectStore(ST).clear();t.oncomplete=()=>r(1);t.onerror=()=>r(0);}); }catch(e){ return 0; } }
-  };
-})();
+/* イラストは <script id="ART_DATA"> の window.ART に base64 で同梱されており、
+   ファイル単体をコピーするだけで（images フォルダが無くても）表示できる */
+function loadEmbeddedArt(){
+  const art = window.ART || {};
+  let n = 0;
+  SLOTS.forEach(s=>{ if (art[s.k]) { IMG[s.k] = art[s.k]; n++; } });
+  return n;
+}
 
 /* =========================================================
    Audio : すべて手続き生成（外部ファイルなし）
@@ -1073,68 +1018,6 @@ function openGallery(){
 }
 $('#gview').onclick=()=>{ $('#gview').classList.remove('on'); Audio_.se('close'); };
 
-/* =========================================================
-   イラスト読み込み
-   ========================================================= */
-let pickedFiles=[], selSlot=null;
-function normName(s){ return String(s).toLowerCase().replace(/\s+/g,''); }
-async function fileToURL(f){ return URL.createObjectURL(f); }
-
-async function applyFiles(files){
-  pickedFiles = files.slice();
-  let hit=0;
-  const byName={};
-  SLOTS.forEach(s=>byName[normName(s.f)]=s.k);
-  for(const f of files){
-    const k = byName[normName(f.name)];
-    if(k && !IMG[k]){ IMG[k]=await fileToURL(f); IDB.put(k,f); hit++; }
-  }
-  renderImgUI();
-  if(hit) toast(`${hit}枚を自動で割り当てました`);
-  else toast('ファイル名が違うので、下から割り当ててください', 2600);
-  refreshTitleBg();
-}
-function autoOrder(){
-  if(pickedFiles.length!==SLOTS.length){ toast(`${SLOTS.length}枚ちょうど選んでください（今 ${pickedFiles.length}枚）`,2600); return; }
-  const sorted=pickedFiles.slice();
-  sorted.forEach(async (f,i)=>{ const k=SLOTS[i].k; IMG[k]=await fileToURL(f); IDB.put(k,f); });
-  setTimeout(()=>{ renderImgUI(); refreshTitleBg(); toast('選んだ順に割り当てました'); },200);
-}
-function renderImgUI(){
-  const sl=$('#slotList'); sl.innerHTML='';
-  SLOTS.forEach(s=>{
-    const d=document.createElement('div');
-    d.className='slot'+(IMG[s.k]?' done':'')+(selSlot===s.k?' sel':'');
-    const th=document.createElement(IMG[s.k]?'img':'div'); th.className='th';
-    if(IMG[s.k]) th.src=IMG[s.k]; else th.style.background=phCss(s);
-    const nm=document.createElement('div'); nm.className='nm'; nm.textContent=s.n;
-    const st=document.createElement('div'); st.className='st'; st.textContent=IMG[s.k]?'済':'未';
-    d.append(th,nm,st);
-    d.onclick=()=>{ selSlot = selSlot===s.k?null:s.k; renderImgUI(); Audio_.se('hover'); };
-    sl.appendChild(d);
-  });
-  const tb=$('#thumbs'); tb.innerHTML='';
-  pickedFiles.forEach(async f=>{
-    const im=document.createElement('img'); im.src=await fileToURL(f);
-    im.onclick=async ()=>{
-      if(!selSlot){ toast('先に下の場面をえらんでください'); return; }
-      IMG[selSlot]=im.src; IDB.put(selSlot,f);
-      const i=SLOTS.findIndex(s=>s.k===selSlot);
-      const nxt=SLOTS.slice(i+1).find(s=>!IMG[s.k]);
-      selSlot = nxt?nxt.k:null;
-      Audio_.se('decide'); renderImgUI(); refreshTitleBg();
-    };
-    tb.appendChild(im);
-  });
-  $('#imgStat').textContent = `${imgCount()} / ${SLOTS.length} 枚 読み込み済み。` +
-    (imgCount()<SLOTS.length ? ' 足りない分は、場面をえらんでからサムネイルをタップ。' : ' すべて揃いました。');
-}
-async function restoreImages(){
-  const all = await IDB.all();
-  let n=0;
-  for(const k in all){ if(SLOTMAP[k] && all[k]){ try{ IMG[k]=URL.createObjectURL(all[k]); n++; }catch(e){} } }
-  return n;
-}
 function refreshTitleBg(){
   $('#titleBg').style.background = bgOf(IMG['bg_torii']?'bg_torii':'bg_yatai');
   $('#titleBg').style.backgroundSize='cover';
@@ -1894,21 +1777,6 @@ $('#volSe').addEventListener('change', saveSettings);
 $('#spd').addEventListener('change', saveSettings);
 
 /* =========================================================
-   イラスト読み込み UI
-   ========================================================= */
-$('#btnImg').onclick = e=>{ e.stopPropagation(); renderImgUI(); $('#imgOv').classList.add('on'); Audio_.se('open'); };
-$('#btnPick').onclick = e=>{ e.stopPropagation(); $('#filePick').click(); };
-$('#filePick').onchange = e=>{ const f=[...e.target.files]; if(f.length) applyFiles(f); };
-$('#btnAutoOrder').onclick = e=>{ e.stopPropagation(); autoOrder(); };
-$('#btnClearImg').onclick = async e=>{
-  e.stopPropagation();
-  await IDB.clear();
-  Object.keys(IMG).forEach(k=>delete IMG[k]);
-  pickedFiles=[]; selSlot=null; renderImgUI(); refreshTitleBg();
-  toast('読み込みをリセットしました');
-};
-
-/* =========================================================
    タイトル
    ========================================================= */
 async function showTitle(){
@@ -1923,7 +1791,7 @@ async function showTitle(){
   const seenN = Object.keys(G.seen).length;
   $('#titleNote').textContent = G.cleared
     ? `思い出 ${seenN}/${SLOTS.length}　${G.routeSeen.oka&&G.routeSeen.hanao?'ふたつの夜を見届けました':'まだ見ていない夜があります'}`
-    : (imgCount()<SLOTS.length ? `イラスト ${imgCount()}/${SLOTS.length} 枚読み込み済み` : 'イラストの準備ができました');
+    : '';
   refreshTitleBg();
   $('#title').classList.add('on');
   Audio_.bgm('yuu');
@@ -1959,8 +1827,8 @@ $('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGaller
    起動
    ========================================================= */
 (async function boot(){
-  const n = await restoreImages();
-  await refreshTitleBg();
+  loadEmbeddedArt();
+  refreshTitleBg();
   const meta = await Store.get('nnt_meta');
   if(meta){ G.cleared=meta.cleared||0; G.seen=meta.seen||{}; G.routeSeen=meta.routeSeen||{}; G.name=meta.name||'きみ'; }
   const settings = await loadSettings();
@@ -1975,11 +1843,6 @@ $('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGaller
     Audio_.setVol('se', CFG.vs);
   }
   await showTitle();
-  if(n===0){
-    setTimeout(()=>{ toast('「イラストを読み込む」から一枚絵を追加できます', 3400); }, 900);
-  } else if(n<SLOTS.length){
-    setTimeout(()=>{ toast(`イラスト ${n}/${SLOTS.length} 枚を復元しました`, 2600); }, 700);
-  }
   window.addEventListener('pointerdown', ()=>Audio_.resume(), {once:true});
   const fit=()=>{ document.documentElement.style.setProperty('--vh', window.innerHeight+'px'); };
   fit(); window.addEventListener('resize', fit);
