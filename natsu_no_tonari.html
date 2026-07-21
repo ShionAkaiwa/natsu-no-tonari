@@ -1072,6 +1072,22 @@ function routeBranch(){
   return Math.random()<0.5 ? 'r_oka' : 'r_hanao';
 }
 
+/* エンディングで、屋台巡りで訪れた場所の記憶をひとつだけ思い出す一言（ランダム） */
+const ACT_ECHO = {
+  ringo:'飴のかけらがついた唇に見とれてしまったこと',
+  kingyo:'金魚に本気で文句を言っていた横顔',
+  shateki:'根性のあるクマに手こずっていた横顔',
+  kakigori:'頭がきーんとなって顔をしかめていたこと',
+  kitsune:'狐の面の奥からこちらを見ていた目',
+  bonodori:'手首をつかんで踊りを教えてくれたこと',
+  omikuji:'おみくじの最後の一行だけ見せてくれたこと'
+};
+function actEchoLine(){
+  if(!G.acts || !G.acts.length) return null;
+  const a = pick(G.acts);
+  return ACT_ECHO[a] ? ['m', `ふと、${ACT_ECHO[a]}を思い出す。`] : null;
+}
+
 const SCENES = {
 
 /* ---------------- 序章 ---------------- */
@@ -1650,48 +1666,78 @@ r_hanao5:{ id:'r_hanao5', bg:'senko2', bgm:'kokoro', flick:'strong', hold:2000, 
 
 /* ================= エンディング ================= */
 ed_oka_true:{ id:'ed_oka_true', bg:'nakiwarai', trans:false, hold:900, keepFw:true,
- lines:[
-  ['n','風が、煙を運んでいく。'],
-  ['n','町の明かりが、まばたきみたいに揺れている。'],
-  ['m','この夏のことを、たぶん一生忘れない。'],
-  ['m','隣にいる、という、それだけのことを。'],
- ], ending:{t:'夏のとなり', s:'TRUE END　――　となりに、ずっと', route:'oka'} },
+ lines:function(){
+  const base = [
+   ['n','風が、煙を運んでいく。'],
+   ['n','町の明かりが、まばたきみたいに揺れている。'],
+  ];
+  const echo = actEchoLine(); if(echo) base.push(echo);
+  return base.concat([
+   ['m','この夏のことを、たぶん一生忘れない。'],
+   ['m','隣にいる、という、それだけのことを。'],
+  ]);
+ }, ending:{t:'夏のとなり', s:'TRUE END　――　となりに、ずっと', route:'oka'} },
 
 ed_oka_soft:{ id:'ed_oka_soft', bg:'bg_oka', trans:false, hold:900,
- lines:[
-  ['n','花火が終わっても、しばらく二人とも動かなかった。'],
-  ['a','……ねえ。来年も、誘ってね。'],
-  ['m','言えなかった言葉が、胸の底で光っている。'],
-  ['m','線香花火みたいに、まだ落ちずに。'],
- ], ending:{t:'まだ落ちない火', s:'END　――　言えなかった、けれど', route:'oka'} },
+ lines:function(){
+  const base = [
+   ['n','花火が終わっても、しばらく二人とも動かなかった。'],
+   ['a','……ねえ。来年も、誘ってね。'],
+  ];
+  const echo = actEchoLine(); if(echo) base.push(echo);
+  return base.concat([
+   ['m','言えなかった言葉が、胸の底で光っている。'],
+   ['m','線香花火みたいに、まだ落ちずに。'],
+  ]);
+ }, ending:{t:'まだ落ちない火', s:'END　――　言えなかった、けれど', route:'oka'} },
 
 ed_oka_next:{ id:'ed_oka_next', bg:'bg_oka', trans:false, hold:900,
- lines:[
-  ['n','約束はひとつ増えて、夏は静かに終わっていく。'],
-  ['a','ぜったい、だからね。指切りする？'],
-  ['m','小指が、思ったよりずっと細かった。'],
- ], ending:{t:'来年の花火', s:'END　――　約束の場所で', route:'oka'} },
+ lines:function(){
+  const base = [
+   ['n','約束はひとつ増えて、夏は静かに終わっていく。'],
+   ['a','ぜったい、だからね。指切りする？'],
+  ];
+  const echo = actEchoLine(); if(echo) base.push(echo);
+  return base.concat([
+   ['m','小指が、思ったよりずっと細かった。'],
+  ]);
+ }, ending:{t:'来年の花火', s:'END　――　約束の場所で', route:'oka'} },
 
 ed_senko_true:{ id:'ed_senko_true', bg:'senko2', trans:false, hold:900, flick:'soft',
- lines:[
-  ['n','袋の中には、まだ何本も残っている。'],
-  ['a','……ぜんぶ、やってから帰ろ。'],
-  ['m','帰り道が長くなればいいと、はじめて思った。'],
- ], ending:{t:'線香花火の速さで', s:'TRUE END　――　落ちるまで、となりで', route:'hanao'} },
+ lines:function(){
+  const base = [
+   ['n','袋の中には、まだ何本も残っている。'],
+   ['a','……ぜんぶ、やってから帰ろ。'],
+  ];
+  const echo = actEchoLine(); if(echo) base.push(echo);
+  return base.concat([
+   ['m','帰り道が長くなればいいと、はじめて思った。'],
+  ]);
+ }, ending:{t:'線香花火の速さで', s:'TRUE END　――　落ちるまで、となりで', route:'hanao'} },
 
 ed_senko_next:{ id:'ed_senko_next', bg:'senko', trans:false, hold:900, flick:'soft',
- lines:[
-  ['n','水面の月が、ゆっくりと形を戻していく。'],
-  ['a','来年は、鼻緒の丈夫なやつ履いてくるね。'],
-  ['m','来年の話ができることが、いまはただ、うれしかった。'],
- ], ending:{t:'また来年', s:'END　――　まだ、言葉にならない', route:'hanao'} },
+ lines:function(){
+  const base = [
+   ['n','水面の月が、ゆっくりと形を戻していく。'],
+   ['a','来年は、鼻緒の丈夫なやつ履いてくるね。'],
+  ];
+  const echo = actEchoLine(); if(echo) base.push(echo);
+  return base.concat([
+   ['m','来年の話ができることが、いまはただ、うれしかった。'],
+  ]);
+ }, ending:{t:'また来年', s:'END　――　まだ、言葉にならない', route:'hanao'} },
 
 ed_senko_hand:{ id:'ed_senko_hand', bg:'senko2', trans:false, hold:900, flick:'soft',
- lines:[
-  ['n','重ねた手を、どちらからともなく離さなかった。'],
-  ['n','川の音が、二人分の沈黙をやさしく埋めていく。'],
-  ['m','言葉より確かなものが、手のひらにあった。'],
- ], ending:{t:'てのひらの熱', s:'END　――　言わなくても、わかる', route:'hanao'} }
+ lines:function(){
+  const base = [
+   ['n','重ねた手を、どちらからともなく離さなかった。'],
+   ['n','川の音が、二人分の沈黙をやさしく埋めていく。'],
+  ];
+  const echo = actEchoLine(); if(echo) base.push(echo);
+  return base.concat([
+   ['m','言葉より確かなものが、手のひらにあった。'],
+  ]);
+ }, ending:{t:'てのひらの熱', s:'END　――　言わなくても、わかる', route:'hanao'} }
 
 };
 
