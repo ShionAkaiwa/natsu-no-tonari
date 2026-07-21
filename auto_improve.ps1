@@ -55,11 +55,14 @@ try {
     # --- 届いた画像を取り込む --------------------------------
     & (Join-Path $Root "art_embed.ps1") 2>&1 | Out-Null
 
-    # --- Geminiで画像を自動生成(APIキーがあれば) ------------
-    if ($env:GEMINI_API_KEY) {
-        & (Join-Path $Root "gemini_art.ps1") 2>&1 | Out-Null
-        & (Join-Path $Root "art_embed.ps1") 2>&1 | Out-Null
-    }
+    # --- 無料で画像を自動生成(Pollinations.ai。課金なし) ----
+    & (Join-Path $Root "auto_art_gen.ps1") 2>&1 | Out-Null
+    & (Join-Path $Root "art_embed.ps1") 2>&1 | Out-Null
+
+    # --- スマホ公開用コピーを更新(Netlifyが自動デプロイする) --
+    $SiteDir = Join-Path $Root "site"
+    if (-not (Test-Path $SiteDir)) { New-Item $SiteDir -ItemType Directory | Out-Null }
+    Copy-Item $GameFile (Join-Path $SiteDir "index.html") -Force
 
     # --- Claude Code に作業させる ----------------------------
     $prompt = "CLAUDE.mdの指示に従って作業してください。REQUESTS.mdの未読要望を最優先し、なければBACKLOG.mdから1件処理し、最後に必ずgit commitとgit pushまで行ってください。"
