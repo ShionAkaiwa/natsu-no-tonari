@@ -412,7 +412,7 @@ body{
     <div id="titleBg"></div>
     <div id="titleVeil"></div>
     <div class="tWrap">
-      <div style="display:flex;justify-content:flex-end;align-items:flex-start;">
+      <div style="display:flex;justify-content:center;align-items:flex-start;">
         <div class="tSub">ひと夏の、となり</div>
         <h1 class="tMain">夏のとなり</h1>
       </div>
@@ -1132,9 +1132,13 @@ function hubChoices(){
       [['a','あ、おみくじだ。……ちょっとドキドキするな。なんでだろ。']],
     ],
   };
-  return shown.map(a=>({
+  const opts = shown.map(a=>({
     t:label[a], act:a, res:pick(react[a]), go:a
   }));
+  if(G.acts.length>=2){
+    opts.push({ t:'花火の見える場所に行こう', go:'hanabiEarly' });
+  }
+  return opts;
 }
 function afterAct(){
   G.actN = G.acts.length;
@@ -1506,6 +1510,43 @@ omikuji:{ id:'omikuji', bg:'omikuji', amb:'keidai', ambHold:6,
   ];
  }, next:afterAct },
 
+/* ---------------- 早めに花火へ(屋台を2つ以上回った後、丘ルートへ直行) ---------------- */
+hanabiEarly:{ id:'hanabiEarly', bg:'bg_yatai', bgm:'matsuri', amb:'matsuri', ambHold:5, hold:1300,
+ lines:[
+  ['a','ねえ、屋台はもういいの？　まだ回れるけど。'],
+  ['m','聞かれて、少し考える。'],
+  ['m','けど、答えはもう決まっていた。'],
+  ['a','……そっか。じゃあ、行こっか。'],
+  ['n','茜が、参道の看板を指でなぞりながら歩く。'],
+  ['a','ねえ{n}、しりとりしよ。「なつまつり」……の「り」。'],
+  ['m','急に始まった遊びに、頭の中で言葉を探す。'],
+ ],
+ choices:[
+  {t:'「りんごあめ」', k:2, res:[
+    ['a','あ、それさっき見たやつだ！　ずるい、目に入ったやつ言うの。'],
+    ['a','じゃあわたし……「めいろ」。次、{n}の番。'],
+  ]},
+  {t:'「りゆう、が、ない」', k:1, res:[
+    ['a','反則っ！　まあ三文字ならいいか。……次わたしね。'],
+    ['a','「いか」。焼きいかの、いか。'],
+  ]},
+  {t:'黙って、少し悩むふりをする', k:1, flag:'hayame', res:[
+    ['a','あ、いま逃げたでしょ。「り」で悩んだ顔してた。'],
+    ['a','ふふ、まあいいや。……こういうの、意外と好きかも。'],
+  ]}
+ ],
+ next:'toClimaxEarly' },
+
+toClimaxEarly:{ id:'toClimaxEarly', bg:'bg_yatai', trans:false, hold:900,
+ lines:[
+  ['n','言葉遊びに気を取られているうちに、屋台の灯りが少しずつ遠くなっていく。'],
+  ['a','あっ、そろそろだ。'],
+  ['a','ねえ{n}、花火はここじゃもったいないの。'],
+  ['a','いい場所、知ってる。ついてきて。'],
+  ['m','人の流れに逆らって、茜が細い坂道のほうへ歩き出す。'],
+  {se:'step'},
+ ], next:'r_oka' },
+
 /* ---------------- 迷子 ---------------- */
 maigo:{ id:'maigo', bg:'maigo', bgm:'matsuri', amb:'matsuri', ambHold:5, hold:1400,
  lines:[
@@ -1603,6 +1644,7 @@ r_oka3:{ id:'r_oka3', bg:'yokogao', bgm:'kokoro', hold:1800, keepFw:true, trans:
   if(G.flags.hometa) base.push(['m','さっき「似合ってる」と言えたときの、赤くなった耳を思い出す。']);
   if(G.flags.oboeteru) base.push(['m','さっき「覚えてるよ」と言ったときの、泣きそうな横顔を思い出す。']);
   if(G.flags.tsunagu) base.push(['m','さっき「迷子になるから」と繋いだ手の、あのときの体温を思い出す。']);
+  if(G.flags.hayame) base.push(['m','さっき言葉遊びでわざと黙ってみせた、あの間の取り方を思い出す。']);
   return base.concat([
    ['n','光が上がるたび、茜の頬の色が変わる。'],
    ['n','ひらいた瞳に、小さな花火がまるごと映っていた。'],
