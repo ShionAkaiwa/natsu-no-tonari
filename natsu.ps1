@@ -223,11 +223,6 @@ switch ($Command.ToLower()) {
         Start-Process explorer.exe $InboxDir
     }
 
-    # --- Geminiで自動生成 ---------------------------------------
-    "gemini" {
-        & (Join-Path $Root "gemini_art.ps1")
-    }
-
     # --- 必要なイラスト一覧を見る -------------------------------
     "arts" {
         Write-Host ""
@@ -268,7 +263,6 @@ switch ($Command.ToLower()) {
 
   イラスト
     natsu arts          今どんな絵が必要とされているか見る
-    natsu gemini        Geminiで自動生成する(APIキー設定時)
     natsu inbox         画像を置くフォルダを開く
     natsu art           inboxの画像をゲームに組み込む
 

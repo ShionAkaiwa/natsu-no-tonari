@@ -59,8 +59,8 @@ try {
     & (Join-Path $Root "auto_art_gen.ps1") 2>&1 | Out-Null
     & (Join-Path $Root "art_embed.ps1") 2>&1 | Out-Null
 
-    # --- スマホ公開用コピーを更新(Netlifyが自動デプロイする) --
-    $SiteDir = Join-Path $Root "site"
+    # --- スマホ公開用コピーを更新(GitHub Pagesが/docsを自動デプロイする) --
+    $SiteDir = Join-Path $Root "docs"
     if (-not (Test-Path $SiteDir)) { New-Item $SiteDir -ItemType Directory | Out-Null }
     Copy-Item $GameFile (Join-Path $SiteDir "index.html") -Force
 
