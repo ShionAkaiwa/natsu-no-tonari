@@ -74,14 +74,15 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 
 ### omikuji
 status: 未生成
-prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing in a quiet shrine courtyard at night, holding a thin paper fortune slip (omikuji), curious hopeful expression reading it, soft lantern and moonlight, rows of tied fortune papers faintly visible in the background. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+retries: 1
+prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing alone in a quiet shrine courtyard at night lit only by plain moonlight and one unlit stone lantern (toro), holding a thin blank paper fortune slip (omikuji) with no writing or printed characters on it, curious hopeful expression reading it, empty background with no hanging paper lanterns, no chochin, no signage, no kanji or text of any kind anywhere in the scene. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters, no readable characters anywhere in the image. Vertical portrait composition (9:16).
 
 ### maigo
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, crouching down at eye level talking gently to a small lost child at a night festival, warm caring expression, soft lantern light, blurred festival crowd and stalls in the background. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### sashidashi
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, looking back over her shoulder and reaching out her hand toward the viewer, fireworks bursting in the night sky behind her, warm golden light on her face, inviting gentle smile. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### bg_oka
