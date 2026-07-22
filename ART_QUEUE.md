@@ -48,15 +48,15 @@ status: 組込済
 prompt: Empty Japanese summer festival stall street at night, rows of glowing paper lanterns, warm orange lantern light against a deep indigo night sky, faint smoke and steam from food stalls, bustling atmosphere but no people visible. Soft painterly anime background art style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
 
 ### ringo
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, happily holding up a shiny red candied apple (ringo-ame) at a night festival, warm lantern light on her face, playful joyful expression. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### kingyo
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, crouched at a goldfish scooping (kingyo-sukui) stall, holding a paper poi scoop over a shallow water tub with orange goldfish, intensely focused expression, warm festival lantern light reflecting on the water. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### shateki
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, seen from behind and slightly to the side, aiming a cork gun at a shooting gallery (shateki) stall lined with prize toys, focused posture, warm lantern light, festival night atmosphere. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### kakigori
