@@ -52,19 +52,30 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 ### geta — 壊れた下駄を持つ茜(夜道)
 どこで使う: 鼻緒(hanao)ルートの開始場面(鼻緒が切れる)
 status: 未生成
-prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing barefoot on a quiet night road holding her broken wooden sandal (geta) in one hand, looking down at it with a rueful gentle smile, soft moonlight and distant streetlight glow. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+retries: 1
+(2026/07/23: 生成された絵は、下駄ではなくスマートフォンのような四角い物を手に持って
+見下ろしている構図になっており、「壊れた下駄を手に持って見る」という場面の意図と
+食い違っていたため差し戻し。下駄自体は帯元に挟まっているだけで手には持っていなかった。
+スマホ等の現代的な小物が写り込まないこと、壊れた下駄を目線の高さまで持ち上げて
+見ていることを強く指定する形に書き直した)
+prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing barefoot on a quiet night road, holding up her broken wooden sandal (geta) in front of her at eye level with both hands, its strap visibly snapped, looking directly at the broken sandal with a rueful gentle smile, soft moonlight and distant streetlight glow, empty hands otherwise, no phone, no smartphone, no modern electronic device of any kind anywhere in the image. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
 ### onbu — おんぶされる茜(夜道)
 どこで使う: 鼻緒ルート、おぶっていく場面
 status: 未生成
-prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, being given a piggyback ride along a quiet night road, seen from the side, her arms gently around the shoulders of the person carrying her (faceless or back-view male silhouette), soft embarrassed happy smile, moonlight and warm distant lantern glow. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+retries: 1
+(2026/07/23: 生成された絵は、茜が一人で夜道を振り返っているだけの構図で、
+おんぶされている描写(背負われている・もう一人の人物)が一切写っていなかったため
+差し戻し。おんぶである点(足が地面から離れている、相手の肩や背中がはっきり
+見える)をより強く指定する形に書き直した)
+prompt: A night-time piggyback ride scene: in the foreground, the broad back and shoulders of a faceless young man (back view only, face not shown) carrying Akane on his back; Akane is a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, her arms wrapped gently around his neck and shoulders from behind, her legs clearly lifted off the ground and supported at his sides, her cheek resting near his shoulder with a soft embarrassed happy smile. Two people must both be visible in the frame. Quiet night road, moonlight and warm distant lantern glow. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
 ### fukuro — 線香花火の袋を掲げる茜(玄関)
 どこで使う: 鼻緒ルート中盤(線香花火を買ってくる場面)
-status: 未生成
-prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing at a traditional wooden entryway (genkan) at night, cheerfully holding up a small paper bag of sparkler fireworks (senko-hanabi), bright happy smile, warm porch light. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+status: 組込済
+(2026/07/23確認: 玄関先で線香花火の袋を掲げて笑う構図・容姿設定とも問題なし。採用)
 > 返信欄:
 
 ### senko — 川辺で線香花火をする茜(月)
