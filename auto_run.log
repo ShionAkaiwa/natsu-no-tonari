@@ -135,3 +135,5 @@ Committed and pushed. Summary:
 - `site/index.html` and `auto_run.log` diffs came from the wrapper script's pre-run copy step, not from me directly, per CLAUDE.md's instruction not to hand-edit the site copy.
 
 2026-07-22 09:57 - 作業完了
+2026-07-22 09:57 - ----- 実行終了 -----
+2026-07-22 10:53 - ----- 実行開始 -----
