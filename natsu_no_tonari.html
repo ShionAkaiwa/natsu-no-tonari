@@ -22,6 +22,7 @@
   --text:#F3F0F4;
   --mute:#AEB6C7;
   --lh:1.85em;
+  --fontScale:1;
   --pad:16px;
   --sat:env(safe-area-inset-top,0px);
   --sab:env(safe-area-inset-bottom,0px);
@@ -135,7 +136,7 @@ body{
   overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
   scrollbar-width:none;
-  font-size:15.5px;line-height:var(--lh);letter-spacing:.02em;
+  font-size:calc(15.5px * var(--fontScale));line-height:var(--lh);letter-spacing:.02em;
   touch-action:pan-y;
 }
 #flow::-webkit-scrollbar{display:none;}
@@ -149,8 +150,8 @@ body{
 .ln.old{opacity:.42;}
 .ln.a{color:var(--sakura);}
 .ln.p{color:#F6E3B6;}
-.ln.m{color:#CBD2E2;font-size:14.5px;}
-.ln.n{color:#B9C2D6;font-size:14.5px;}
+.ln.m{color:#CBD2E2;font-size:calc(14.5px * var(--fontScale));}
+.ln.n{color:#B9C2D6;font-size:calc(14.5px * var(--fontScale));}
 #bell{
   position:absolute;right:14px;bottom:9px;width:16px;height:20px;opacity:0;
   transition:opacity .3s;pointer-events:none;
@@ -291,7 +292,7 @@ body{
 
 @media(max-height:640px){
   :root{--lh:1.72em;}
-  #flow{font-size:14.5px;}
+  #flow{font-size:calc(14.5px * var(--fontScale));}
 }
 @media(prefers-reduced-motion:reduce){
   .layer .inner.kb,.layer .inner.kb2,#titleBg{animation:none!important;}
@@ -364,6 +365,8 @@ body{
         <input type="range" id="spd" min="0" max="100" value="55" style="width:100%">
         <div style="font-size:12px;color:#AEB6C7;letter-spacing:.1em;margin:12px 0 4px;">オート送りの速さ</div>
         <input type="range" id="autoSpd" min="0" max="100" value="50" style="width:100%">
+        <div style="font-size:12px;color:#AEB6C7;letter-spacing:.1em;margin:12px 0 4px;">文字の大きさ</div>
+        <input type="range" id="fontSize" min="80" max="130" value="100" style="width:100%">
       </div>
       <div class="row">
         <button class="tbtn sub" id="btnSaveNow">ここまでを保存</button>
@@ -723,7 +726,7 @@ const G = {
   name:'きみ', kizuna:0, scene:null, flags:{}, acts:[], actN:0,
   seen:{}, cleared:0, routeSeen:{}, ending:null, pool:null, endingsSeen:{}
 };
-const CFG = { speed:55, autoSpeed:50, uiHidden:false, boot:false };
+const CFG = { speed:55, autoSpeed:50, fontSize:100, uiHidden:false, boot:false };
 let curLayer = 0, typing=false, skipTyping=false, waitTap=null, curLog=[], inChoice=false;
 let autoPlay=false, autoTimer=null;
 
@@ -1019,7 +1022,7 @@ async function save(){
 }
 async function loadSave(){ return await Store.get('nnt_save'); }
 async function saveSettings(){
-  await Store.set('nnt_settings', {vb:CFG.vb, vs:CFG.vs, speed:CFG.speed, autoSpeed:CFG.autoSpeed});
+  await Store.set('nnt_settings', {vb:CFG.vb, vs:CFG.vs, speed:CFG.speed, autoSpeed:CFG.autoSpeed, fontSize:CFG.fontSize});
 }
 async function loadSettings(){ return await Store.get('nnt_settings'); }
 async function saveMeta(){
@@ -2053,10 +2056,12 @@ $('#volBgm').oninput = e=>{ CFG.vb=e.target.value/100; if(!muted) Audio_.setVol(
 $('#volSe').oninput  = e=>{ CFG.vs=e.target.value/100; if(!muted) Audio_.setVol('se',CFG.vs); };
 $('#spd').oninput    = e=>{ CFG.speed=+e.target.value; };
 $('#autoSpd').oninput = e=>{ CFG.autoSpeed=+e.target.value; };
+$('#fontSize').oninput = e=>{ CFG.fontSize=+e.target.value; document.documentElement.style.setProperty('--fontScale', CFG.fontSize/100); };
 $('#volBgm').addEventListener('change', saveSettings);
 $('#volSe').addEventListener('change', saveSettings);
 $('#spd').addEventListener('change', saveSettings);
 $('#autoSpd').addEventListener('change', saveSettings);
+$('#fontSize').addEventListener('change', saveSettings);
 
 /* =========================================================
    タイトル
@@ -2120,10 +2125,13 @@ $('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGaller
     if(settings.vs!=null) CFG.vs=settings.vs;
     if(settings.speed!=null) CFG.speed=settings.speed;
     if(settings.autoSpeed!=null) CFG.autoSpeed=settings.autoSpeed;
+    if(settings.fontSize!=null) CFG.fontSize=settings.fontSize;
     $('#volBgm').value=Math.round(CFG.vb*100);
     $('#volSe').value=Math.round(CFG.vs*100);
     $('#spd').value=CFG.speed;
     $('#autoSpd').value=CFG.autoSpeed;
+    $('#fontSize').value=CFG.fontSize;
+    document.documentElement.style.setProperty('--fontScale', CFG.fontSize/100);
     Audio_.setVol('bgm', CFG.vb);
     Audio_.setVol('se', CFG.vs);
   }
