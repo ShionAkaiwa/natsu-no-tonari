@@ -22,7 +22,7 @@ $content = Get-Content $Queue -Raw -Encoding UTF8
 #   ### key_name
 #   status: 未生成
 #   prompt: <英語のプロンプト>
-$pattern = '(?ms)^### (.+?)\r?\n(?:retries: \d+\r?\n)?status: 未生成\r?\nprompt: (.+?)(?=\r?\n###|\r?\n*\z)'
+$pattern = '(?m)^### ([^\r\n]+)\r?\n(?:retries: \d+\r?\n)?status: 未生成\r?\nprompt: ([\s\S]+?)(?=\r?\n### |\r?\n*\z)'
 $matches = [regex]::Matches($content, $pattern)
 
 if ($matches.Count -eq 0) {
