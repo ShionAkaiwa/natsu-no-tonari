@@ -44,3 +44,11 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 ### sashidashi
 status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, looking back over her shoulder and reaching out her hand toward the viewer, fireworks bursting in the night sky behind her, warm golden light on her face, inviting gentle smile. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+
+### kitsune
+status: 組込済
+prompt: Akane, a young Japanese woman around 20 years old, fully human with normal human ears (absolutely no animal ears, no fox ears, no kemonomimi), chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, holding a traditional flat white fox festival mask (kitsune-men, a solid painted paper/ceramic mask like a Noh mask) tilted up and resting on top of her head like a hat so her own human face is fully visible and laughing brightly, warm golden lantern light at a night festival. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+
+### bg_oka
+status: 組込済
+prompt: Empty quiet hilltop overlooking a distant town at night, scattered warm city lights below, deep blue night sky with soft stars, gentle grass in the foreground swaying, tranquil peaceful atmosphere, no people. Soft painterly anime background art style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).

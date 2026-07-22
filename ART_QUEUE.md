@@ -26,25 +26,14 @@
 
 ---
 
-### kitsune — お面屋の茜(狐面を頭に乗せて笑う)
-どこで使う: 屋台「お面屋」を選んだときの一枚絵
-status: 未生成
-retries: 1
-prompt: Akane, a young Japanese woman around 20 years old, fully human with normal human ears (absolutely no animal ears, no fox ears, no kemonomimi), chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, holding a traditional flat white fox festival mask (kitsune-men, a solid painted paper/ceramic mask like a Noh mask) tilted up and resting on top of her head like a hat so her own human face is fully visible and laughing brightly, warm golden lantern light at a night festival. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
-> 返信欄:
-
 ### omikuji — おみくじを引く茜(境内)
 どこで使う: 屋台「おみくじ」を選んだときの一枚絵
 status: 未生成
-retries: 1
-(2026/07/22: 提灯に読める文字が写り込んでいたため差し戻し。提灯・文字を消す指定に書き直し済み)
-prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing alone in a quiet shrine courtyard at night lit only by plain moonlight and one unlit stone lantern (toro), holding a thin blank paper fortune slip (omikuji) with no writing or printed characters on it, curious hopeful expression reading it, empty background with no hanging paper lanterns, no chochin, no signage, no kanji or text of any kind anywhere in the scene. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters, no readable characters anywhere in the image. Vertical portrait composition (9:16).
-> 返信欄:
-
-### bg_oka — 丘から見る夜景(背景のみ・人物なし)
-どこで使う: 丘(oka)ルート、告白直前の静かな場面の背景
-status: 未生成
-prompt: Empty quiet hilltop overlooking a distant town at night, scattered warm city lights below, deep blue night sky with soft stars, gentle grass in the foreground swaying, tranquil peaceful atmosphere, no people. Soft painterly anime background art style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
+retries: 2
+(2026/07/22: 1回目は提灯に読める文字が写り込んでいたため差し戻し。2回目は提灯は消えたが、
+手に持つおみくじの紙自体に手紙のような文字列がはっきり書き込まれてしまっていたため再度差し戻し。
+紙が完全に白紙であることをより強く指定する形に書き直した)
+prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing alone in a quiet shrine courtyard at night lit only by plain moonlight and one unlit stone lantern (toro), holding a completely blank plain white paper strip with absolutely no writing, no printed characters, no ink marks, no lines of any kind on it (a pure blank sheet of paper, not a letter, not a card with text), curious hopeful expression looking at the blank paper, empty background with no hanging paper lanterns, no chochin, no signage, no kanji or text of any kind anywhere in the scene. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters, no handwriting, no readable characters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
 ### yokogao — 花火を見上げる茜の横顔
