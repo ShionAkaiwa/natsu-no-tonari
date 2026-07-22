@@ -36,15 +36,15 @@ prompt: Anime style illustration, warm summer festival night. A young Japanese w
 (ここから下にClaudeが書き足していきます)
 
 ### bg_torii
-status: 未生成
+status: 組込済
 prompt: Empty stone approach path to a traditional Japanese shrine torii gate at dusk, summer festival lanterns strung along the path, warm orange and deep magenta sunset sky, soft atmospheric haze, no people. Soft painterly anime background art style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
 
 ### akane
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair styled in a high bun, wearing a dark navy blue yukata with a delicate floral pattern, standing in front of a shrine torii gate at dusk, warm orange and magenta sunset light glowing behind her, gentle shy smile, looking toward the viewer, soft summer breeze. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### bg_yatai
-status: 未生成
+status: 組込済
 prompt: Empty Japanese summer festival stall street at night, rows of glowing paper lanterns, warm orange lantern light against a deep indigo night sky, faint smoke and steam from food stalls, bustling atmosphere but no people visible. Soft painterly anime background art style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
 
 ### ringo
