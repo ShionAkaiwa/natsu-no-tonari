@@ -78,26 +78,47 @@ if ($i -ge 0) {
 }
 [System.IO.File]::WriteAllText($GameFile, $html, $Utf8)
 
-# --- 新規画像があればClaudeへの申し送りを書く ---------------
-if ($new.Count -gt 0) {
+# --- Claudeの確認待ちの画像を洗い出す ------------------------
+# inbox 経由(natsu art)だけでなく、スマホのGitHubアプリなどで
+# images フォルダに直接アップロードされた画像も拾えるよう、
+# 「$new(今回inboxから移動した分)」だけでなく、ART_QUEUE.md 上でまだ
+# 「組込済」「要手動」になっていないキーのうち images フォルダに実ファイルが
+# あるものを毎回まるごと洗い出す方式にしている。
+# (inbox はこのリポジトリの .gitignore 対象で GitHub 上には存在しないため、
+#  スマホから images フォルダへ直接アップロードするしかルートが無い)
+$QueueFile = Join-Path $Root "ART_QUEUE.md"
+$pending = @()
+if (Test-Path $QueueFile) {
+    $queueText = Get-Content $QueueFile -Raw -Encoding UTF8
+    $blockPattern = '(?ms)^### (\S+).*?^status:\s*(\S+)'
+    foreach ($m in [regex]::Matches($queueText, $blockPattern)) {
+        $qKey = $m.Groups[1].Value
+        $qStatus = $m.Groups[2].Value
+        if ($qStatus -eq '組込済' -or $qStatus -eq '要手動') { continue }
+        $imgFile = Get-ChildItem -Path "$ImgDir\*" -Include "$qKey.png","$qKey.jpg","$qKey.jpeg","$qKey.webp" -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($imgFile) { $pending += $imgFile.Name }
+    }
+}
+
+if ($pending.Count -gt 0) {
     $lines = @("# 新しく届いた画像", "", "Claude Code へ: 以下の画像が届きました。",
                "ゲーム内の適切な場面で ``window.ART[""キー名""]`` として表示するよう",
                "組み込んでください。組み込んだらこのファイルを空にしてください。", "")
-    foreach ($n in $new) {
+    foreach ($n in $pending) {
         $k = [System.IO.Path]::GetFileNameWithoutExtension($n)
         $lines += "- ``$k`` (images/$n)"
     }
     [System.IO.File]::WriteAllText($ArtLog, ($lines -join "`r`n"), $Utf8)
     Write-Host ""
-    Write-Host "  $($new.Count) 枚を取り込みました" -ForegroundColor Green
-    foreach ($n in $new) { Write-Host "    ・$n" }
+    Write-Host "  $($pending.Count) 枚、Claudeの確認待ちです" -ForegroundColor Green
+    foreach ($n in $pending) { Write-Host "    ・$n" }
     Write-Host ""
     Write-Host "  次の自動実行でClaudeがゲームに組み込みます" -ForegroundColor Cyan
     Write-Host "  すぐ組み込ませるなら  natsu now"
     Write-Host ""
 } else {
     Write-Host ""
-    Write-Host "  inbox に新しい画像はありませんでした"
-    Write-Host "  画像を入れる場所: $InboxDir"
+    Write-Host "  確認待ちの新しい画像はありませんでした"
+    Write-Host "  画像を入れる場所: $InboxDir (PC) / images フォルダ (スマホのGitHubアプリ)"
     Write-Host ""
 }

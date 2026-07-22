@@ -244,9 +244,9 @@ body{
   font-family:"Shippori Mincho B1",serif;font-weight:800;
   font-size:clamp(38px,12vw,58px);letter-spacing:.16em;line-height:1.12;
   color:#FFF7F2;text-shadow:0 3px 22px rgba(0,0,0,.7),0 0 40px rgba(255,190,140,.18);
-  margin:0 6px 0 auto;padding-right:2px;height:auto;}
+  margin:0 6px 0 0;padding-right:2px;height:auto;}
 .tSub{writing-mode:vertical-rl;font-family:"Shippori Mincho B1",serif;font-size:12px;
-  letter-spacing:.5em;color:rgba(251,220,228,.72);margin:6px 14px 0 auto;}
+  letter-spacing:.5em;color:rgba(251,220,228,.72);margin:6px 14px 0 0;}
 .tMenu{display:flex;flex-direction:column;gap:10px;width:min(340px,100%);margin:0 auto;}
 .tbtn{padding:15px 18px;border-radius:16px;font-family:inherit;font-size:15px;font-weight:700;
   letter-spacing:.14em;color:#FFF3F6;cursor:pointer;
@@ -1065,7 +1065,8 @@ function openGallery(){
 $('#gview').onclick=()=>{ $('#gview').classList.remove('on'); Audio_.se('close'); };
 
 function refreshTitleBg(){
-  $('#titleBg').style.background = bgOf(IMG['bg_torii']?'bg_torii':'bg_yatai');
+  const key = IMG['bg_title'] ? 'bg_title' : (IMG['bg_torii'] ? 'bg_torii' : 'bg_yatai');
+  $('#titleBg').style.background = bgOf(key);
   $('#titleBg').style.backgroundSize='cover';
   $('#titleBg').style.backgroundPosition='center';
 }

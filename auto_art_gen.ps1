@@ -18,28 +18,38 @@ if (-not (Test-Path $InboxDir)) { New-Item $InboxDir -ItemType Directory | Out-N
 
 $content = Get-Content $Queue -Raw -Encoding UTF8
 
-# ART_QUEUE.md の書式:
-#   ### key_name
-#   status: 未生成
-#   prompt: <英語のプロンプト>
-$pattern = '(?m)^### ([^\r\n]+)\r?\n(?:retries: \d+\r?\n)?status: 未生成\r?\nprompt: ([\s\S]+?)(?=\r?\n### |\r?\n*\z)'
-$matches = [regex]::Matches($content, $pattern)
+# ART_QUEUE.md の書式(見出し・「どこで使う:」・retriesの有無や順番はブロックごとに
+# 揺れることがあるため、"### key" 〜 次の "### " または末尾までを1ブロックとして
+# 切り出し、その中から status: / prompt: をそれぞれ個別に探す作りにしている)
+$blockPattern = '(?ms)^### (\S+).*?(?=^### |\z)'
+$blocks = [regex]::Matches($content, $blockPattern)
 
-if ($matches.Count -eq 0) {
+$targets = @()
+foreach ($b in $blocks) {
+    $key = $b.Groups[1].Value
+    $blockText = $b.Value
+    $statusMatch = [regex]::Match($blockText, '(?m)^status:\s*(\S+)')
+    if (-not $statusMatch.Success -or $statusMatch.Groups[1].Value -ne '未生成') { continue }
+    $promptMatch = [regex]::Match($blockText, '(?ms)^prompt:\s*(.+?)\s*(?=\r?\n> |\z)')
+    if (-not $promptMatch.Success) { continue }
+    $targets += [PSCustomObject]@{ Key = $key; Prompt = $promptMatch.Groups[1].Value.Trim() }
+}
+
+if ($targets.Count -eq 0) {
     Write-Host "  生成待ちの画像はありません"
     exit
 }
 
 Write-Host ""
-Write-Host "  $($matches.Count) 件の画像を生成します(無料・課金なし)" -ForegroundColor Cyan
+Write-Host "  $($targets.Count) 件の画像を生成します(無料・課金なし)" -ForegroundColor Cyan
 
 # 1回の実行で作りすぎないよう3枚まで
-$limit = [Math]::Min(3, $matches.Count)
+$limit = [Math]::Min(3, $targets.Count)
 $successCount = 0
 
 for ($i = 0; $i -lt $limit; $i++) {
-    $key    = $matches[$i].Groups[1].Value.Trim()
-    $prompt = $matches[$i].Groups[2].Value.Trim()
+    $key    = $targets[$i].Key
+    $prompt = $targets[$i].Prompt
 
     Write-Host "   生成中: $key ..."
 
@@ -59,18 +69,18 @@ for ($i = 0; $i -lt $limit; $i++) {
             Write-Host "     完了: inbox\$key.png" -ForegroundColor Green
             Log "生成成功: $key"
             $successCount++
-            $content = $content -replace "(### $([regex]::Escape($key))\r?\nstatus: )未生成", "`${1}生成済み"
+            $content = $content -replace "(?ms)(### $([regex]::Escape($key))\b.*?status: )未生成", "`${1}生成済み"
         } else {
             Remove-Item $out -ErrorAction SilentlyContinue
             Write-Host "     画像が取得できませんでした" -ForegroundColor Yellow
             Log "生成失敗(サイズ異常): $key"
-            $content = $content -replace "(### $([regex]::Escape($key))\r?\nstatus: )未生成", "`${1}要手動"
+            $content = $content -replace "(?ms)(### $([regex]::Escape($key))\b.*?status: )未生成", "`${1}要手動"
         }
     }
     catch {
         Write-Host "     エラー: $_" -ForegroundColor Red
         Log "生成エラー: $key / $_"
-        $content = $content -replace "(### $([regex]::Escape($key))\r?\nstatus: )未生成", "`${1}要手動"
+        $content = $content -replace "(?ms)(### $([regex]::Escape($key))\b.*?status: )未生成", "`${1}要手動"
     }
 
     # 無料の匿名アクセスは連続リクエストに弱いので間隔を空ける
