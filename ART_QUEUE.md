@@ -86,17 +86,23 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 ### senko2 — 二人の手元の線香花火(川辺・アップ)
 どこで使う: 鼻緒ルートのラストカット
 status: 未生成
-retries: 1
+retries: 2
 (2026/07/23: 1回目の生成は、二人の手元ではなく一人の女性の横顔と片手だけが
 写った構図になっており(yokogaoに近い絵)、「二人の手元」という意図と
 食い違っていたため差し戻し。顔を一切写さず、手と線香花火だけのアップに
-限定する形にプロンプトを書き直した)
-prompt: Extreme close-up shot showing ONLY two hands and nothing else, no faces, no heads, no upper bodies visible in frame: two separate hands from two different people holding their own lit sparkler fireworks (senko-hanabi) close together near a riverbank at night, the hands almost touching, one hand belonging to Akane emerging from a dark navy blue floral yukata sleeve visible at the very edge of frame, the other hand belonging to a man emerging from plain dark clothing sleeve at the opposite edge of frame. Tiny glowing spark and soft falling embers between the two sparklers, dark water faintly reflecting light in the blurred background, intimate quiet mood. This is a hand-only macro shot; do not show any face or profile. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
+限定する形にプロンプトを書き直した。2回目の生成は構図自体(二人の手・線香花火)は
+指定通りだったが、仕上がりが実写風の写真そのもの(人物写真)になっており、
+他の11枚すべてが持つ「Soft painterly anime style」の絵柄と明確に食い違っていた
+ため差し戻し。プロンプトに"Soft painterly anime style"の指定はあったが実写に
+寄ってしまったため、実写・写真であることを明確に禁止する記述を追加した)
+prompt: A hand-drawn digital illustration, NOT a photograph, NOT photorealistic, NOT a real photo — an anime/manga style painting with visible painterly brushstrokes. Extreme close-up illustration showing ONLY two hands and nothing else, no faces, no heads, no upper bodies visible in frame: two separate hands from two different people holding their own lit sparkler fireworks (senko-hanabi) close together near a riverbank at night, the hands almost touching, one hand belonging to Akane emerging from a dark navy blue floral yukata sleeve visible at the very edge of frame, the other hand belonging to a man emerging from plain dark clothing sleeve at the opposite edge of frame. Tiny glowing spark and soft falling embers between the two sparklers, dark water faintly reflecting light in the blurred background, intimate quiet mood. This is a hand-only macro illustration; do not show any face or profile. Soft painterly anime style illustration, cel-shaded or painterly digital art, cool nostalgic night color palette, gentle brush texture, cinematic lighting, stylized proportions (not photorealistic skin texture). No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
 > 返信欄:
 
 ### bg_title — タイトル画面の背景イラスト(新規追加)
 どこで使う: ゲーム起動直後、一番最初のタイトル画面([はじめから]ボタンが出る画面)の背景
-status: 未生成
+status: 組込済
+(2026/07/23確認: 鳥居と提灯の並ぶ夏祭りの入口に立つ茜、容姿設定・画風とも
+既存11枚と一致。下段はUIボタンと重ならない程度に開いている。採用)
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing at the entrance of a night summer festival with a torii gate and glowing paper lanterns behind her, gentle warm smile looking toward the viewer, fireflies and floating embers drifting in the air, a sense of quiet anticipation for the night ahead. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting, atmospheric depth. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16), leave the lower third relatively open/uncluttered since UI buttons will be overlaid there.
 > 返信欄:
 
