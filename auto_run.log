@@ -127,3 +127,11 @@ Both changes are committed and pushed. `site/index.html` was left untouched, sin
 2026-07-22 08:57 - 利用制限に到達。次回のタイミングで自動的に再試行します
 2026-07-22 08:57 - ----- 実行終了 -----
 2026-07-22 09:53 - ----- 実行開始 -----
+Committed and pushed. Summary:
+
+- REQUESTS.md had no unread requests (both prior items already have Claude replies), and BACKLOG.md only had placeholder examples, so I read the game and picked an improvement myself.
+- Added an **繧ｪ繝ｼ繝・*(auto-play)button to the top bar: toggles auto-advance of dialogue after each line finishes typing (1.1s delay), pausing itself while any overlay (menu/log/gallery) is open so it doesn't advance text behind the player's back. Choices still always require a manual tap, since they don't go through the same tap-wait mechanism.
+- Logged the change in PROGRESS.md with a note that in-app behavior (auto-advance timing, pausing on overlays, immediate stop on toggle-off) hasn't been verified on a real device yet 窶・only JS syntax was checked.
+- `site/index.html` and `auto_run.log` diffs came from the wrapper script's pre-run copy step, not from me directly, per CLAUDE.md's instruction not to hand-edit the site copy.
+
+2026-07-22 09:57 - 作業完了
