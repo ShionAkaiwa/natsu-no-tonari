@@ -51,27 +51,23 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 
 ### geta — 壊れた下駄を持つ茜(夜道)
 どこで使う: 鼻緒(hanao)ルートの開始場面(鼻緒が切れる)
-status: 未生成
+status: 組込済
 retries: 2
-(2026/07/23: 2回目の生成も、手に持っているものが下駄ではなく扇子(または団扇)のような
-折り畳み式の物になっており、下駄には見えなかった。「下駄」という単語だけでは
-和装小物として扇子と混同されやすいと判断し、下駄の形状(平らな木の板の底、
-足を乗せる台、切れた鼻緒の紐)をより具体的に描写し、扇子・団扇・傘との混同を
-避ける指定を追加する形に書き直した)
-prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing barefoot on a quiet night road, holding up in front of her at eye level a single traditional Japanese wooden platform sandal (geta): a flat rectangular wooden board sole with a raised wooden block underneath, NOT a fan, NOT a folding fan, NOT an umbrella, NOT a smartphone — its fabric thong strap (hanao) visibly torn and snapped, dangling loose. She looks directly at the broken wooden sandal in her hands with a rueful gentle smile. Soft moonlight and distant streetlight glow, her other hand empty, no phone, no fan, no umbrella, no modern electronic device anywhere in the image. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+(2026/07/23: 3回目の生成で、両手に持つ茶色い木製の台に鼻緒のついた本物の下駄の形に
+なっていることを確認。容姿設定・場面の雰囲気とも問題なし。採用)
 > 返信欄:
 
 ### onbu — おんぶされる茜(夜道)
 どこで使う: 鼻緒ルート、おぶっていく場面
-status: 未生成
-retries: 2
-(2026/07/23: 2回目の生成も、茜が一人で夜道を振り返っている構図のままで、背景に
-無関係な通行人らしき影が写っているだけで、おんぶ(背負われている描写)自体が
-依然として欠落していた。「二人」「背負う」という指定だけでは単独の後ろ姿の絵に
-流れやすいと判断し、「両方の人物が画面の中心に大きく写ること」「茜の体が完全に
-相手の背中に乗っていること」「脚が地面から離れ相手の腰の横で支えられていること」
-をより具体的に、単独ポートレートを明確に否定する形で書き直した)
-prompt: A close-up night-time piggyback ride scene filling most of the frame with two full figures, both large and clearly visible, NOT a solo portrait of one person alone: in front, the broad back and shoulders of a faceless young man (back view only, face not shown) bent slightly forward, actively carrying a woman on his back. Riding on his back is Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata; her chest and body pressed against his back, both her arms wrapped around his neck and shoulders from behind, both her legs lifted completely off the ground and wrapped around his sides at waist height, her feet clearly not touching the road, her cheek resting near his shoulder with a soft embarrassed happy smile. This must depict active carrying/lifting, not two people merely standing or walking side by side. Quiet night road, moonlight and warm distant lantern glow. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+status: 要手動
+retries: 3
+(2026/07/23: 3回目の生成も、正面の人物が茜をおぶっているというよりは背後から
+抱きついているだけの構図になっており、脚が地面から離れて相手の腰に回っている
+様子が確認できず、加えて浴衣の背中が大きく開いて素肌が露出してしまっており
+「濃紺の花柄浴衣」の容姿設定とも食い違っていた。retriesが3に達したため
+CLAUDE.mdのルールに従い自動でのやり直しを停止し、IMPROVEMENTS_LOGに
+要ユーザー判断として記録した。このプロンプトでの自動生成は一旦保留)
+prompt: A close-up night-time piggyback ride scene filling most of the frame with two full figures, both large and clearly visible, NOT a solo portrait of one person alone: in front, the broad back and shoulders of a faceless young man (back view only, face not shown) bent slightly forward, actively carrying a woman on his back. Riding on his back is Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata fully closed and covering her back with no exposed skin on the back; her chest and body pressed against his back, both her arms wrapped around his neck and shoulders from behind, both her legs lifted completely off the ground and wrapped around his sides at waist height, her feet clearly not touching the road, her cheek resting near his shoulder with a soft embarrassed happy smile. This must depict active carrying/lifting, not two people merely standing, walking side by side, or hugging from behind. Quiet night road, moonlight and warm distant lantern glow. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
 ### fukuro — 線香花火の袋を掲げる茜(玄関)
@@ -90,7 +86,12 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 ### senko2 — 二人の手元の線香花火(川辺・アップ)
 どこで使う: 鼻緒ルートのラストカット
 status: 未生成
-prompt: Close-up of two hands holding lit sparkler fireworks (senko-hanabi) close together by a riverbank at night, one hand belonging to Akane, a young Japanese woman around 20 years old wearing a dark navy blue floral yukata sleeve visible at the edge of frame, tiny glowing spark and soft falling embers, dark water faintly reflecting light in the background, intimate quiet mood. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
+retries: 1
+(2026/07/23: 1回目の生成は、二人の手元ではなく一人の女性の横顔と片手だけが
+写った構図になっており(yokogaoに近い絵)、「二人の手元」という意図と
+食い違っていたため差し戻し。顔を一切写さず、手と線香花火だけのアップに
+限定する形にプロンプトを書き直した)
+prompt: Extreme close-up shot showing ONLY two hands and nothing else, no faces, no heads, no upper bodies visible in frame: two separate hands from two different people holding their own lit sparkler fireworks (senko-hanabi) close together near a riverbank at night, the hands almost touching, one hand belonging to Akane emerging from a dark navy blue floral yukata sleeve visible at the very edge of frame, the other hand belonging to a man emerging from plain dark clothing sleeve at the opposite edge of frame. Tiny glowing spark and soft falling embers between the two sparklers, dark water faintly reflecting light in the blurred background, intimate quiet mood. This is a hand-only macro shot; do not show any face or profile. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
 > 返信欄:
 
 ### bg_title — タイトル画面の背景イラスト(新規追加)
