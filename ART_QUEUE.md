@@ -60,15 +60,16 @@ status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, seen from behind and slightly to the side, aiming a cork gun at a shooting gallery (shateki) stall lined with prize toys, focused posture, warm lantern light, festival night atmosphere. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### kakigori
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, happily eating shaved ice (kakigori) with bright red strawberry syrup from a paper cup, sitting on a bench at a night festival, warm lantern light, sweet contented expression. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### kitsune
 status: 未生成
-prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, playfully wearing a traditional fox (kitsune) festival mask pushed up on top of her head, laughing brightly, warm golden lantern light at a night festival. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
+retries: 1
+prompt: Akane, a young Japanese woman around 20 years old, fully human with normal human ears (absolutely no animal ears, no fox ears, no kemonomimi), chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, holding a traditional flat white fox festival mask (kitsune-men, a solid painted paper/ceramic mask like a Noh mask) tilted up and resting on top of her head like a hat so her own human face is fully visible and laughing brightly, warm golden lantern light at a night festival. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### bonodori
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata with wide sleeves flowing, dancing joyfully in a bon-odori circle dance under a wooden yagura tower strung with red lanterns, warm night festival glow, motion and energy in her pose. Soft painterly anime style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 
 ### omikuji
