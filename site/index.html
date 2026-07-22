@@ -219,6 +219,14 @@ body{
 #gview{position:absolute;inset:0;z-index:30;display:none;background:#04060c;}
 #gview.on{display:block;}
 #gview img{width:100%;height:100%;object-fit:contain;}
+.galSub{font-family:"Shippori Mincho B1",serif;font-size:13px;letter-spacing:.2em;color:var(--sakura);margin:24px 0 10px;}
+#edList{display:flex;flex-direction:column;gap:8px;}
+.edrow{padding:11px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--hair);}
+.edrow .edt{font-family:"Shippori Mincho B1",serif;font-size:13.5px;letter-spacing:.08em;color:var(--gold);}
+.edrow .eds{font-size:10.5px;color:var(--mute);letter-spacing:.03em;margin-top:2px;}
+.edrow.lock{color:#4B5468;}
+.edrow.lock .edt{color:#4B5468;}
+.edrow.lock .eds{color:#4B5468;}
 
 /* ============ タイトル ============ */
 #title{position:absolute;inset:0;z-index:15;display:none;overflow:hidden;}
@@ -363,6 +371,8 @@ body{
     <div class="ovhead"><div class="ovtitle">思 い 出</div><button class="xbtn" data-close="galOv">✕</button></div>
     <div class="ovbody"><div id="galGrid"></div>
       <p class="hint" id="galNote"></p>
+      <div class="galSub">エ ン デ ィ ン グ</div>
+      <div id="edList"></div>
     </div>
     <div id="gview"><img id="gviewImg" alt=""></div>
   </div>
@@ -1014,6 +1024,18 @@ function openGallery(){
     g.appendChild(d);
   });
   $('#galNote').textContent = `${n} / ${SLOTS.length} 枚。まだ見ていない場面は、別の道を選ぶと見つかります。`;
+
+  const el=$('#edList'); el.innerHTML='';
+  Object.values(SCENES).filter(sc=>sc.ending).forEach(sc=>{
+    const seen = !!G.endingsSeen[sc.ending.t];
+    const row=document.createElement('div');
+    row.className = 'edrow' + (seen ? '' : ' lock');
+    const t=document.createElement('div'); t.className='edt'; t.textContent = seen ? sc.ending.t : '？？？';
+    const s=document.createElement('div'); s.className='eds'; s.textContent = seen ? sc.ending.s : 'まだ見ていないエンディング';
+    row.appendChild(t); row.appendChild(s);
+    el.appendChild(row);
+  });
+
   $('#galOv').classList.add('on'); Audio_.se('open');
 }
 $('#gview').onclick=()=>{ $('#gview').classList.remove('on'); Audio_.se('close'); };

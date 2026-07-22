@@ -94,6 +94,8 @@ body{
 .ibtn:active{transform:scale(.9);background:rgba(176,56,76,.42);}
 .ibtn svg{width:15px;height:15px;stroke:var(--sakura);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 .ibtn span{font-size:8.5px;color:var(--mute);}
+.ibtn.active{background:rgba(176,56,76,.5);border-color:var(--sakura);}
+.ibtn.active span{color:var(--sakura);}
 
 /* 会話ボックス */
 #dialogue{
@@ -319,6 +321,9 @@ body{
       </button>
       <button class="ibtn" id="btnHide" aria-label="UI非表示">
         <svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>隠す</span>
+      </button>
+      <button class="ibtn" id="btnAuto" aria-label="オート送り">
+        <svg viewBox="0 0 24 24"><path d="M5 5l7 7-7 7"/><path d="M13 5l7 7-7 7"/></svg><span>オート</span>
       </button>
       <button class="ibtn" id="btnSound" aria-label="音">
         <svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9c1.2 1.2 1.2 4.8 0 6"/></svg><span>音</span>
@@ -718,6 +723,7 @@ const G = {
 };
 const CFG = { speed:55, uiHidden:false, boot:false };
 let curLayer = 0, typing=false, skipTyping=false, waitTap=null, curLog=[], inChoice=false;
+let autoPlay=false, autoTimer=null;
 
 /* ---------- トースト ---------- */
 let toastT=null;
@@ -854,7 +860,19 @@ async function typeInto(el, text, speed){
   typing=false;
   $('#bell').classList.add('on');
 }
-function tapPromise(){ return new Promise(res=>{ waitTap=()=>{ waitTap=null; res(); }; }); }
+function tapPromise(){
+  return new Promise(res=>{
+    waitTap=()=>{ waitTap=null; if(autoTimer){ clearTimeout(autoTimer); autoTimer=null; } res(); };
+    if(autoPlay) scheduleAuto();
+  });
+}
+function scheduleAuto(){
+  autoTimer=setTimeout(()=>{
+    if(!autoPlay || !waitTap) return;
+    if($$('.ov.on').length){ scheduleAuto(); return; }
+    waitTap();
+  }, 1100);
+}
 
 async function say(sp, text, opt){
   opt=opt||{};
@@ -1893,6 +1911,15 @@ document.addEventListener('keydown', e=>{
 $('#btnLog').onclick = e=>{ e.stopPropagation(); openLog(); };
 $('#btnHide').onclick = e=>{ e.stopPropagation(); hideUI(); };
 $('#btnMenu').onclick = e=>{ e.stopPropagation(); $('#menuOv').classList.add('on'); Audio_.se('open'); };
+$('#btnAuto').onclick = e=>{
+  e.stopPropagation();
+  autoPlay=!autoPlay;
+  $('#btnAuto').classList.toggle('active', autoPlay);
+  Audio_.se(autoPlay?'open':'close');
+  if(autoPlay && waitTap && !typing && !autoTimer) scheduleAuto();
+  if(!autoPlay && autoTimer){ clearTimeout(autoTimer); autoTimer=null; }
+  toast(autoPlay?'オート送りを始めます':'オート送りを止めました', 1200);
+};
 let muted=false;
 $('#btnSound').onclick = e=>{
   e.stopPropagation(); muted=!muted;
