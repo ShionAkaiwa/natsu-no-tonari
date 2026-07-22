@@ -155,3 +155,21 @@ Push螳御ｺ・＠縺ｾ縺励◆縲・
 2026-07-22 11:56 - 作業完了
 2026-07-22 11:56 - ----- 実行終了 -----
 2026-07-22 12:53 - ----- 実行開始 -----
+Working tree is clean and both commits are pushed. Summary of this session:
+
+**Implemented:**
+- Added a "譁・ｭ励・螟ｧ縺阪＆" (font size) slider to the settings menu, following the existing slider pattern, saved/restored via `nnt_settings`.
+
+**Handled the unread REQUESTS.md backlog** (discovered mid-session after a `git pull --rebase`, since new requests arrived on remote while I was working):
+- Confirmed the auto-run interval was 1h and changed it to 2h via Task Scheduler, per the user's stated preference.
+- Bumped CLAUDE.md's per-session item limit from "1, at most 2" to "2窶・", flagged as a deliberately cautious adjustment (not the full 3x requested) given the prior mid-session-crash incident.
+- Found `images/` and `ART_QUEUE.md` were both essentially empty despite "prioritize art" 窶・wrote all 20 needed scene prompts into `ART_QUEUE.md` so the free Pollinations.ai pipeline starts producing them automatically.
+- **Caught and fixed a real bug** while verifying that queue: the art-generation regex in `auto_art_gen.ps1`/`gemini_art.ps1` used dotall matching, which would have silently corrupted key names whenever a non-`譛ｪ逕滓・` entry preceded a real one. Fixed and verified against all 20 entries.
+- Restructured `REQUESTS.md` per explicit request (trimmed usage instructions, newest-on-top), archiving fully-answered threads into a new `REQUESTS_DONE.md`.
+- Removed the Gemini manual-workflow instructions from `ART_QUEUE.md` and clarified that automatic generation never used Gemini.
+- Logged the minigame concept to `BACKLOG.md` as deferred, gated on art completion.
+- Answered the Netlify/mobile-viewing question in `REQUESTS.md`, flagging the "make repo public" trade-off as the user's call rather than acting on it.
+
+Both commits are pushed to `main`.
+
+2026-07-22 13:06 - 作業完了
