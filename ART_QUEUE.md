@@ -28,23 +28,24 @@
 
 ### omikuji — おみくじを引く茜(境内)
 どこで使う: 屋台「おみくじ」を選んだときの一枚絵
-status: 未生成
+status: 組込済
 retries: 2
 (2026/07/22: 1回目は提灯に読める文字が写り込んでいたため差し戻し。2回目は提灯は消えたが、
 手に持つおみくじの紙自体に手紙のような文字列がはっきり書き込まれてしまっていたため再度差し戻し。
-紙が完全に白紙であることをより強く指定する形に書き直した)
+紙が完全に白紙であることをより強く指定する形に書き直した。2026/07/23、3回目の生成で紙が完全に
+白紙になっていることを確認し、組み込み済みとした)
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, standing alone in a quiet shrine courtyard at night lit only by plain moonlight and one unlit stone lantern (toro), holding a completely blank plain white paper strip with absolutely no writing, no printed characters, no ink marks, no lines of any kind on it (a pure blank sheet of paper, not a letter, not a card with text), curious hopeful expression looking at the blank paper, empty background with no hanging paper lanterns, no chochin, no signage, no kanji or text of any kind anywhere in the scene. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters, no handwriting, no readable characters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
 ### yokogao — 花火を見上げる茜の横顔
 どこで使う: 丘ルート、クライマックス直前
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, shown in profile close-up looking up at fireworks bursting in the night sky, soft golden fireworks light reflected on her face, quiet awed expression, gentle wind in her hair. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
 ### nakiwarai — 泣き笑いの茜(アップ)
 どこで使う: 丘ルート、告白直後
-status: 未生成
+status: 組込済
 prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, extreme close-up portrait, tearful eyes with a single tear but smiling warmly at the same time, soft warm night lighting, tender emotional expression. Soft painterly anime style, warm nostalgic color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
