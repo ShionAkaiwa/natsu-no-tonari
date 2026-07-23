@@ -26,6 +26,12 @@
 
 ---
 
+**2026/07/23追記**: 志温さんが以前Geminiに描いてもらっていた20場面ぶんのイラストを
+まとめて`images`フォルダにアップロードしてくれた(ファイル名は端末の写真IDのまま
+だったため、内容を見て`akane`・`kingyo`など正しいキー名に手動でリネームして
+組み込んだ)。これにより、下記の`onbu`を含む20場面すべてがこのGemini版に
+差し替わっている(自動生成のPollinations版から置き換え)。
+
 ### omikuji — おみくじを引く茜(境内)
 どこで使う: 屋台「おみくじ」を選んだときの一枚絵
 status: 組込済
@@ -59,14 +65,13 @@ retries: 2
 
 ### onbu — おんぶされる茜(夜道)
 どこで使う: 鼻緒ルート、おぶっていく場面
-status: 要手動
+status: 組込済
 retries: 3
-(2026/07/23: 3回目の生成も、正面の人物が茜をおぶっているというよりは背後から
-抱きついているだけの構図になっており、脚が地面から離れて相手の腰に回っている
-様子が確認できず、加えて浴衣の背中が大きく開いて素肌が露出してしまっており
-「濃紺の花柄浴衣」の容姿設定とも食い違っていた。retriesが3に達したため
-CLAUDE.mdのルールに従い自動でのやり直しを停止し、IMPROVEMENTS_LOGに
-要ユーザー判断として記録した。このプロンプトでの自動生成は一旦保留)
+(2026/07/23: 自動生成では3回とも「おんぶ」の構図がうまく描けず要手動としていたが、
+志温さんがGeminiで手描きしてくれた版(正面から見た構図。相手の背に担がれ、
+片手に鼻緒の切れた下駄を提げている)を確認したところ、おんぶの体勢・浴衣が
+きちんと閉じている点とも問題なく、容姿設定とも一致していたため採用した。
+IMPROVEMENTS_LOGの該当項目も解決済みとする)
 prompt: A close-up night-time piggyback ride scene filling most of the frame with two full figures, both large and clearly visible, NOT a solo portrait of one person alone: in front, the broad back and shoulders of a faceless young man (back view only, face not shown) bent slightly forward, actively carrying a woman on his back. Riding on his back is Akane, a young Japanese woman around 20 years old, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata fully closed and covering her back with no exposed skin on the back; her chest and body pressed against his back, both her arms wrapped around his neck and shoulders from behind, both her legs lifted completely off the ground and wrapped around his sides at waist height, her feet clearly not touching the road, her cheek resting near his shoulder with a soft embarrassed happy smile. This must depict active carrying/lifting, not two people merely standing, walking side by side, or hugging from behind. Quiet night road, moonlight and warm distant lantern glow. Soft painterly anime style, cool nostalgic night color palette, gentle brush texture, cinematic lighting. No text, no watermark, no letters anywhere in the image. Vertical portrait composition (9:16).
 > 返信欄:
 
