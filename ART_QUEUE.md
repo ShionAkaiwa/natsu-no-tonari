@@ -33,17 +33,4 @@
 (自動生成のPollinations版から置き換え)。差し替え済みだった項目のプロンプトは
 志温さんの許可を得て`ART_QUEUE_DONE.md`に移した。
 
-### bg_title — タイトル画面の背景イラスト(茜が写らないバージョンに差し替え希望)
-どこで使う: ゲーム起動直後、一番最初のタイトル画面([はじめから]ボタンが出る画面)の背景
-status: 未生成
-(2026/07/23: 現在組み込み済みの`bg_title`(鳥居の前に立つ茜)について、志温さんから
-「タイトル画面がなんとなくさみしい気がする」「茜が登場しないイラストの方がいいかも」
-との希望があった。同じキー名`bg_title`で新しい画像を上書きアップロードすれば
-自動的に差し替わる。風景だけの画作りなので、既存11枚と違って人物の顔・体型の
-一致確認は不要)
-prompt: A quiet Japanese summer festival entrance at dusk with absolutely no people or human figures anywhere in the scene, an old stone torii gate at the top of a stone stairway, rows of glowing paper lanterns strung along both sides of the path leading up to it, warm orange and deep magenta sunset sky fading into the coming night, fireflies and floating embers drifting softly in the air, faint smoke haze, a sense of quiet anticipation before the festival truly begins. Soft painterly anime background art style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting, atmospheric depth. No text, no watermark, no letters anywhere in the image. No human figures, no silhouettes of people, empty scene. Vertical portrait composition (9:16), leave the lower third relatively open/uncluttered since UI buttons will be overlaid there.
-> 返信欄:
-
----
-
 すでに組み込み済みの項目は `ART_QUEUE_DONE.md` に移してあります。
