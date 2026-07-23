@@ -509,6 +509,8 @@ function loadEmbeddedArt(){
   const art = window.ART || {};
   let n = 0;
   SLOTS.forEach(s=>{ if (art[s.k]) { IMG[s.k] = art[s.k]; n++; } });
+  // bg_title はタイトル画面専用の背景で、ギャラリー(SLOTS)には含めない
+  if (art['bg_title']) IMG['bg_title'] = art['bg_title'];
   return n;
 }
 
@@ -730,7 +732,7 @@ const Audio_ = (() => {
    ========================================================= */
 const G = {
   name:'きみ', kizuna:0, scene:null, flags:{}, acts:[], actN:0,
-  seen:{}, cleared:0, routeSeen:{}, ending:null, pool:null, endingsSeen:{}
+  seen:{}, cleared:0, routeSeen:{}, pool:null, endingsSeen:{}
 };
 const CFG = { speed:55, autoSpeed:50, fontSize:100, uiHidden:false, boot:false, muted:false };
 let curLayer = 0, typing=false, skipTyping=false, waitTap=null, curLog=[], inChoice=false;
@@ -2056,7 +2058,6 @@ async function showEnding(e){
   G.cleared = 1;
   G.routeSeen[e.route] = 1;
   G.endingsSeen[e.t] = 1;
-  G.ending = e.t;
   await saveMeta();
   await Store.del('nnt_save');
 }
@@ -2211,7 +2212,7 @@ $('#nameGo').onclick = async e=>{
   e.stopPropagation(); Audio_.se('decide');
   const v = $('#nameInput').value.trim();
   G.name = v || 'きみ';
-  G.kizuna=0; G.flags={}; G.acts=[]; G.actN=0; G.ending=null; shufflePool();
+  G.kizuna=0; G.flags={}; G.acts=[]; G.actN=0; shufflePool();
   $('#nameOv').classList.remove('on');
   $('#title').classList.remove('on');
   await saveMeta();
