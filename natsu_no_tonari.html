@@ -242,11 +242,15 @@ body{
   padding:calc(var(--sat) + 34px) 24px calc(var(--sab) + 28px);}
 .tMain{writing-mode:vertical-rl;text-orientation:upright;
   font-family:"Shippori Mincho B1",serif;font-weight:800;
-  font-size:clamp(38px,12vw,58px);letter-spacing:.16em;line-height:1.12;
-  color:#FFF7F2;text-shadow:0 3px 22px rgba(0,0,0,.7),0 0 40px rgba(255,190,140,.18);
+  font-size:clamp(44px,15vw,72px);letter-spacing:.2em;line-height:1.12;
+  background:linear-gradient(180deg,#FFFBF6 0%,#FFE9C7 48%,var(--gold) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 3px 20px rgba(0,0,0,.75)) drop-shadow(0 0 34px rgba(255,190,140,.4)) drop-shadow(0 0 12px rgba(235,201,120,.5));
   margin:0 6px 0 0;padding-right:2px;height:auto;}
-.tSub{writing-mode:vertical-rl;font-family:"Shippori Mincho B1",serif;font-size:12px;
-  letter-spacing:.5em;color:rgba(251,220,228,.72);margin:6px 14px 0 0;}
+.tDivider{width:1px;align-self:stretch;margin:8px 12px 0 2px;min-height:64px;
+  background:linear-gradient(180deg,transparent,var(--gold) 45%,var(--gold) 60%,transparent);opacity:.65;}
+.tSub{writing-mode:vertical-rl;font-family:"Shippori Mincho B1",serif;font-size:13.5px;
+  letter-spacing:.55em;color:var(--gold);opacity:.85;margin:6px 4px 0 0;text-shadow:0 2px 10px rgba(0,0,0,.5);}
 .tMenu{display:flex;flex-direction:column;gap:10px;width:min(340px,100%);margin:0 auto;}
 .tbtn{padding:15px 18px;border-radius:16px;font-family:inherit;font-size:15px;font-weight:700;
   letter-spacing:.14em;color:#FFF3F6;cursor:pointer;
@@ -414,6 +418,7 @@ body{
     <div class="tWrap">
       <div style="display:flex;justify-content:center;align-items:flex-start;">
         <div class="tSub">ひと夏の、となり</div>
+        <div class="tDivider"></div>
         <h1 class="tMain">夏のとなり</h1>
       </div>
       <div class="tMenu">
