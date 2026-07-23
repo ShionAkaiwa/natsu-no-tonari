@@ -37,7 +37,7 @@ body{
   user-select:none;
   overscroll-behavior:none;
 }
-#app{position:fixed;inset:0;overflow:hidden;}
+#app{position:fixed;top:0;left:0;right:0;height:var(--vh,100%);overflow:hidden;}
 
 /* ============ 背景ステージ ============ */
 #stage{position:absolute;inset:0;background:#04060c;}
@@ -377,6 +377,7 @@ body{
         <button class="tbtn sub" id="btnToTitle">タイトルへ戻る</button>
       </div>
       <p class="hint">シーンが変わるたびに自動で保存されます。アプリを閉じても「つづきから」で戻れます。</p>
+      <p class="hint">会話部分を長押しすると、素早く読み進められます。既読シーンの周回に便利です。</p>
     </div>
   </div>
 
@@ -417,7 +418,7 @@ body{
     <div id="titleVeil"></div>
     <div class="tWrap">
       <div style="display:flex;justify-content:center;align-items:flex-start;">
-        <div class="tSub">ひと夏の、となり</div>
+        <div class="tSub">あの夏、きみの隣で</div>
         <div class="tDivider"></div>
         <h1 class="tMain">夏のとなり</h1>
       </div>
@@ -1007,6 +1008,14 @@ async function runScene(id){
       if(c.k) G.kizuna += c.k;
       if(c.flag) G.flags[c.flag]=1;
       if(c.act) G.acts.push(c.act);
+      /* 選択肢の文言が「」で囲まれている(=実際に口に出した台詞)場合だけ、
+         選んだ内容を自分の名前つきで会話欄に反映する。無言の動作を表す
+         選択肢(カギカッコなし。例:「そっと、涙をぬぐう」)には付けない。
+         すでにres側の最初の台詞行が自分(p)の言い回しを手動で用意している場合
+         (告白シーンなど、演出のために選択肢の文言そのままではなく間を作って
+         言わせているケース)は二重に表示されてしまうので、その場合はスキップする */
+      const firstResLine = (c.res||[]).find(L=>Array.isArray(L));
+      if(/^「.*」$/.test(c.t) && (!firstResLine || firstResLine[0]!=='p')) await say('p', c.t);
       if(c.res) for(const L of c.res){
         if(Array.isArray(L)) await say(L[0],L[1],L[2]); else await cmd(L);
       }
@@ -1725,15 +1734,15 @@ r_oka4:{ id:'r_oka4', bg:'nakiwarai', bgm:'kokoro', hold:1900, keepFw:true, tran
  choices:[
   {t:'「好きだ。ずっと、茜が好きだった」', k:5, flag:'kokuhaku', go:'ed_oka_true', res:[
     {se:'heart'},
-    ['p','好きだ。','slow'],
-    ['p','ずっと──ずっと、茜が好きだった。','slow'],
+    ['p','好きだ。',{slow:true}],
+    ['p','ずっと──ずっと、茜が好きだった。',{slow:true}],
     ['n','空が静まりかえって、'],
     ['n','煙のにおいだけが、風に流れていく。'],
-    ['a','……知ってた。','slow'],
+    ['a','……知ってた。',{slow:true}],
     ['a','ううん、うそ。知らなかった。'],
     ['a','知ってたら、こんなに泣いてない。'],
     ['n','茜が、両手で顔を覆って、それからゆっくり下ろした。'],
-    ['a','わたしも。','slow'],
+    ['a','わたしも。',{slow:true}],
     ['a','わたしも、好き。ずっとずっと、{n}が好き。'],
   ]},
   {t:'そっと、涙をぬぐう', k:3, go:'ed_oka_soft', res:[
@@ -1748,7 +1757,7 @@ r_oka4:{ id:'r_oka4', bg:'nakiwarai', bgm:'kokoro', hold:1900, keepFw:true, tran
   ]},
   {t:'「来年も、ここに来よう」', k:4, go:'ed_oka_next', res:[
     ['p','来年も。'],
-    ['p','来年も、ここに来よう。二人で。','slow'],
+    ['p','来年も、ここに来よう。二人で。',{slow:true}],
     ['n','茜が、濡れた目を大きく見ひらいた。'],
     ['a','……それって。'],
     ['a','来年も、その次も、ずっとってことでいい？'],
@@ -1825,7 +1834,7 @@ r_hanao2:{ id:'r_hanao2', bg:'onbu', bgm:'kokoro', amb:'mushi', ambHold:8, hold:
  choices:[
   {t:'「花火より、こっちのほうがいい」', k:4, res:[
     ['p','花火なんて、来年も上がるだろ。'],
-    ['p','……いまは、こっちのほうがいい。','slow'],
+    ['p','……いまは、こっちのほうがいい。',{slow:true}],
     ['n','しばらく、返事がなかった。'],
     ['n','かわりに、首すじに額が押しつけられた。'],
     ['a','……ばか。'],
@@ -1911,11 +1920,11 @@ r_hanao5:{ id:'r_hanao5', bg:'senko2', bgm:'kokoro', flick:'strong', hold:2000, 
  choices:[
   {t:'「好きだ。ずっと前から」', k:5, flag:'kokuhaku', go:'ed_senko_true', res:[
     {se:'heart'},
-    ['p','好きだ。','slow'],
-    ['p','ずっと前から、茜のことが好きだった。','slow'],
+    ['p','好きだ。',{slow:true}],
+    ['p','ずっと前から、茜のことが好きだった。',{slow:true}],
     ['n','茜の手のなかで、二本目の玉も落ちた。'],
     ['n','急に暗くなって、川の音だけが大きくなる。'],
-    ['a','……ずるい。','slow'],
+    ['a','……ずるい。',{slow:true}],
     ['a','わたしが言うつもりだったのに。'],
     ['a','ずっと、今日言うって決めてたのに。'],
     ['n','そう言って、額をこちらの肩に押しつけた。'],
@@ -2068,15 +2077,36 @@ function advance(){
   if(waitTap) waitTap();
 }
 let sw={y:0,x:0,moved:false};
+/* 長押しで早送り（既読の周回プレイ向け。advance()を短い間隔で呼び直すだけで、
+   タイプ中の行はskipTyping、行間はwaitTap()を経由するため既存の演出はそのまま） */
+let holdTimer=null, ffTimer=null, holdFF=false;
+function stopHold(){
+  clearTimeout(holdTimer); holdTimer=null;
+  clearTimeout(ffTimer); ffTimer=null;
+  holdFF=false;
+}
+function ffTick(){
+  if(!holdFF) return;
+  advance();
+  ffTimer=setTimeout(ffTick, 90);
+}
 function down(e){
   const p = e.touches ? e.touches[0] : e;
   sw.y=p.clientY; sw.x=p.clientX; sw.moved=false;
+  clearTimeout(holdTimer);
+  holdTimer=setTimeout(()=>{
+    if(sw.moved || inChoice) return;
+    holdFF=true;
+    if(navigator.vibrate){ try{ navigator.vibrate(12); }catch(e){} }
+    ffTick();
+  }, 380);
 }
 function move(e){
   const p = e.touches ? e.touches[0] : e;
-  if(Math.abs(p.clientY-sw.y)>8 || Math.abs(p.clientX-sw.x)>8) sw.moved=true;
+  if(Math.abs(p.clientY-sw.y)>8 || Math.abs(p.clientX-sw.x)>8){ sw.moved=true; stopHold(); }
 }
 function up(e){
+  stopHold();
   if(sw.moved) return;
   if(e.target.closest && e.target.closest('#topbar')) return;
   advance();
@@ -2202,7 +2232,7 @@ $('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGaller
 /* =========================================================
    起動
    ========================================================= */
-(async function boot(){
+async function boot(){
   loadEmbeddedArt();
   refreshTitleBg();
   const meta = await Store.get('nnt_meta');
@@ -2227,9 +2257,23 @@ $('#btnGal').onclick = e=>{ e.stopPropagation(); Audio_.se('decide'); openGaller
   }
   await showTitle();
   window.addEventListener('pointerdown', ()=>Audio_.resume(), {once:true});
-  const fit=()=>{ document.documentElement.style.setProperty('--vh', window.innerHeight+'px'); };
-  fit(); window.addEventListener('resize', fit);
-})();
+}
+/* モバイルブラウザはアドレスバーの出入りで実際に見えている高さが変わるが、
+   #app は position:fixed で高さを100%(=固定の初期ビューポート基準)にしていたため、
+   アドレスバーが出ている状態だと画面下側がその分だけ見えなくなってしまう
+   （--vh はこの対策用に用意されていたが、CSS側で一度もvar(--vh)を使っておらず
+   実際には機能していなかった。#app の height を var(--vh,100%) に変更済み） */
+const fitVh=()=>{ document.documentElement.style.setProperty('--vh', window.innerHeight+'px'); };
+fitVh(); window.addEventListener('resize', fitVh);
+/* window.ART は、このスクリプトより後ろにある <script id="ART_DATA"> で定義される。
+   ここで即時実行すると、まだそのブロックが解析される前で window.ART が
+   undefined のままイラストが一枚も読み込まれない状態で起動してしまうため、
+   DOMContentLoaded(=ページ全体の解析完了後)まで起動を遅らせる */
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
 
 </script>
 <script id="ART_DATA">
