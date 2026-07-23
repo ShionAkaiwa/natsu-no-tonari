@@ -377,6 +377,7 @@ body{
         <button class="tbtn sub" id="btnToTitle">タイトルへ戻る</button>
       </div>
       <p class="hint">シーンが変わるたびに自動で保存されます。アプリを閉じても「つづきから」で戻れます。</p>
+      <p class="hint">会話部分を長押しすると、素早く読み進められます。既読シーンの周回に便利です。</p>
     </div>
   </div>
 
@@ -2068,15 +2069,36 @@ function advance(){
   if(waitTap) waitTap();
 }
 let sw={y:0,x:0,moved:false};
+/* 長押しで早送り（既読の周回プレイ向け。advance()を短い間隔で呼び直すだけで、
+   タイプ中の行はskipTyping、行間はwaitTap()を経由するため既存の演出はそのまま） */
+let holdTimer=null, ffTimer=null, holdFF=false;
+function stopHold(){
+  clearTimeout(holdTimer); holdTimer=null;
+  clearTimeout(ffTimer); ffTimer=null;
+  holdFF=false;
+}
+function ffTick(){
+  if(!holdFF) return;
+  advance();
+  ffTimer=setTimeout(ffTick, 90);
+}
 function down(e){
   const p = e.touches ? e.touches[0] : e;
   sw.y=p.clientY; sw.x=p.clientX; sw.moved=false;
+  clearTimeout(holdTimer);
+  holdTimer=setTimeout(()=>{
+    if(sw.moved || inChoice) return;
+    holdFF=true;
+    if(navigator.vibrate){ try{ navigator.vibrate(12); }catch(e){} }
+    ffTick();
+  }, 380);
 }
 function move(e){
   const p = e.touches ? e.touches[0] : e;
-  if(Math.abs(p.clientY-sw.y)>8 || Math.abs(p.clientX-sw.x)>8) sw.moved=true;
+  if(Math.abs(p.clientY-sw.y)>8 || Math.abs(p.clientX-sw.x)>8){ sw.moved=true; stopHold(); }
 }
 function up(e){
+  stopHold();
   if(sw.moved) return;
   if(e.target.closest && e.target.closest('#topbar')) return;
   advance();
