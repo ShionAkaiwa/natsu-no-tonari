@@ -85,7 +85,7 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 
 ### senko2 — 二人の手元の線香花火(川辺・アップ)
 どこで使う: 鼻緒ルートのラストカット
-status: 未生成
+status: 組込済
 retries: 2
 (2026/07/23: 1回目の生成は、二人の手元ではなく一人の女性の横顔と片手だけが
 写った構図になっており(yokogaoに近い絵)、「二人の手元」という意図と
@@ -94,7 +94,9 @@ retries: 2
 指定通りだったが、仕上がりが実写風の写真そのもの(人物写真)になっており、
 他の11枚すべてが持つ「Soft painterly anime style」の絵柄と明確に食い違っていた
 ため差し戻し。プロンプトに"Soft painterly anime style"の指定はあったが実写に
-寄ってしまったため、実写・写真であることを明確に禁止する記述を追加した)
+寄ってしまったため、実写・写真であることを明確に禁止する記述を追加した。
+3回目の生成で、はっきりとした線画・塗りのアニメ塗り(実写ではない)になっており、
+顔を写さず二人の手と線香花火のアップという構図・浴衣の柄も指定通りで確認できたため採用)
 prompt: A hand-drawn digital illustration, NOT a photograph, NOT photorealistic, NOT a real photo — an anime/manga style painting with visible painterly brushstrokes. Extreme close-up illustration showing ONLY two hands and nothing else, no faces, no heads, no upper bodies visible in frame: two separate hands from two different people holding their own lit sparkler fireworks (senko-hanabi) close together near a riverbank at night, the hands almost touching, one hand belonging to Akane emerging from a dark navy blue floral yukata sleeve visible at the very edge of frame, the other hand belonging to a man emerging from plain dark clothing sleeve at the opposite edge of frame. Tiny glowing spark and soft falling embers between the two sparklers, dark water faintly reflecting light in the blurred background, intimate quiet mood. This is a hand-only macro illustration; do not show any face or profile. Soft painterly anime style illustration, cel-shaded or painterly digital art, cool nostalgic night color palette, gentle brush texture, cinematic lighting, stylized proportions (not photorealistic skin texture). No text, no watermark, no letters anywhere in the image. Vertical composition (9:16).
 > 返信欄:
 
