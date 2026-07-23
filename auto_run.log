@@ -369,3 +369,11 @@ All REQUESTS.md threads got real replies, two finished threads moved to REQUESTS
 2026-07-23 13:17 - 作業完了
 2026-07-23 13:17 - ----- 実行終了 -----
 2026-07-23 14:53 - ----- 実行開始 -----
+Committed and pushed. This session:
+
+1. Checked `REQUESTS.md` 窶・no unread requests.
+2. Took the top `BACKLOG.md` item (possible mislabeled "蠢・・螢ｰ" lines) and read through every `m`-type line in the game (70+ occurrences, all scenes). Found none that were actually spoken dialogue mislabeled as thought 窶・the earlier concern didn't hold up under a full review, so I closed the item as verified/complete rather than leaving it open indefinitely.
+3. While doing that pass, found a genuine unused-state bug: `flag:'kokuhaku'` was set on both confession choices but never read anywhere (the endings already branch via `go:`), so I removed the two dead references. Verified with a Node.js syntax check that the script still parses cleanly, and confirmed no branching/kizuna/ending behavior changed.
+4. Logged both in `PROGRESS.md`, marked the `BACKLOG.md` item done, and pushed.
+
+2026-07-23 14:58 - 作業完了
