@@ -354,3 +354,16 @@ Remaining open item is unchanged: `onbu` art still needs the user's manual-gener
 2026-07-23 10:56 - 作業完了
 2026-07-23 10:56 - ----- 実行終了 -----
 2026-07-23 12:53 - ----- 実行開始 -----
+Pushed successfully. Session summary:
+
+**Fixed real bugs (found via code investigation, not guessing):**
+- **Illustrations never displayed at all** 窶・`boot()` read `window.ART` before the browser had even parsed the `<script id="ART_DATA">` block that defines it (that block sits after the main script in the file). Deferred boot to `DOMContentLoaded` so art data loads first.
+- **"Slow typing" effect on confession lines never worked** 窶・9 call sites passed the string `'slow'` where `say()` expected `{slow:true}`; fixed all 9.
+- **Mobile viewport bug likely causing the reported firework "cutoff"** 窶・a `--vh` custom property was computed on resize but never actually wired into any CSS; connected it to `#app`'s height.
+- **Player's own choice lines never appeared in the dialogue flow** 窶・after picking a quoted (`縲・..縲港) choice, nothing echoed what was "said." Now it's echoed with the player's name plate, unless the scene already hand-crafts that line (6 confession-tier cases correctly skipped to avoid duplication).
+
+**Also:** added a hold-to-fast-forward gesture for replay convenience, tweaked the title subtitle text per feedback, replied honestly to the Claude Code model/usage question (can't change billing/model settings from this repo), and recorded the user's new standing directive (bugs/polish over new content) into CLAUDE.md and BACKLOG.md.
+
+All REQUESTS.md threads got real replies, two finished threads moved to REQUESTS_DONE.md, and everything is pushed to `main`.
+
+2026-07-23 13:17 - 作業完了
