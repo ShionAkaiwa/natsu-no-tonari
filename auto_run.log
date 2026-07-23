@@ -406,3 +406,6 @@ Everything was syntax-checked and pushed (`160fd0f`). Next session should check 
 2026-07-23 19:14 - 作業完了
 2026-07-23 19:14 - ----- 実行終了 -----
 2026-07-23 20:53 - ----- 実行開始 -----
+Session summary: fixed dead hub dialogue variant, added skip-to-choice button, cleared dialogue box on speaker change with lantern-style name plate, reorganized ART_QUEUE.md per user request, and replied to all REQUESTS.md threads (moved 4 done items, answered 2 new requests in full, deferred 3 to next sessions). Everything committed and pushed (`1581e94`).
+
+2026-07-23 21:12 - 作業完了
