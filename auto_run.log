@@ -342,3 +342,13 @@ Both are committed and pushed to `main`. `docs/index.html` will sync automatical
 2026-07-23 10:53 - ----- 実行開始 -----
 2026-07-23 10:53 - [art] 生成成功: senko2
 2026-07-23 10:54 - [art] 取り込み: senko2.png
+Pushed successfully. This session's work:
+
+- No unread `REQUESTS.md` items; `BACKLOG.md`'s only open item (tap minigames) is still gated on `onbu` art, so nothing actionable there.
+- `ART_NEW.md` had `senko2` (line drawing/hand illustration for the fireworks-sparkler finale) already auto-embedded by the generation pipeline 窶・I opened and reviewed it: correct anime painterly style (not photorealistic like the previous rejected attempt), no faces shown, navy floral yukata sleeve visible, matches the scene's intent. Accepted it.
+- Updated `ART_QUEUE.md` (senko2 竊・邨・ｾｼ貂・, cleared `ART_NEW.md`, logged the decision in `PROGRESS.md`, and added a short follow-up note in the relevant `REQUESTS.md` thread since it referenced senko2 as still pending.
+- Verified `natsu_no_tonari.html`'s script block still parses cleanly, committed, and pushed (`65cab7d`).
+
+Remaining open item is unchanged: `onbu` art still needs the user's manual-generation decision (recorded in `IMPROVEMENTS_LOG.md`).
+
+2026-07-23 10:56 - 作業完了
