@@ -521,7 +521,7 @@ const Audio_ = (() => {
   let ctx=null, master=null, bgmG=null, seG=null, ambG=null, verb=null;
   let ready=false;
   let vol = {bgm:.42, se:.70};
-  let bgmTimer=null, bgmMood=null, bgmNodes=[];
+  let bgmTimer=null, bgmMood=null;
   let ambNodes=[];
 
   function makeVerb(){
@@ -684,7 +684,6 @@ const Audio_ = (() => {
     gn.gain.linearRampToValueAtTime(0.0001, t+dur);
     o.connect(bf); o2.connect(bf); bf.connect(gn); gn.connect(bgmG);
     o.start(t); o2.start(t); o.stop(t+dur+.1); o2.stop(t+dur+.1);
-    bgmNodes.push(o,o2);
   }
   function pluck(midi, t, g){
     const o=ctx.createOscillator(), gn=ctx.createGain(), bf=ctx.createBiquadFilter();
@@ -693,7 +692,7 @@ const Audio_ = (() => {
     gn.gain.setValueAtTime(0,t); gn.gain.linearRampToValueAtTime(g,t+.008);
     gn.gain.exponentialRampToValueAtTime(.0001,t+1.15);
     o.connect(bf); bf.connect(gn); gn.connect(bgmG);
-    o.start(t); o.stop(t+1.25); bgmNodes.push(o);
+    o.start(t); o.stop(t+1.25);
   }
   function bgm(mood){
     if(!ready) init(); if(!ready) return; resume();
@@ -734,7 +733,7 @@ const G = {
   name:'きみ', kizuna:0, scene:null, flags:{}, acts:[], actN:0,
   seen:{}, cleared:0, routeSeen:{}, pool:null, endingsSeen:{}
 };
-const CFG = { speed:55, autoSpeed:50, fontSize:100, uiHidden:false, boot:false, muted:false };
+const CFG = { speed:55, autoSpeed:50, fontSize:100, uiHidden:false, muted:false };
 let curLayer = 0, typing=false, skipTyping=false, waitTap=null, curLog=[], inChoice=false;
 let autoPlay=false, autoTimer=null;
 
@@ -2155,6 +2154,7 @@ $('#btnAuto').onclick = e=>{
 $('#btnSound').onclick = e=>{
   e.stopPropagation(); CFG.muted=!CFG.muted;
   Audio_.setVol('bgm', CFG.muted?0:CFG.vb); Audio_.setVol('se', CFG.muted?0:CFG.vs);
+  if(!CFG.muted) Audio_.se('hover');
   $('#btnSound').style.opacity = CFG.muted?.42:1;
   toast(CFG.muted?'音を止めました':'音を戻しました', 1200);
   saveSettings();
