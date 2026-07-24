@@ -540,3 +540,15 @@ rt 443 after 21113 ms: Could not connect to server
 
 2026-07-24 14:59 - ----- 実行終了 -----
 2026-07-24 16:53 - ----- 実行開始 -----
+Committed and pushed (`5601bbe`).
+
+**This session's work:**
+- Pushed a previous session's unpushed commit (had failed earlier due to a network error).
+- Reviewed REQUESTS.md/BACKLOG.md/ART_QUEUE.md/ART_NEW.md 窶・no unread requests or actionable backlog items, so per CLAUDE.md I read the game code myself, prioritizing bugs/inconsistencies over new content.
+- Found that firework particles in the `FW` canvas module carried an unused `tr:[]` (trail) property that was never read anywhere 窶・dead, half-finished code.
+- Implemented the trail properly: sparks now leave a short fading streak as they fall, giving a more polished "real fireworks" look.
+- Noticed `boom` SE was identical for big and small bursts; differentiated it (big = deeper/longer, small = higher/shorter) so the sound matches what's on screen.
+- This also directly serves the still-open "make the fireworks scene special" request in REQUESTS.md 窶・replied there with what was done and asked again for direction (髻ｳ/譁・ｫ/逕ｻ髱｢ emphasis) for the next pass.
+- Logged details in PROGRESS.md, verified JS syntax, committed and pushed.
+
+2026-07-24 17:00 - 作業完了
