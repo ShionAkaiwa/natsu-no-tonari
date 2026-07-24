@@ -4,16 +4,7 @@
 
 ## 待ち行列
 
-### chibi_run
-status: 未生成
-prompt: Akane in chibi/SD (super-deformed) style, roughly 2.5 heads tall, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, running energetically in a dynamic side-view pose with motion lines behind her, cheerful excited expression, arms pumping. Plain simple dark indigo night-festival background (no other characters, no background clutter, no text). Soft painterly anime style matching the other character art, warm nostalgic summer-festival color accents (lantern orange glow). No text, no watermark, no letters anywhere in the image. Square-ish composition (1:1 or 4:5), full body visible with some margin around her so she can be cropped out and used as a small running sprite during scene-transition cuts.
-
-(2026/07/24追記: REQUESTS.mdの「場面切り替え時のトランジション演出」の話題で、
-志温さんから「ミニキャラを出すプロンプトをart queueに追加して」との依頼があったため追加。
-現在は光の粒が明滅するだけの1段階目が実装済みで、この絵ができたら、光の粒があった位置に
-このミニキャラが一瞬駆け抜けるカットを差し込む2段階目に進める予定。単体の全身イラストとして
-生成されるため、組み込み時に周囲の背景を切り抜く/馴染ませる調整が必要になる可能性がある点は
-留意。)
+(現在、待ち行列は空です)
 
 ## 使い方(Geminiなどに手動で貼る場合)
 

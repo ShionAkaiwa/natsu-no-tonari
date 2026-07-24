@@ -107,6 +107,12 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 status: 組込済(2026/07/23、自動生成パイプラインにより生成・組み込み)
 prompt: A quiet Japanese summer festival entrance at dusk with absolutely no people or human figures anywhere in the scene, an old stone torii gate at the top of a stone stairway, rows of glowing paper lanterns strung along both sides of the path leading up to it, warm orange and deep magenta sunset sky fading into the coming night, fireflies and floating embers drifting softly in the air, faint smoke haze, a sense of quiet anticipation before the festival truly begins. Soft painterly anime background art style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting, atmospheric depth. No text, no watermark, no letters anywhere in the image. No human figures, no silhouettes of people, empty scene. Vertical portrait composition (9:16), leave the lower third relatively open/uncluttered since UI buttons will be overlaid there.
 
+### chibi_run
+status: 組込済(2026/07/24、シーン転換演出の2段階目として組み込み)
+prompt: Akane in chibi/SD (super-deformed) style, roughly 2.5 heads tall, chestnut brown hair in a high bun, wearing a dark navy blue floral yukata, running energetically in a dynamic side-view pose with motion lines behind her, cheerful excited expression, arms pumping. Plain simple dark indigo night-festival background (no other characters, no background clutter, no text). Soft painterly anime style matching the other character art, warm nostalgic summer-festival color accents (lantern orange glow). No text, no watermark, no letters anywhere in the image. Square-ish composition (1:1 or 4:5), full body visible with some margin around her so she can be cropped out and used as a small running sprite during scene-transition cuts.
+(仕上がりは指定した2.5頭身のSDというより通常に近い頭身になったが、顔・手の破綻や
+透かしはなく、走る一瞬のスプライトとして使うには十分なクオリティだったため採用した)
+
 ---
 
 ## このファイルについての感想・要望
