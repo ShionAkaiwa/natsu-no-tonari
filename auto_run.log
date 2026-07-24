@@ -554,3 +554,12 @@ Committed and pushed (`5601bbe`).
 2026-07-24 17:00 - 作業完了
 2026-07-24 17:01 - ----- 実行終了 -----
 2026-07-24 18:53 - ----- 実行開始 -----
+Committed and pushed (`da908ea`).
+
+**This session's work:**
+- No unread requests in REQUESTS.md and no ready-to-start BACKLOG.md items, so I reviewed the game code myself per CLAUDE.md's priority order (bug/consistency fixes before new content).
+- Found that `chibi_run.png` (the mini-character art embedded last session for the scene-transition dash effect) has a solid navy/orange background rather than transparency, but was being rendered with just `drop-shadow`, so it visually looked like a rectangular card sliding across the screen rather than Akane dashing past.
+- Fixed with a CSS-only change: added `mix-blend-mode:screen` to `.tchibi` (which makes the dark background blend into the night scenes and leaves only the bright parts of the image visible) and removed the now-pointless drop-shadow.
+- Logged the fix in PROGRESS.md and replied in the relevant REQUESTS.md thread, asking to confirm in `natsu play` that Akane now reads as a silhouette/streak rather than a card.
+
+2026-07-24 18:59 - 作業完了
