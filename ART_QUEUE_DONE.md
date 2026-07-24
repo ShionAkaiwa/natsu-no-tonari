@@ -106,3 +106,12 @@ prompt: Akane, a young Japanese woman around 20 years old, chestnut brown hair i
 ### bg_title(2代目・茜が写らないバージョン)
 status: 組込済(2026/07/23、自動生成パイプラインにより生成・組み込み)
 prompt: A quiet Japanese summer festival entrance at dusk with absolutely no people or human figures anywhere in the scene, an old stone torii gate at the top of a stone stairway, rows of glowing paper lanterns strung along both sides of the path leading up to it, warm orange and deep magenta sunset sky fading into the coming night, fireflies and floating embers drifting softly in the air, faint smoke haze, a sense of quiet anticipation before the festival truly begins. Soft painterly anime background art style, warm nostalgic summer-festival color palette, gentle brush texture, cinematic lighting, atmospheric depth. No text, no watermark, no letters anywhere in the image. No human figures, no silhouettes of people, empty scene. Vertical portrait composition (9:16), leave the lower third relatively open/uncluttered since UI buttons will be overlaid there.
+
+---
+
+## このファイルについての感想・要望
+ここに一言書いておくと、次回Claude Codeが読んで対応します(REQUESTS.mdほど
+頻繁なやり取り向けの場所ではありませんが、このファイルの内容についての
+意見や削除してほしい部分などがあれば、ここが窓口です)。
+
+▼返信はここに
